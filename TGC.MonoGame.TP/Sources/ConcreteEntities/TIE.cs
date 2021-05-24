@@ -28,12 +28,12 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         protected float StandarVelocity = 120f;
         protected float FastVelocity = 300f;
 
-        internal override void Update()
+        internal override void Update(double elapsedTime)
         {
             StateMachine();
         }
 
-        protected internal void StateMachine(double )
+        protected internal void StateMachine()
         {
             BodyReference body = Body();
 
