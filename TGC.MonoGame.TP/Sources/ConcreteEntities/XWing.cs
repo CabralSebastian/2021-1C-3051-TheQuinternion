@@ -21,6 +21,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         private const float acceleration = 0.5f;
 
         private Vector3 baseUpDirection = Vector3.Up;
+        private Vector3 axisRotation = Vector3.Zero;
         internal Vector3 forward, rightDirection, upDirection;
 
         override internal void Update(double elapsedTime)
@@ -34,13 +35,19 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
             Brakement((float)elapsedTime, body);
             Movement((float)elapsedTime, body);
+            //Aligment();
+            Rotation((float)elapsedTime);
         }
 
         internal Vector3 Position() => Body().Pose.Position.ToVector3();
         internal Vector3 Velocity() => Body().Velocity.Linear.ToVector3();
         private void Movement(float elapsedTime, BodyReference body)
         {
-            Vector3 directionToMove = Input.HorizontalAxis() * rightDirection + Input.ForwardAxis() * forward + Input.VerticalAxis() * upDirection;
+            //float verticalAxis = Input.VerticalAxis();
+            float horizontalAxis = Input.HorizontalAxis();
+
+            //Vector3 directionToMove = horizontalAxis * rightDirection + Input.ForwardAxis() * forward + verticalAxis * upDirection;
+            Vector3 directionToMove = horizontalAxis * Vector3.Cross(forward, baseUpDirection) + Input.ForwardAxis() * forward;// + verticalAxis * baseUpDirection;
             Vector3 normalizedDirection = !Equals(directionToMove, Vector3.Zero) ? Vector3.Normalize(directionToMove) : Vector3.Zero;
 
             Vector3 velocity = normalizedDirection * acceleration * elapsedTime;
@@ -59,12 +66,37 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             AddLinearVelocity(body, (forwardBreakment + horizontalBrakment + verticalBrakment) * -acceleration * elapsedTime);
         }
 
-        internal void RotateY(float axis, float elapsedTime)
+        private void Aligment()
         {
-            var fixValue = 0.0001f;
-            Body().Pose.Orientation *= Quaternion.CreateFromAxisAngle(new Vector3(0, 1, 0), axis * elapsedTime * fixValue).ToBEPU();
+            if (Vector3.Equals(upDirection, baseUpDirection))
+                return;
+            float angleDirection = Vector3.Dot(upDirection, baseUpDirection);
+            addRotation(new Vector3(1, 0, 1) * angleDirection * 0.5f);
+
+            //Quaternion.
         }
-        
+        internal void Rotation(float elapsedTime)
+        {
+            var xFixValue = 0.0004f;
+            var yFixValue = 0.0005f;
+            var zFixValue = 0.0003f;
+
+            Quaternion rotation =
+                Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), Math.Sign(axisRotation.X + Input.VerticalAxis()) * elapsedTime * xFixValue) *
+                Quaternion.CreateFromAxisAngle(new Vector3(0, 1, 0), axisRotation.Y * elapsedTime * yFixValue) *
+                Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), axisRotation.Z * elapsedTime * zFixValue);
+            Body().Pose.Orientation *= rotation.ToBEPU();
+            axisRotation = Vector3.Zero;
+        }
+
+        internal void addRotation(Vector3 axisRotation)
+        {
+            this.axisRotation += axisRotation;
+            this.axisRotation.X = Math.Sign(this.axisRotation.X);
+            this.axisRotation.Y = Math.Sign(this.axisRotation.Y);
+            this.axisRotation.Z = Math.Sign(this.axisRotation.Z);
+        }
+
         private void AddLinearVelocity(BodyReference body, Vector3 velocity)
         {
             var newVelocity = body.Velocity.Linear.ToVector3() + velocity;
@@ -76,15 +108,6 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             Vector3 forwardVelocity = Math.Clamp(forwardSpeed, 0, maxSpeed) * forward;
             Vector3 horizontalVelocity = Math.Clamp(horizontalSpeed, -maxSpeed, maxSpeed) * rightDirection;
             Vector3 verticalVelocity = Math.Clamp(verticalSpeed, -maxSpeed, maxSpeed) * upDirection;
-
-            /*
-            double upAngle = Math.Acos(Vector3.Dot(baseUpDirection, upDirection) / (baseUpDirection.Length() * upDirection.Length()));
-            if (horizontalSpeed != 0 && Math.Abs(upAngle) < Math.PI/4)
-                body.Pose.Orientation *= Quaternion.CreateFromAxisAngle(new Vector3(0, 0, -1), horizontalSpeed * 0.00001f).ToBEPU();
-
-            if (!Vector3.Equals(baseUpDirection, upDirection))
-                body.Pose.Orientation *= Quaternion.CreateFromAxisAngle(new Vector3(0, 0, -1), (float)-upAngle * 0.00001f).ToBEPU();
-            */
 
             Vector3 limitedVelocity = forwardVelocity + horizontalVelocity + verticalVelocity;
 

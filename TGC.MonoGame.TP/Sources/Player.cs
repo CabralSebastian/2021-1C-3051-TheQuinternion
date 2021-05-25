@@ -7,8 +7,19 @@ namespace TGC.MonoGame.TP
 {
     internal class Player
     {
-        private const float mouseOuterBoxSide = 6f; 
-        private const float mouseInnerBoxSide = 3f;
+        private readonly Vector2 screenSize;
+        private readonly Vector2 screenCenter;
+
+        private readonly Vector2 mouseOuterBox; 
+        private readonly Vector2 mouseInnerBox;
+
+        internal Player(Vector2 screenSize)
+        {
+            this.screenSize = screenSize;
+            this.screenCenter = screenSize / 2;
+            mouseOuterBox = screenSize / 7;
+            mouseInnerBox = screenSize / 10;
+        }
 
         internal void Update(float elapsedTime)
         {
@@ -17,19 +28,24 @@ namespace TGC.MonoGame.TP
 
         //MOUSE//
         private Vector2 CurrentMousePosition() => Mouse.GetState().Position.ToVector2();
-        private bool MouseIsInside() => Math.Abs(CurrentMousePosition().X) < TGCGame.screenCenter.X + mouseInnerBoxSide && Math.Abs(CurrentMousePosition().Y) < TGCGame.screenCenter.Y + mouseInnerBoxSide;
+        private bool MouseIsInside() =>
+            (CurrentMousePosition().X < screenCenter.X + mouseInnerBox.X && CurrentMousePosition().X > screenCenter.X - mouseInnerBox.X) && 
+            (CurrentMousePosition().Y < screenCenter.Y + mouseInnerBox.Y && CurrentMousePosition().Y > screenCenter.Y - mouseInnerBox.Y);
         
         private void ProcessMouseMovement(float elapsedTime)
         {
-            Vector2 mouseDelta = (CurrentMousePosition() - TGCGame.screenCenter);
+            Vector2 mouseDelta = (CurrentMousePosition() - screenCenter);
             var fixValue = 0.001f;
             TGCGame.camera.UpdateYawNPitch(mouseDelta * elapsedTime * fixValue);
 
-            //if (!MouseIsInside())
-            //    TGCGame.world.xwing.RotateY(mouseDelta.Y, elapsedTime);
+            if (!MouseIsInside())
+                TGCGame.world.xwing.addRotation(new Vector3(0, Math.Sign(-mouseDelta.X), Math.Sign(-mouseDelta.X)));
 
-            int limitedToOuterBoxSideX = (int)Math.Clamp(CurrentMousePosition().X, TGCGame.screenCenter.X - mouseOuterBoxSide, TGCGame.screenCenter.X + mouseOuterBoxSide);
-            int limitedToOuterBoxSideY = (int)Math.Clamp(CurrentMousePosition().Y, TGCGame.screenCenter.Y - mouseOuterBoxSide, TGCGame.screenCenter.Y + mouseOuterBoxSide);
+            //if (CurrentMousePosition().Y == screenCenter.Y + mouseInnerBox.Y || CurrentMousePosition().Y == screenCenter.Y - mouseInnerBox.Y)
+            //    TGCGame.world.xwing.addRotation(new Vector3(Math.Sign(mouseDelta.Y), 0, 0));
+
+            int limitedToOuterBoxSideX = (int)Math.Clamp(CurrentMousePosition().X, screenCenter.X - mouseOuterBox.X, screenCenter.X + mouseOuterBox.X);
+            int limitedToOuterBoxSideY = (int)Math.Clamp(CurrentMousePosition().Y, screenCenter.Y - mouseOuterBox.Y, screenCenter.Y + mouseOuterBox.Y);
 
             Mouse.SetPosition(limitedToOuterBoxSideX, limitedToOuterBoxSideY);
         }

@@ -14,8 +14,8 @@ namespace TGC.MonoGame.TP
 
         internal static readonly World world = new World();
         internal static Camera camera = new Camera();
-        internal static Vector2 screenCenter;
-        private readonly Player player = new Player();
+
+        private Player player;
 
         internal TGCGame()
         {
@@ -36,7 +36,7 @@ namespace TGC.MonoGame.TP
         protected override void Initialize()
         {
             GraphicsDevice.RasterizerState = new RasterizerState { CullMode = CullMode.CullClockwiseFace };
-            screenCenter = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
+            player = new Player(new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
             base.Initialize();
             world.Initialize();
             camera.Initialize(GraphicsDevice);
