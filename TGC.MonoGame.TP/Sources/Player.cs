@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using System;
-
+using Microsoft.Xna.Framework.Graphics;
 
 namespace TGC.MonoGame.TP
 {
@@ -34,5 +34,19 @@ namespace TGC.MonoGame.TP
             Mouse.SetPosition(limitedToOuterBoxSideX, limitedToOuterBoxSideY);
         }
 
+        internal void DrawHUD(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        {
+            Vector2 mousePosition = CurrentMousePosition();
+            spriteBatch.DrawString(TGCGame.content.F_StarJedi, "Hace mucho tiempo en una galaxia muy lejana.",
+                new Vector2(graphicsDevice.Viewport.Width/5, 50), Color.White);
+            spriteBatch.Draw(
+                TGCGame.content.T_TargetCursor, 
+                new Rectangle(
+                    (int)mousePosition.X - 10,
+                    (int)mousePosition.Y - 10,
+                    20, 20
+                ), 
+                Color.White);
+        }
     }
 }

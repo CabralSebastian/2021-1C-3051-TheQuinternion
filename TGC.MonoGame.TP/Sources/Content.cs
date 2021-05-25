@@ -21,13 +21,15 @@ namespace TGC.MonoGame.TP
         private const string TexturesFolder = "Textures/";
         private const string SoundsFolder = "Sounds/";
         //private const string MusicFolder = "Music/";
-        //private const string SpriteFontsFolder = "SpriteFonts/";
+        private const string FontsFolder = "Fonts/";
 
         internal readonly Effect E_BasicShader;
         internal readonly Model M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Trench2;
         internal readonly TypedIndex Sh_Sphere20, SH_XWing, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
         internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Trench2;
+        internal readonly Texture2D T_TargetCursor;
         internal readonly SoundEffect S_Explotion;
+        internal readonly SpriteFont F_StarJedi;
 
         internal Content(ContentManager contentManager)
         {
@@ -104,9 +106,13 @@ namespace TGC.MonoGame.TP
             };
             T_Trench = new Texture2D[] { LoadTexture("DeathStar/DeathStar") };
             T_Trench2 = Enumerable.Repeat(LoadTexture("DeathStar/DeathStar"), 27).ToArray();
+            T_TargetCursor = LoadTexture("HUD/TargetCursor");
 
             // Sounds
             S_Explotion = LoadSound("Explotion");
+
+            // Fonts
+            F_StarJedi = LoadFont("Starjedi");
         }
 
         private Effect LoadEffect(string name) => contentManager.Load<Effect>(EffectsFolder + name);
@@ -130,5 +136,6 @@ namespace TGC.MonoGame.TP
         private TypedIndex LoadConvexHull(string name) => LoadShape(ConvexHullGenerator.Generate(contentManager.Load<Model>(ModelsFolder + name)));
         private Texture2D LoadTexture(string name) => contentManager.Load<Texture2D>(TexturesFolder + name);
         private SoundEffect LoadSound(string name) => contentManager.Load<SoundEffect>(SoundsFolder + name);
+        private SpriteFont LoadFont(string name) => contentManager.Load<SpriteFont>(FontsFolder + name);
     }
 }

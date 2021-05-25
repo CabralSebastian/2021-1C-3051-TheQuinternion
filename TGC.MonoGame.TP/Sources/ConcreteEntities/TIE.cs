@@ -2,8 +2,6 @@
 using BepuPhysics.Collidables;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 using TGC.MonoGame.TP.Entities;
 using TGC.MonoGame.TP.Physics;
 

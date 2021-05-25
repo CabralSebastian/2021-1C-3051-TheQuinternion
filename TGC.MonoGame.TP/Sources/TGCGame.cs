@@ -1,6 +1,4 @@
-﻿using BepuPhysics;
-using BepuPhysics.Collidables;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TGC.MonoGame.TP.Physics;
 
@@ -8,10 +6,12 @@ namespace TGC.MonoGame.TP
 {
     internal class TGCGame : Game
     {
-        private SpriteBatch SpriteBatch { get; set; }
-
+        
         internal static Content content;
         internal static readonly PhysicSimulation physicSimulation = new PhysicSimulation();
+        private SpriteBatch spriteBatch;
+        private FullScreenQuad fullScreenQuad;
+
         internal static readonly World world = new World();
         internal static Camera camera = new Camera();
         internal static Vector2 screenCenter;
@@ -27,13 +27,15 @@ namespace TGC.MonoGame.TP
 
         protected override void LoadContent()
         {
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            fullScreenQuad = new FullScreenQuad(GraphicsDevice);
             content = new Content(Content);
             base.LoadContent();
         }
 
         protected override void Initialize()
         {
-            GraphicsDevice.RasterizerState = new RasterizerState { CullMode = CullMode.None };
+            GraphicsDevice.RasterizerState = new RasterizerState { CullMode = CullMode.CullClockwiseFace };
             screenCenter = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
             base.Initialize();
             world.Initialize();
@@ -57,15 +59,23 @@ namespace TGC.MonoGame.TP
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicsDevice.BlendState = BlendState.Opaque;
+
             content.E_BasicShader.Parameters["View"].SetValue(camera.View);
             content.E_BasicShader.Parameters["Projection"].SetValue(camera.Projection);
             world.Draw();
+
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, DepthStencilState.DepthRead, RasterizerState.CullNone);
+            player.DrawHUD(spriteBatch, GraphicsDevice);
+            spriteBatch.End();
         }
 
         protected override void UnloadContent()
         {
             Content.Unload();
             physicSimulation.Dispose();
+            fullScreenQuad.Dispose();
             base.UnloadContent();
         }
     }
