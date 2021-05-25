@@ -117,7 +117,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         private float DistanceToXWing(BodyReference body) 
         {
             Vector3 TIEPosition = body.Pose.Position.ToVector3();
-            Vector3 XWingPosition = XWing.getInstance().XWingPosition().ToVector3();
+            Vector3 XWingPosition = TGCGame.world.xwing.Position();
 
             Vector3 DistanceVector = TIEPosition - XWingPosition;
             DistanceVector.Y = 0f;
@@ -127,7 +127,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         private void GetCloseToXWing(BodyReference body) 
         {
-            Vector3 XWingDirection = (XWing.getInstance().XWingPosition() - body.Pose.Position).ToVector3();
+            Vector3 XWingDirection = TGCGame.world.xwing.Position() - body.Pose.Position.ToVector3();
             XWingDirection.Y = 0;
             Quaternion RotationToXWing = new Quaternion(XWingDirection, 1f);
             Quaternion FinalRotation = Quaternion.Lerp(RotationToXWing, body.Pose.Orientation.ToQuaternion(), 3f);
@@ -141,7 +141,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         private void GetCloseToXWingSlowly(BodyReference body)
         {
-            Vector3 XWingDirection = (XWing.getInstance().XWingPosition() - body.Pose.Position).ToVector3();
+            Vector3 XWingDirection = TGCGame.world.xwing.Position() - body.Pose.Position.ToVector3();
             XWingDirection.Y = 0;
             Quaternion RotationToXWing = new Quaternion(XWingDirection, 1f);
             Quaternion FinalRotation = Quaternion.Lerp(RotationToXWing, body.Pose.Orientation.ToQuaternion(), 3f);

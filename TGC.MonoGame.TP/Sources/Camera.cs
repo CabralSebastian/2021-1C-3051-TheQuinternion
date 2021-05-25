@@ -1,20 +1,16 @@
-﻿using BepuPhysics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using TGC.MonoGame.TP.Physics;
 
 namespace TGC.MonoGame.TP
 {
     internal class Camera
     {
-        private Vector3 Position() => TGCGame.physicSimulation.GetBody(handle).Pose.Position.ToVector3();
+        private Vector3 position = new Vector3();
         public Matrix View { get; private set; }
         public Matrix Projection { get; private set; }
 
-        private const float walkSpeed = 100f;
-        private const float runSpeed = walkSpeed * 5;
         private const float mouseSensitivity = 2f;
 
         private const float fieldOfView = MathHelper.PiOver4;
@@ -22,75 +18,54 @@ namespace TGC.MonoGame.TP
         private const float farPlaneDistance = 10000f;
 
         private float pitch, yaw = -90f;
-        private Vector3 frontDirection = -Vector3.UnitZ;
+        private Vector3 frontDirection;
         private Vector3 rightDirection = Vector3.Right;
         private Vector3 upDirection = Vector3.Up;
 
-        private Vector2 pastMousePosition;
-        private Point screenCenter;
-
-        private BodyHandle handle;
-
-        internal void Initialize(GraphicsDevice graphicsDevice, BodyHandle handle)
+        internal void Initialize(GraphicsDevice graphicsDevice)
         {
-            this.handle = handle;
-            screenCenter = new Point(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2);
             Projection = CreateProjectionMatrix(graphicsDevice);
             View = CreateViewMatrix();
         }
 
-        internal void Update(GameTime gameTime)
+        internal void Update(float elapsedTime)
         {
-            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            ProcessKeyboard(elapsedTime);
-            ProcessMouseMovement(elapsedTime);
+            FollowXWing();
+            UpdateCameraVectors();
             View = CreateViewMatrix();
         }
 
         // Matrix
-
         private Matrix CreateProjectionMatrix(GraphicsDevice graphicsDevice) => Matrix.CreatePerspectiveFieldOfView(fieldOfView, graphicsDevice.Viewport.AspectRatio, nearPlaneDistance, farPlaneDistance);
-        private Matrix CreateViewMatrix() => Matrix.CreateLookAt(Position(), Position() + frontDirection, upDirection);
+        private Matrix CreateViewMatrix() => Matrix.CreateLookAt(position, position + frontDirection, upDirection);
 
-        // Keyboard
-
-        private float MovementSpeed() => Input.Turbo() ? runSpeed : walkSpeed;
-
-        private void ProcessKeyboard(float elapsedTime)
+        private void FollowXWing()
         {
-            Vector3 inputDirection = Input.HorizontalAxis() * rightDirection + Input.ForwardAxis() * frontDirection + Input.VerticalAxis() * upDirection;
-            Vector3 normalizedInput = !Equals(inputDirection, Vector3.Zero) ? Vector3.Normalize(inputDirection) : Vector3.Zero;
+            Vector3 xwingPosition = TGCGame.world.xwing.Position();
+            float xwingVelocityScale = Math.Max(0, Vector3.Dot(TGCGame.world.xwing.Velocity(), TGCGame.world.xwing.forward) / (TGCGame.world.xwing.forward.Length() * TGCGame.world.xwing.forward.Length())) / TGCGame.world.xwing.maxSpeed;
+            float xwingDistance = 30 + 15 * xwingVelocityScale;
+            float cametaHeightDistance = 6 + 4 * xwingVelocityScale;
 
-            var velocidad = normalizedInput * MovementSpeed() * elapsedTime;
-            var velocidadConvertida = new System.Numerics.Vector3(velocidad.X, velocidad.Y, velocidad.Z);
-
-            TGCGame.physicSimulation.GetBody(handle).Velocity.Linear += velocidadConvertida;
-            //game.GetBodyReference(handle).Velocity.Linear = new System.Numerics.Vector3(-100, 0, 0) * elapsedTime;
+            position = xwingPosition - xwingDistance * TGCGame.world.xwing.forward + cametaHeightDistance * TGCGame.world.xwing.upDirection;
         }
 
-        // Mouse
-
-        private Vector2 CurrentMousePosition() => Mouse.GetState().Position.ToVector2();
-
-        private void ProcessMouseMovement(float elapsedTime)
+        internal void UpdateYawNPitch(Vector2 mouseDelta)
         {
-            Vector2 mouseDelta = (CurrentMousePosition() - pastMousePosition) * mouseSensitivity * elapsedTime;
             yaw += mouseDelta.X;
             pitch -= mouseDelta.Y;
             pitch = Math.Clamp(pitch, -89.9f, 89.9f);
-
-            UpdateCameraVectors();
-            Mouse.SetPosition(screenCenter.X, screenCenter.Y);
-            pastMousePosition = CurrentMousePosition();
         }
 
         private void UpdateCameraVectors()
         {
-            frontDirection = Vector3.Normalize(new Vector3(
+            Vector3 mouseDirection = Vector3.Normalize(new Vector3(
                 MathF.Cos(MathHelper.ToRadians(yaw)) * MathF.Cos(MathHelper.ToRadians(pitch)),
                 MathF.Sin(MathHelper.ToRadians(pitch)),
                 MathF.Sin(MathHelper.ToRadians(yaw)) * MathF.Cos(MathHelper.ToRadians(pitch))
             ));
+
+            frontDirection = Vector3.Normalize(TGCGame.world.xwing.forward * 10 + mouseDirection);
+
             rightDirection = Vector3.Normalize(Vector3.Cross(frontDirection, Vector3.Up));
             upDirection = Vector3.Normalize(Vector3.Cross(rightDirection, frontDirection));
         }

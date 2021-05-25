@@ -13,7 +13,9 @@ namespace TGC.MonoGame.TP
         internal static Content content;
         internal static readonly PhysicSimulation physicSimulation = new PhysicSimulation();
         internal static readonly World world = new World();
-        private readonly Camera camera = new Camera();
+        internal static Camera camera = new Camera();
+        internal static Vector2 screenCenter;
+        private readonly Player player = new Player();
 
         internal TGCGame()
         {
@@ -32,16 +34,10 @@ namespace TGC.MonoGame.TP
         protected override void Initialize()
         {
             GraphicsDevice.RasterizerState = new RasterizerState { CullMode = CullMode.None };
+            screenCenter = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
             base.Initialize();
             world.Initialize();
-            InitializeCamera();
-        }
-
-        private void InitializeCamera()
-        {
-            Vector3 position = new Vector3(0f, 0f, 150f);
-            BodyHandle bodyHandle = physicSimulation.CreateDynamic(position, Quaternion.Identity, content.Sh_Sphere20, 100f);
-            camera.Initialize(GraphicsDevice, bodyHandle);
+            camera.Initialize(GraphicsDevice);
         }
 
         protected override void Update(GameTime gameTime)
@@ -49,10 +45,13 @@ namespace TGC.MonoGame.TP
             if (Input.Exit())
                 Exit();
 
-            world.Update(gameTime.ElapsedGameTime.TotalMilliseconds);
+            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            world.Update(elapsedTime);
             physicSimulation.Update();
-            camera.Update(gameTime);
+            camera.Update(elapsedTime);
             base.Update(gameTime);
+            player.Update(elapsedTime);
         }
 
         protected override void Draw(GameTime gameTime)

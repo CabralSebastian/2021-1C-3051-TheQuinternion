@@ -12,22 +12,23 @@ namespace TGC.MonoGame.TP
         Random Random = new Random();
 
         private readonly List<Entity> entities = new List<Entity>();
+        internal XWing xwing;
 
         internal void Register(Entity entity) => entities.Add(entity);
 
         internal void Initialize()
         {
             new DeathStar().Create();
-            XWing.getInstance().Instantiate(new Vector3(50f, 0f, 0f));
+            xwing = new XWing();
+            xwing.Instantiate(new Vector3(50f, 0f, 0f));
         }
 
         internal void Update(double elapsedTime)
         {
-            RandomNumber = Random.Next(0, 750); // 1/750 Chances * update de que spawnee un Tie
+            RandomNumber = Random.Next(0, 750);
             if (RandomNumber == 1)
-            {
                 new TIE().Instantiate(new Vector3((float)Random.Next(100, 400), 0f, 0f));
-            }
+
 
             entities.ForEach(entity => entity.Update(elapsedTime));
         }
