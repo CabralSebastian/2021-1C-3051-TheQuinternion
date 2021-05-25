@@ -8,12 +8,12 @@ using TGC.MonoGame.TP.Drawers;
 
 namespace TGC.MonoGame.TP.ConcreteEntities
 {
-    internal class XWing : KinematicEntity
+    internal class XWing : DynamicEntity
     {
         protected override Drawer Drawer() => new BasicDrawer(TGCGame.content.M_XWing, TGCGame.content.T_XWing);
         protected override Vector3 Scale => Vector3.One;
         protected override TypedIndex Shape => TGCGame.content.SH_XWing;
-        //protected override float Mass => 100f;
+        protected override float Mass => 100f;
 
         internal readonly float maxSpeed = 200f;
         private const float acceleration = 0.5f;
@@ -114,7 +114,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         public override bool HandleCollition(ICollitionHandler other)
         {
-            //TGCGame.content.S_Explotion.CreateInstance().Play();
+            TGCGame.content.S_Explotion.CreateInstance().Play();
             return false;
         }
 
