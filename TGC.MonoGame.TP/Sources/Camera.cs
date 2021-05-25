@@ -11,8 +11,6 @@ namespace TGC.MonoGame.TP
         public Matrix View { get; private set; }
         public Matrix Projection { get; private set; }
 
-        private const float mouseSensitivity = 2f;
-
         private const float fieldOfView = MathHelper.PiOver4;
         private const float nearPlaneDistance = 0.1f;
         private const float farPlaneDistance = 10000f;
@@ -64,10 +62,10 @@ namespace TGC.MonoGame.TP
                 MathF.Sin(MathHelper.ToRadians(yaw)) * MathF.Cos(MathHelper.ToRadians(pitch))
             ));
 
-            frontDirection = Vector3.Normalize(TGCGame.world.xwing.forward * 10 + mouseDirection);
+            frontDirection = Vector3.Normalize(frontDirection * 20 + TGCGame.world.xwing.forward); // + mouseDirection);
 
             rightDirection = Vector3.Normalize(Vector3.Cross(frontDirection, Vector3.Up));
-            upDirection = Vector3.Normalize(Vector3.Cross(rightDirection, frontDirection));
+            upDirection = Vector3.Normalize(upDirection * 2 + Vector3.Cross(rightDirection, frontDirection));
         }
     }
 }

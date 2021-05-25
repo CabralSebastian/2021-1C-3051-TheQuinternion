@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace TGC.MonoGame.TP
 {
@@ -14,16 +15,16 @@ namespace TGC.MonoGame.TP
 
         private static bool MovingUp() => KeyboardState.IsKeyDown(Keys.Space);
         private static bool MovingDown() => KeyboardState.IsKeyDown(Keys.LeftControl);
-
         private static int BoolToInt(bool b) => b ? 1 : 0;
         private static int BoolsToAxis(bool positive, bool negative) => BoolToInt(positive) - BoolToInt(negative);
-
         internal static int HorizontalAxis() => BoolsToAxis(MovingRight(), MovingLeft());
         internal static int VerticalAxis() => BoolsToAxis(MovingUp(), MovingDown());
         internal static int ForwardAxis() => BoolsToAxis(MovingForward(), MovingBackward());
-
         internal static bool Turbo() => KeyboardState.IsKeyDown(Keys.LeftShift);
-
         internal static bool Exit() => KeyboardState.IsKeyDown(Keys.Escape);
+
+        //MOUSE//
+        internal static Vector2 MousePosition() => Mouse.GetState().Position.ToVector2();
+        internal static bool Fire() => Mouse.GetState().LeftButton == ButtonState.Pressed;
     }
 }
