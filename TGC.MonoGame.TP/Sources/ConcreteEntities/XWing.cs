@@ -1,18 +1,16 @@
 ﻿using BepuPhysics;
 using BepuPhysics.Collidables;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using TGC.MonoGame.TP.Entities;
 using TGC.MonoGame.TP.Physics;
 using System;
+using TGC.MonoGame.TP.Drawers;
 
 namespace TGC.MonoGame.TP.ConcreteEntities
 {
     internal class XWing : KinematicEntity
     {
-        protected override Model Model() => TGCGame.content.M_XWing;
-        protected override Texture2D[] Textures() => TGCGame.content.T_XWing;
+        protected override Drawer Drawer() => new BasicDrawer(TGCGame.content.M_XWing, TGCGame.content.T_XWing);
         protected override Vector3 Scale => Vector3.One;
         protected override TypedIndex Shape => TGCGame.content.SH_XWing;
         //protected override float Mass => 100f;
@@ -69,7 +67,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         private void Aligment(float elapsedTime)
         {
-            if (Vector3.Equals(upDirection, baseUpDirection))
+            if (Equals(upDirection, baseUpDirection))
                 return;
 
             float fixValue = 0.001f;
@@ -92,7 +90,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             axisRotation = Vector3.Zero;
         }
 
-        internal void addRotation(Vector3 rotatioPerAxis)
+        internal void AddRotation(Vector3 rotatioPerAxis)
         {
             this.axisRotation += rotatioPerAxis;
         }
@@ -118,6 +116,12 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         {
             //TGCGame.content.S_Explotion.CreateInstance().Play();
             return false;
+        }
+
+        internal void Fire()
+        {
+            BodyReference body = Body();
+            new Laser().Instantiate(body.Pose.Position.ToVector3(), body.Pose.Orientation.ToQuaternion());
         }
     }
 }

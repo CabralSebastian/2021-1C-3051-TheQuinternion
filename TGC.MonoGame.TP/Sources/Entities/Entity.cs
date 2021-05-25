@@ -1,30 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using TGC.MonoGame.TP.Drawers;
 
 namespace TGC.MonoGame.TP.Entities
 {
     internal abstract class Entity
     {
-        protected abstract Model Model();
-        protected abstract Texture2D[] Textures();
+        protected abstract Drawer Drawer();
         protected abstract Matrix GeneralWorldMatrix();
 
         internal virtual void Update(double elapsedTime) { }
 
-        internal void Draw()
-        {
-            Matrix generalWorldMatrix = GeneralWorldMatrix();
-
-            int index = 0;
-            ModelMeshCollection meshes = Model().Meshes;
-            foreach (var mesh in meshes)
-            {
-                Matrix worldMatrix = mesh.ParentBone.Transform * generalWorldMatrix;
-                TGCGame.content.E_BasicShader.Parameters["World"].SetValue(worldMatrix);
-                TGCGame.content.E_BasicShader.Parameters["ModelTexture"].SetValue(Textures()[index]);
-                mesh.Draw();
-                index++;
-            }
-        }
+        internal virtual void Draw() => Drawer().Draw(GeneralWorldMatrix());
     }
 }

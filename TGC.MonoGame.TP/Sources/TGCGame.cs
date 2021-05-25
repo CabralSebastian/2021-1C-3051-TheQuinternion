@@ -51,7 +51,7 @@ namespace TGC.MonoGame.TP
 
             world.Update(elapsedTime);
             physicSimulation.Update();
-            camera.Update(elapsedTime);
+            camera.Update();
             base.Update(gameTime);
             player.Update(elapsedTime);
         }
@@ -62,8 +62,6 @@ namespace TGC.MonoGame.TP
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.BlendState = BlendState.Opaque;
 
-            content.E_BasicShader.Parameters["View"].SetValue(camera.View);
-            content.E_BasicShader.Parameters["Projection"].SetValue(camera.Projection);
             world.Draw();
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, DepthStencilState.DepthRead, RasterizerState.CullNone);

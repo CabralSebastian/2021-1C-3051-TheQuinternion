@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using TGC.MonoGame.TP.ConcreteEntities;
+using TGC.MonoGame.TP.Drawers;
 using TGC.MonoGame.TP.Entities;
 
 namespace TGC.MonoGame.TP
@@ -29,9 +30,14 @@ namespace TGC.MonoGame.TP
             if (RandomNumber == 1)
                 new TIE().Instantiate(new Vector3((float)Random.Next(100, 400), 0f, 0f));
 
-
             entities.ForEach(entity => entity.Update(elapsedTime));
         }
-        internal void Draw() => entities.ForEach(entity => entity.Draw());
+
+        internal void Draw()
+        {
+            BasicDrawer.PreDraw();
+            LaserDrawer.PreDraw();
+            entities.ForEach(entity => entity.Draw());
+        }
     }
 }

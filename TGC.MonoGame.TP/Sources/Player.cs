@@ -25,23 +25,17 @@ namespace TGC.MonoGame.TP
         {
             ProcessMouseMovement(elapsedTime);
             if (Input.Fire())
-                Fire();
-        }
-
-        private void Fire()
-        { 
+                TGCGame.world.xwing.Fire();
         }
 
         //MOUSE//
-        private Vector2 CurrentMousePosition() => Input.MousePosition();
-       
         private bool MouseIsInside() =>
-            (CurrentMousePosition().X < screenCenter.X + mouseInnerBox.X && CurrentMousePosition().X > screenCenter.X - mouseInnerBox.X) && 
-            (CurrentMousePosition().Y < screenCenter.Y + mouseInnerBox.Y && CurrentMousePosition().Y > screenCenter.Y - mouseInnerBox.Y);
+            (Input.MousePosition().X < screenCenter.X + mouseInnerBox.X && Input.MousePosition().X > screenCenter.X - mouseInnerBox.X) && 
+            (Input.MousePosition().Y < screenCenter.Y + mouseInnerBox.Y && Input.MousePosition().Y > screenCenter.Y - mouseInnerBox.Y);
         
         private void ProcessMouseMovement(float elapsedTime)
         {
-            Vector2 mouseDelta = (CurrentMousePosition() - screenCenter);
+            Vector2 mouseDelta = (Input.MousePosition() - screenCenter);
             var fixValue = 0.001f;
             TGCGame.camera.UpdateYawNPitch(mouseDelta * elapsedTime * fixValue);
 
@@ -49,11 +43,11 @@ namespace TGC.MonoGame.TP
             //    TGCGame.world.xwing.addRotation(new Vector3(0, Math.Sign(-mouseDelta.X), 0));
             //TGCGame.world.xwing.addRotation(new Vector3(0, Math.Sign(-mouseDelta.X), Math.Sign(-mouseDelta.X)));
 
-            //if (CurrentMousePosition().Y == screenCenter.Y + mouseInnerBox.Y || CurrentMousePosition().Y == screenCenter.Y - mouseInnerBox.Y)
+            //if (Input.MousePosition().Y == screenCenter.Y + mouseInnerBox.Y || Input.MousePosition().Y == screenCenter.Y - mouseInnerBox.Y)
             //    TGCGame.world.xwing.addRotation(new Vector3(Math.Sign(mouseDelta.Y), 0, 0));
 
-            int limitedToOuterBoxSideX = (int)Math.Clamp(CurrentMousePosition().X, screenCenter.X - mouseOuterBox.X, screenCenter.X + mouseOuterBox.X);
-            int limitedToOuterBoxSideY = (int)Math.Clamp(CurrentMousePosition().Y, screenCenter.Y - mouseOuterBox.Y, screenCenter.Y + mouseOuterBox.Y);
+            int limitedToOuterBoxSideX = (int)Math.Clamp(Input.MousePosition().X, screenCenter.X - mouseOuterBox.X, screenCenter.X + mouseOuterBox.X);
+            int limitedToOuterBoxSideY = (int)Math.Clamp(Input.MousePosition().Y, screenCenter.Y - mouseOuterBox.Y, screenCenter.Y + mouseOuterBox.Y);
 
             Mouse.SetPosition(limitedToOuterBoxSideX, limitedToOuterBoxSideY);
             
@@ -61,7 +55,7 @@ namespace TGC.MonoGame.TP
 
         internal void DrawHUD(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            Vector2 mousePosition = CurrentMousePosition();
+            Vector2 mousePosition = Input.MousePosition();
             spriteBatch.DrawString(TGCGame.content.F_StarJedi, "Hace mucho tiempo en una galaxia muy lejana.",
                 new Vector2(graphicsDevice.Viewport.Width/5, 50), Color.White);
             spriteBatch.Draw(

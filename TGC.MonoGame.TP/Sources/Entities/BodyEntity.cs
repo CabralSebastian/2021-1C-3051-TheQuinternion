@@ -7,7 +7,7 @@ namespace TGC.MonoGame.TP.Entities
 {
     internal abstract class BodyEntity : Entity, ICollitionHandler
     {
-        protected virtual Vector3 Scale { get; }
+        protected virtual Vector3 Scale { get; } = Vector3.One;
         protected abstract TypedIndex Shape { get; }
         private BodyHandle handle;
         protected BodyReference Body() => TGCGame.physicSimulation.GetBody(handle);

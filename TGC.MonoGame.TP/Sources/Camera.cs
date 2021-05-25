@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 
 namespace TGC.MonoGame.TP
@@ -26,7 +25,7 @@ namespace TGC.MonoGame.TP
             View = CreateViewMatrix();
         }
 
-        internal void Update(float elapsedTime)
+        internal void Update()
         {
             FollowXWing();
             UpdateCameraVectors();

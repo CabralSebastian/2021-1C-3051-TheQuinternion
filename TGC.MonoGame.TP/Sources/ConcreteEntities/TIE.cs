@@ -1,7 +1,7 @@
 ﻿using BepuPhysics;
 using BepuPhysics.Collidables;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using TGC.MonoGame.TP.Drawers;
 using TGC.MonoGame.TP.Entities;
 using TGC.MonoGame.TP.Physics;
 
@@ -11,8 +11,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 {
     internal class TIE : DynamicEntity
     {
-        protected override Model Model() => TGCGame.content.M_TIE;
-        protected override Texture2D[] Textures() => TGCGame.content.T_TIE;
+        protected override Drawer Drawer() => new BasicDrawer(TGCGame.content.M_TIE, TGCGame.content.T_TIE);
 
         protected override Vector3 Scale => Vector3.One / 100f;
         protected override TypedIndex Shape => TGCGame.content.Sh_Sphere20;

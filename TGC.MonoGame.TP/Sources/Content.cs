@@ -23,9 +23,9 @@ namespace TGC.MonoGame.TP
         //private const string MusicFolder = "Music/";
         private const string FontsFolder = "Fonts/";
 
-        internal readonly Effect E_BasicShader;
-        internal readonly Model M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Trench2;
-        internal readonly TypedIndex Sh_Sphere20, SH_XWing, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
+        internal readonly Effect E_BasicShader, E_LaserShader;
+        internal readonly Model M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Trench2, M_Laser;
+        internal readonly TypedIndex Sh_Sphere20, SH_XWing, SH_Laser, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
         internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Trench2;
         internal readonly Texture2D T_TargetCursor;
         internal readonly SoundEffect S_Explotion;
@@ -37,6 +37,7 @@ namespace TGC.MonoGame.TP
 
             // Efects
             E_BasicShader = LoadEffect("BasicShader");
+            E_LaserShader = LoadEffect("LaserShader");
 
             // Models
             M_XWing = LoadModel("XWing/XWing", E_BasicShader);
@@ -48,12 +49,14 @@ namespace TGC.MonoGame.TP
             M_Trench_Cross = LoadModel("DeathStar/Trench_Cross", E_BasicShader);
             M_Trench_End = LoadModel("DeathStar/Trench_End", E_BasicShader);
             M_Trench2 = LoadModel("DeathStar/Trench2", E_BasicShader);
+            M_Laser = LoadModel("Laser", E_LaserShader);
 
             // Convex Hulls
 
             // Shapes
             Sh_Sphere20 = LoadShape(new Sphere(20f));
             SH_XWing = LoadConvexHull("XWing/XWing");
+            SH_Laser = LoadShape(new Cylinder(Laser.Radius, Laser.Lenght));
 
             // DeathStar shapes
             TypedIndex trenchPlain = LoadShape(new Box(DeathStar.trenchSize, DeathStar.trenchHeight, DeathStar.trenchSize));
