@@ -1,6 +1,7 @@
 ﻿using BepuPhysics;
 using BepuPhysics.Collidables;
 using Microsoft.Xna.Framework;
+using TGC.MonoGame.TP.CollitionInterfaces;
 using TGC.MonoGame.TP.Drawers;
 using TGC.MonoGame.TP.Entities;
 using TGC.MonoGame.TP.Physics;
@@ -25,6 +26,11 @@ namespace TGC.MonoGame.TP
 
         public override bool HandleCollition(ICollitionHandler other)
         {
+            if (!Destroyed) {
+                if (other is ILaserDamageable damageable)
+                    damageable.ReceiveLaserDamage();
+                Destroy();
+            }
             return false;
         }
     }

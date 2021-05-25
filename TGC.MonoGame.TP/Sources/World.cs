@@ -17,6 +17,8 @@ namespace TGC.MonoGame.TP
 
         internal void Register(Entity entity) => entities.Add(entity);
 
+        internal void Unregister(Entity entity) => entities.Remove(entity);
+
         internal void Initialize()
         {
             new DeathStar().Create();

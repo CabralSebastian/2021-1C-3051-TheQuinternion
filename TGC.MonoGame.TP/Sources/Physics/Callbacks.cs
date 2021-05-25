@@ -100,7 +100,10 @@ namespace TGC.MonoGame.TP.Physics
 
             ICollitionHandler handlerA = GetCollitionHandler(pair.A);
             ICollitionHandler handlerB = GetCollitionHandler(pair.B);
-            return (handlerA != null && handlerA.HandleCollition(handlerB)) || (handlerB != null && handlerB.HandleCollition(handlerA));
+            handlerA?.HandleCollition(handlerB);
+            handlerB?.HandleCollition(handlerA);
+            return false;
+            //return (handlerA != null && handlerA.HandleCollition(handlerB)) || (handlerB != null && handlerB.HandleCollition(handlerA));
         }
 
         private ICollitionHandler GetCollitionHandler(CollidableReference collider) =>

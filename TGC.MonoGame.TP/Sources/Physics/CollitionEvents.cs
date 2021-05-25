@@ -13,5 +13,8 @@ namespace TGC.MonoGame.TP.Physics
 
         internal ICollitionHandler GetHandler(StaticHandle handle) => collidersS.GetValueOrDefault(handle);
         internal ICollitionHandler GetHandler(BodyHandle handle) => collidersB.GetValueOrDefault(handle);
+
+        internal void UnregisterCollider(StaticHandle handle) => collidersS.Remove(handle);
+        internal void UnregisterCollider(BodyHandle handle) => collidersB.Remove(handle);
     }
 }

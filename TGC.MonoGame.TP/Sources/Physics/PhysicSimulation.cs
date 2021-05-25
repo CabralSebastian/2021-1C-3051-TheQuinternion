@@ -67,6 +67,9 @@ namespace TGC.MonoGame.TP.Physics
             return simulation.Bodies.Add(bodyDescription);
         }
 
+        internal void DestroyStatic(StaticHandle handle) => simulation.Statics.Remove(handle);
+        internal void DestroyBody(BodyHandle handle) => simulation.Bodies.Remove(handle);
+
         internal void Dispose()
         {
             simulation.Dispose();

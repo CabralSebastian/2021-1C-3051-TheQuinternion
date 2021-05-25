@@ -121,7 +121,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         internal void Fire()
         {
             BodyReference body = Body();
-            new Laser().Instantiate(body.Pose.Position.ToVector3(), body.Pose.Orientation.ToQuaternion());
+            new Laser().Instantiate(body.Pose.Position.ToVector3() + forward * 20f, body.Pose.Orientation.ToQuaternion());
         }
     }
 }

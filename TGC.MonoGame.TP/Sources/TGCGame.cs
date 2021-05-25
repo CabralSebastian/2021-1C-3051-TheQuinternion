@@ -50,10 +50,10 @@ namespace TGC.MonoGame.TP
             float elapsedTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
             world.Update(elapsedTime);
-            physicSimulation.Update();
             camera.Update();
-            base.Update(gameTime);
             player.Update(elapsedTime);
+            physicSimulation.Update();
+            base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
