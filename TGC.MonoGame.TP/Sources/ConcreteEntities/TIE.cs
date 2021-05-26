@@ -1,6 +1,7 @@
 ﻿using BepuPhysics;
 using BepuPhysics.Collidables;
 using Microsoft.Xna.Framework;
+using TGC.MonoGame.TP.CollitionInterfaces;
 using TGC.MonoGame.TP.Drawers;
 using TGC.MonoGame.TP.Entities;
 using TGC.MonoGame.TP.Physics;
@@ -9,7 +10,7 @@ enum State { SEEKING, ATTACKING, FLEEING };
 
 namespace TGC.MonoGame.TP.ConcreteEntities
 {
-    internal class TIE : DynamicEntity
+    internal class TIE : DynamicEntity, IStaticDamageable, ILaserDamageable
     {
         protected override Drawer Drawer() => new BasicDrawer(TGCGame.content.M_TIE, TGCGame.content.T_TIE);
 
@@ -167,6 +168,16 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         private bool XWingInSight(BodyReference body)
         {
             return DistanceToXWing(body) < 250f;
+        }
+
+        void IStaticDamageable.ReceiveStaticDamage()
+        {
+            Destroy();
+        }
+
+        void ILaserDamageable.ReceiveLaserDamage()
+        {
+            Destroy();
         }
     }
 }

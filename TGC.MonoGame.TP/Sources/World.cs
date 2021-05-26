@@ -35,7 +35,7 @@ namespace TGC.MonoGame.TP
 
             pendingEntities.ForEach(entity => entities.Add(entity));
             pendingEntities.Clear();
-            entities.ForEach(entity => entity.Update(elapsedTime));
+            entities.ForEach(entity => entity?.Update(elapsedTime));
         }
 
         internal void Draw()
