@@ -29,9 +29,9 @@ namespace TGC.MonoGame.TP
 
         internal void Update(double elapsedTime)
         {
-            RandomNumber = Random.Next(0, 750);
+            RandomNumber = Random.Next(0, 1000);
             if (RandomNumber == 1)
-                new TIE().Instantiate(new Vector3((float)Random.Next(100, 400), 0f, 0f));
+                new TIE().Instantiate(new Vector3((float)Random.Next(-2000, 2000), 0f, 0f));
 
             pendingEntities.ForEach(entity => entities.Add(entity));
             pendingEntities.Clear();
