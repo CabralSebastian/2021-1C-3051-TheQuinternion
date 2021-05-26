@@ -23,7 +23,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         private readonly Vector3 baseRightDirection = Vector3.Right;
         internal Vector3 forward, rightDirection, upDirection;
 
-        internal float angleUp;
+        internal float salud = 100;
 
         override internal void Update(double elapsedTime)
         {
@@ -43,7 +43,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         internal Vector3 Velocity() => Body().Velocity.Linear.ToVector3();
         private void Movement(float elapsedTime, BodyReference body)
         {
-            Vector3 accelerationDirection = Input.Accelerate() ? forward : Vector3.Zero; // Vector3 normalizedDirection = !Equals(accelerationDirection, Vector3.Zero) ? Vector3.Normalize(accelerationDirection) : Vector3.Zero;
+            Vector3 accelerationDirection = Input.Accelerate() ? forward : Vector3.Zero;
             Vector3 velocity = accelerationDirection * acceleration * elapsedTime;
 
             AddLinearVelocity(body, velocity);
@@ -69,13 +69,13 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
             if (!Equals(upDirection, baseUpDirection) && Input.VerticalAxis() == 0)
             {
-                angleUp = (float)Math.Acos(Vector3.Dot(baseUpDirection, upDirection));
+                float angleUp = (float)Math.Acos(Vector3.Dot(baseUpDirection, upDirection));
 
                 Quaternion alignedUpQuaternion = Quaternion.CreateFromAxisAngle(Vector3.Cross(upDirection, forward), angleUp / 2 * elapsedTime * fixValue);
 
                 Body().Pose.Orientation *= alignedUpQuaternion.ToBEPU();
             }
-                
+
             if (!Equals(rightDirection, baseRightDirection) && Input.HorizontalAxis() == 0)
             {
                 float angleRight = (float)Math.Acos(Vector3.Dot(baseRightDirection, rightDirection));
@@ -92,7 +92,6 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
             Quaternion horizontalRotation = Quaternion.CreateFromAxisAngle(new Vector3(0, 1, 0), -Input.HorizontalAxis() * elapsedTime * yFixValue);
             Quaternion verticalRotation = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), Input.VerticalAxis() * elapsedTime * xFixValue);
-            //Quaternion frontalRotation = Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), -Input.HorizontalAxis() * elapsedTime * 0.0002f);
 
             Body().Pose.Orientation *= (horizontalRotation * verticalRotation).ToBEPU();
         }
@@ -107,33 +106,58 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
             body.Velocity.Linear = limitedVelocity.ToBEPU();
         }
-        /*private void AddAngularVelocity(BodyReference body, Vector3 velocity)
-        {
-            var castedVelocity = new System.Numerics.Vector3(velocity.X, velocity.Y, velocity.Z);
-            body.Velocity.Angular += castedVelocity;
-        }*/
 
-        internal void Fire()
+        internal void Fire(Vector2 mousePosition)
         {
             BodyReference body = Body();
+
+            /*float yaw = 90f-mousePosition.X;
+            float pitch = 90f-mousePosition.Y;
+
+            Vector3 mouseDirection;
+            mouseDirection.X = -MathF.Cos(MathHelper.ToRadians(yaw)) * MathF.Cos(MathHelper.ToRadians(pitch));
+            mouseDirection.Y = MathF.Sin(MathHelper.ToRadians(yaw)) * MathF.Cos(MathHelper.ToRadians(pitch));
+            mouseDirection.Z = MathF.Sin(MathHelper.ToRadians(pitch));
+
+            Vector3 fireDirection = Vector3.Normalize(mouseDirection * 50 + body.Pose.Position.ToVector3());
+            Quaternion laserQuaternion = new Quaternion(fireDirection, 0);*/
+
             new Laser().Instantiate(body.Pose.Position.ToVector3() + forward * 10, body.Pose.Orientation.ToQuaternion());
+        }
+
+        private void Reiniciar()
+        {
+            //TGCGame.content.S_Explotion.CreateInstance().Play();
+            salud = 100;
+            BodyReference body = Body();
+
+            body.Velocity.Linear = System.Numerics.Vector3.Zero;
+            body.Velocity.Angular = System.Numerics.Vector3.Zero;
+            body.Pose.Position = System.Numerics.Vector3.Zero;
+            body.Pose.Orientation = Quaternion.Normalize(new Quaternion(baseUpDirection * baseRightDirection, 0)).ToBEPU();
+        }
+        internal void PerderSalud(float perdida)
+        {
+            salud -= perdida;
+            if (salud <= 0)
+                Reiniciar();
         }
 
         public override bool HandleCollition(ICollitionHandler other)
         {
-            //TGCGame.content.S_Explotion.CreateInstance().Play();
+            Reiniciar();
             return false;
         }
 
 
         void IStaticDamageable.ReceiveStaticDamage()
         {
-            //TGCGame.content.S_Explotion.CreateInstance().Play();
+            Reiniciar();
         }
 
         void ILaserDamageable.ReceiveLaserDamage()
         {
-            //throw new NotImplementedException();
+            PerderSalud(20);
         }
     }
 }

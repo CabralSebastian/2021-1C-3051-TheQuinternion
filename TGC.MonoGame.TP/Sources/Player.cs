@@ -25,7 +25,7 @@ namespace TGC.MonoGame.TP
         {
             ProcessMouseMovement(elapsedTime);
             if (Input.Fire())
-                TGCGame.world.xwing.Fire();
+                TGCGame.world.xwing.Fire(Input.MousePosition()-screenCenter);
         }
 
         //MOUSE//
@@ -56,7 +56,9 @@ namespace TGC.MonoGame.TP
         internal void DrawHUD(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
             Vector2 mousePosition = Input.MousePosition();
-            spriteBatch.DrawString(TGCGame.content.F_StarJedi, "Hace mucho tiempo, en una galaxia muy, muy lejana..." + TGCGame.world.xwing.angleUp,
+            spriteBatch.DrawString(TGCGame.content.F_StarJedi, "Salud: " + TGCGame.world.xwing.salud,
+                new Vector2(graphicsDevice.Viewport.Width / 100, graphicsDevice.Viewport.Width / 100), Color.White);
+            spriteBatch.DrawString(TGCGame.content.F_StarJedi, "Hace mucho tiempo, en una galaxia muy, muy lejana...",
                 new Vector2(graphicsDevice.Viewport.Width/5, 50), Color.White);
             spriteBatch.Draw(
                 TGCGame.content.T_TargetCursor, 
