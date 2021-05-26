@@ -21,6 +21,8 @@ namespace TGC.MonoGame.TP
         internal override void Update(double elapsedTime) {
             BodyReference body = Body();
             body.Velocity.Linear = -PhysicUtils.Forward(body.Pose.Orientation.ToQuaternion()).ToBEPU() * LinearVelocity * (float)elapsedTime;
+            if (body.Pose.Position.Length() > 100000f)
+                Destroy();
         }
 
         public override bool HandleCollition(ICollitionHandler other)

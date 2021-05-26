@@ -14,11 +14,12 @@ namespace TGC.MonoGame.TP
 
         private readonly List<Entity> pendingEntities = new List<Entity>();
         private readonly List<Entity> entities = new List<Entity>();
+        private readonly List<Entity> removedEntities = new List<Entity>();
         internal XWing xwing;
 
         internal void Register(Entity entity) => pendingEntities.Add(entity);
 
-        internal void Unregister(Entity entity) => entities.Remove(entity);
+        internal void Unregister(Entity entity) => removedEntities.Add(entity);
 
         internal void Initialize()
         {
@@ -35,6 +36,8 @@ namespace TGC.MonoGame.TP
 
             pendingEntities.ForEach(entity => entities.Add(entity));
             pendingEntities.Clear();
+            removedEntities.ForEach(entity => entities.Remove(entity));
+            removedEntities.Clear();
             entities.ForEach(entity => entity?.Update(elapsedTime));
         }
 
