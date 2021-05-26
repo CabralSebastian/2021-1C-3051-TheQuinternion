@@ -24,9 +24,9 @@ namespace TGC.MonoGame.TP
         private const string FontsFolder = "Fonts/";
 
         internal readonly Effect E_BasicShader, E_LaserShader;
-        internal readonly Model M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Trench2, M_Laser;
-        internal readonly TypedIndex Sh_Sphere20, SH_XWing, SH_Laser, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
-        internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Trench2;
+        internal readonly Model M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Trench2, M_Laser, M_Turret;
+        internal readonly TypedIndex Sh_Sphere20, SH_XWing, SH_Laser, SH_Turret, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
+        internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Trench2, T_Turret;
         internal readonly Texture2D T_TargetCursor;
         internal readonly SoundEffect S_Explotion;
         internal readonly SpriteFont F_StarJedi;
@@ -50,6 +50,7 @@ namespace TGC.MonoGame.TP
             M_Trench_End = LoadModel("DeathStar/Trench_End", E_BasicShader);
             M_Trench2 = LoadModel("DeathStar/Trench2", E_BasicShader);
             M_Laser = LoadModel("Laser", E_LaserShader);
+            M_Turret = LoadModel("Turret", E_BasicShader);
 
             // Convex Hulls
 
@@ -57,6 +58,7 @@ namespace TGC.MonoGame.TP
             Sh_Sphere20 = LoadShape(new Sphere(20f));
             SH_XWing = LoadConvexHull("XWing/XWing");
             SH_Laser = LoadShape(new Cylinder(Laser.Radius, Laser.Lenght));
+            SH_Turret = LoadShape(new Box(3f, 3.3f, 3f));
 
             // DeathStar shapes
             TypedIndex trenchPlain = LoadShape(new Box(DeathStar.trenchSize, DeathStar.trenchHeight, DeathStar.trenchSize));
@@ -110,6 +112,7 @@ namespace TGC.MonoGame.TP
             T_Trench = new Texture2D[] { LoadTexture("DeathStar/DeathStar") };
             T_Trench2 = Enumerable.Repeat(LoadTexture("DeathStar/DeathStar"), 27).ToArray();
             T_TargetCursor = LoadTexture("HUD/TargetCursor");
+            T_Turret = new Texture2D[] { LoadTexture("DeathStar/Turret") };
 
             // Sounds
             S_Explotion = LoadSound("Explotion");

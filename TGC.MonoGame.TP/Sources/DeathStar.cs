@@ -26,6 +26,7 @@ namespace TGC.MonoGame.TP
             bool[,] matrix = GenerateMatrix();
             CleanMatrix(matrix);
             InstantiateMatrix(matrix);
+            CreateTurrets(matrix);
         }
 
         private int RandomMatrixValue() => random.Next(margin, size - margin + 1);
@@ -178,6 +179,14 @@ namespace TGC.MonoGame.TP
                     }
                     else
                         instantiationMethods[0000](new Vector3((x - halfSize) * trenchSize, -100f, (z - halfSize) * trenchSize));
+        }
+
+        private void CreateTurrets(bool[,] matrix)
+        {
+            for (int x = 0; x < size; x++)
+                for (int z = 0; z < size; z++)
+                    if (!matrix[x, z] && RandomBool(0.2f))
+                        new Turret().Instantiate(new Vector3((x - halfSize) * trenchSize, -100f, (z - halfSize) * trenchSize));
         }
     }
 }

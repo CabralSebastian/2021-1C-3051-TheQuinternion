@@ -12,10 +12,11 @@ namespace TGC.MonoGame.TP
         int RandomNumber = 0;
         Random Random = new Random();
 
+        private readonly List<Entity> pendingEntities = new List<Entity>();
         private readonly List<Entity> entities = new List<Entity>();
         internal XWing xwing;
 
-        internal void Register(Entity entity) => entities.Add(entity);
+        internal void Register(Entity entity) => pendingEntities.Add(entity);
 
         internal void Unregister(Entity entity) => entities.Remove(entity);
 
@@ -32,6 +33,8 @@ namespace TGC.MonoGame.TP
             if (RandomNumber == 1)
                 new TIE().Instantiate(new Vector3((float)Random.Next(100, 400), 0f, 0f));
 
+            pendingEntities.ForEach(entity => entities.Add(entity));
+            pendingEntities.Clear();
             entities.ForEach(entity => entity.Update(elapsedTime));
         }
 
@@ -39,6 +42,7 @@ namespace TGC.MonoGame.TP
         {
             BasicDrawer.PreDraw();
             LaserDrawer.PreDraw();
+            TurretDrawer.PreDraw();
             entities.ForEach(entity => entity.Draw());
         }
     }

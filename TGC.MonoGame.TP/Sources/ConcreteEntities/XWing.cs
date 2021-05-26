@@ -35,7 +35,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
             Brakement((float)elapsedTime, body);
             Movement((float)elapsedTime, body);
-            Aligment((float)elapsedTime);
+            //Aligment((float)elapsedTime);
             Rotation((float)elapsedTime);
         }
 
@@ -133,7 +133,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         void ILaserDamageable.ReceiveLaserDamage()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }
