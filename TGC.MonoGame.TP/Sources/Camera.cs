@@ -41,7 +41,7 @@ namespace TGC.MonoGame.TP
             Vector3 xwingPosition = TGCGame.world.xwing.Position();
             float xwingVelocityScale = Math.Max(0, Vector3.Dot(TGCGame.world.xwing.Velocity(), TGCGame.world.xwing.forward) / (TGCGame.world.xwing.forward.Length() * TGCGame.world.xwing.forward.Length())) / TGCGame.world.xwing.maxSpeed;
             float xwingDistance = 30 + 15 * xwingVelocityScale;
-            float cametaHeightDistance = 6 + 4 * xwingVelocityScale;
+            float cametaHeightDistance = 6 + 3 * xwingVelocityScale;
 
             position = xwingPosition - xwingDistance * TGCGame.world.xwing.forward + cametaHeightDistance * TGCGame.world.xwing.upDirection;
         }
