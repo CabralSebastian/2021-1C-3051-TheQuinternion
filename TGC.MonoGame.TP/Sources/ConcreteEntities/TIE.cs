@@ -36,7 +36,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         {
             BodyReference body = Body();
 
-            if (Health < 0)
+            if (Health <= 0)
             {
                 Destroy();
             }
@@ -124,12 +124,12 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         private bool FleeSuccess(BodyReference body)
         {
-            return DistanceToXWing(body) > 2000f;
+            return DistanceToXWing(body) > 3000f;
         }
 
         private bool ShortFleeSuccess(BodyReference body)
         {
-            return DistanceToXWing(body) > 1000f;
+            return DistanceToXWing(body) > 1500f;
         }
 
         private void Flee(BodyReference body)
