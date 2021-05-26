@@ -9,12 +9,11 @@ using TGC.MonoGame.TP.CollitionInterfaces;
 
 namespace TGC.MonoGame.TP.ConcreteEntities
 {
-    internal class XWing : DynamicEntity, IStaticDamageable, ILaserDamageable
+    internal class XWing : KinematicEntity, IStaticDamageable, ILaserDamageable
     {
         protected override Drawer Drawer() => new BasicDrawer(TGCGame.content.M_XWing, TGCGame.content.T_XWing);
         protected override Vector3 Scale => Vector3.One;
         protected override TypedIndex Shape => TGCGame.content.SH_XWing;
-        protected override float Mass => 100f;
 
         internal readonly float maxSpeed = 200f;
         private const float acceleration = 1f;
@@ -122,7 +121,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             Vector3 fireDirection = Vector3.Normalize(mouseDirection * 50 + body.Pose.Position.ToVector3());
             Quaternion laserQuaternion = new Quaternion(fireDirection, 0);*/
 
-            new Laser().Instantiate(body.Pose.Position.ToVector3() + forward * 10, body.Pose.Orientation.ToQuaternion());
+            new Laser().Instantiate(body.Pose.Position.ToVector3() + forward * 20, body.Pose.Orientation.ToQuaternion());
         }
 
         private void Reiniciar()
@@ -131,10 +130,10 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             salud = 100;
             BodyReference body = Body();
 
-            body.Velocity.Linear = System.Numerics.Vector3.Zero;
-            body.Velocity.Angular = System.Numerics.Vector3.Zero;
+            /*body.Velocity.Linear = System.Numerics.Vector3.Zero;
+            body.Velocity.Angular = System.Numerics.Vector3.Zero;*/
             body.Pose.Position = System.Numerics.Vector3.Zero;
-            body.Pose.Orientation = Quaternion.Normalize(new Quaternion(baseUpDirection * baseRightDirection, 0)).ToBEPU();
+            //body.Pose.Orientation = Quaternion.Normalize(new Quaternion(baseUpDirection * baseRightDirection, 0)).ToBEPU();
         }
         internal void PerderSalud(float perdida)
         {
@@ -142,13 +141,6 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             if (salud <= 0)
                 Reiniciar();
         }
-
-        public override bool HandleCollition(ICollitionHandler other)
-        {
-            Reiniciar();
-            return false;
-        }
-
 
         void IStaticDamageable.ReceiveStaticDamage()
         {

@@ -28,7 +28,7 @@ namespace TGC.MonoGame.TP.Entities
             base.Destroy();
         }
 
-        public bool HandleCollition(ICollitionHandler other)
+        public virtual bool HandleCollition(ICollitionHandler other)
         {
             if (other is IStaticDamageable damageable)
                 damageable.ReceiveStaticDamage();

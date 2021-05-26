@@ -58,12 +58,12 @@ namespace TGC.MonoGame.TP
             Sh_Sphere20 = LoadShape(new Sphere(20f));
             SH_XWing = LoadConvexHull("XWing/XWing");
             SH_Laser = LoadShape(new Cylinder(Laser.Radius, Laser.Lenght));
-            SH_Turret = LoadShape(new Box(3f, 3.3f, 3f));
+            SH_Turret = LoadShape(new Box(2f * 10f, 5f * 10f, 2f * 10f));
 
             // DeathStar shapes
             TypedIndex trenchPlain = LoadShape(new Box(DeathStar.trenchSize, DeathStar.trenchHeight, DeathStar.trenchSize));
-            TypedIndex trenchLine = LoadShape(new Box(DeathStar.trenchSize, DeathStar.trenchHeight, DeathStar.trenchSize / 2f));
-            TypedIndex trenchQuarter = LoadShape(new Box(DeathStar.trenchSize / 2f, DeathStar.trenchHeight, DeathStar.trenchSize / 2f));
+            TypedIndex trenchLine = LoadShape(new Box(DeathStar.trenchSize, DeathStar.trenchHeight, DeathStar.trenchSize / 1.6f));
+            TypedIndex trenchQuarter = LoadShape(new Box(DeathStar.trenchSize / 1.6f, DeathStar.trenchHeight, DeathStar.trenchSize / 1.6f));
             RigidPose plainPose = new RigidPose(new BEPUVector3(0f, -DeathStar.trenchHeight * 1.5f, 0f));
             float colliderYPos = -DeathStar.trenchHeight / 2f;
             float sideOffset = DeathStar.trenchSize * 3.5f / 8f;

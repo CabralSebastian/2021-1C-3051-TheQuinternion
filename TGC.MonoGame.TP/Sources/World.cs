@@ -43,7 +43,7 @@ namespace TGC.MonoGame.TP
             BasicDrawer.PreDraw();
             LaserDrawer.PreDraw();
             TurretDrawer.PreDraw();
-            entities.ForEach(entity => entity.Draw());
+            entities.ForEach(entity => entity?.Draw());
         }
     }
 }

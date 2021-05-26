@@ -8,7 +8,7 @@ using TGC.MonoGame.TP.Physics;
 
 namespace TGC.MonoGame.TP
 {
-    internal class Laser : DynamicEntity
+    internal class Laser : KinematicEntity
     {
         private const float LinearVelocity = 50f;
         internal const float Radius = 0.2f;
@@ -17,7 +17,6 @@ namespace TGC.MonoGame.TP
         protected override Drawer Drawer() => new LaserDrawer(TGCGame.content.M_Laser);
         protected override Vector3 Scale => new Vector3(Radius, Radius, Lenght) / 100f;
         protected override TypedIndex Shape => TGCGame.content.SH_Laser;
-        protected override float Mass => 1f;
 
         internal override void Update(double elapsedTime) {
             BodyReference body = Body();

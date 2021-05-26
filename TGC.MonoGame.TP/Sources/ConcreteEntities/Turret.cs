@@ -73,8 +73,15 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         private void Fire()
         {
-            new Laser().Instantiate(Position + new Vector3(0f, 2.8911f * 10f, 0f) - PhysicUtils.Left(cannonsRotation) * 2f - PhysicUtils.Forward(cannonsRotation) * 5f, cannonsRotation);
-            new Laser().Instantiate(Position + new Vector3(0f, 2.8911f * 10f, 0f) + PhysicUtils.Left(cannonsRotation) * 2f - PhysicUtils.Forward(cannonsRotation) * 5f, cannonsRotation);
+            new Laser().Instantiate(Position + new Vector3(0f, 2.8911f * 10f, 0f) - PhysicUtils.Left(cannonsRotation) * 2f - PhysicUtils.Forward(cannonsRotation) * 25f, cannonsRotation);
+            new Laser().Instantiate(Position + new Vector3(0f, 2.8911f * 10f, 0f) + PhysicUtils.Left(cannonsRotation) * 2f - PhysicUtils.Forward(cannonsRotation) * 25f, cannonsRotation);
+        }
+
+        public override bool HandleCollition(ICollitionHandler other)
+        {
+            base.HandleCollition(other);
+            Destroy();
+            return false;
         }
     }
 }
