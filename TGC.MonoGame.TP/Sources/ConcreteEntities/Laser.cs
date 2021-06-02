@@ -10,7 +10,7 @@ namespace TGC.MonoGame.TP
 {
     internal class Laser : KinematicEntity
     {
-        private const float LinearVelocity = 50f;
+        private const float LinearVelocity = 700f;
         internal const float Radius = 0.2f;
         internal const float Lenght = 5f;
 
@@ -18,10 +18,14 @@ namespace TGC.MonoGame.TP
         protected override Vector3 Scale => new Vector3(Radius, Radius, Lenght) / 100f;
         protected override TypedIndex Shape => TGCGame.content.SH_Laser;
 
-        internal override void Update(double elapsedTime) {
+        internal override void OnInstantiate() {
             BodyReference body = Body();
-            body.Velocity.Linear = -PhysicUtils.Forward(body.Pose.Orientation.ToQuaternion()).ToBEPU() * LinearVelocity * (float)elapsedTime;
-            if (body.Pose.Position.Length() > 100000f)
+            body.Velocity.Linear = -PhysicUtils.Forward(body.Pose.Orientation.ToQuaternion()).ToBEPU() * LinearVelocity;
+        }
+
+        internal override void Update(double elapsedTime)
+        {
+            if (Body().Pose.Position.Length() > 100000f)
                 Destroy();
         }
 
