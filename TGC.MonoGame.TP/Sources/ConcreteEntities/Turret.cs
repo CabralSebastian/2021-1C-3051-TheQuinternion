@@ -39,6 +39,8 @@ namespace TGC.MonoGame.TP.ConcreteEntities
                 Vector3 direction = Vector3.Normalize(difference);
 
                 float objectiveHeadAngle = (float)Math.Atan(direction.X / direction.Z);
+                if (direction.Z > 0)
+                    objectiveHeadAngle += MathHelper.Pi;
                 float objectiveCannonsAngle = -(float)Math.Asin(difference.Y / distance);
 
                 float differenceHead = objectiveHeadAngle - headAngle;
