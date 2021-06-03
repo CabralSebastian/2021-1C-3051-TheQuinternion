@@ -179,7 +179,7 @@ namespace TGC.MonoGame.TP
 
                         if (shape == 1100 && RandomBool(0.2f))
                             new SmallTurret(false).Instantiate(new Vector3((x - halfSize) * trenchSize, -110f - trenchHeight, (z - halfSize) * trenchSize));
-                        else if (shape == 0011 && RandomBool(1f))
+                        else if (shape == 0011 && RandomBool(0.2f))
                             new SmallTurret(true).Instantiate(new Vector3((x - halfSize) * trenchSize, -110f - trenchHeight, (z - halfSize) * trenchSize), d90);
                     }
                     else

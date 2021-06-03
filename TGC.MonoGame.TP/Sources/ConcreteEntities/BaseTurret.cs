@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 using TGC.MonoGame.TP.Entities;
 using TGC.MonoGame.TP.Physics;
 
@@ -6,34 +7,48 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 {
     internal abstract class BaseTurret : StaticPhysicEntity
     {
-        protected abstract float MaxRange { get; }
-        //protected abstract float MinIdleTime { get; }
+        protected override Vector3 Scale => Vector3.One * DeathStar.trenchScale;
 
-        private double idleTime = 0;
+        protected abstract float MaxRange { get; }
+        protected abstract float MinIdleTime { get; }
+        protected abstract Vector3 CannonsOffset { get; }
+
+        protected float headAngle = 0f, cannonsAngle = 0f;
+
+        protected Vector3 CannonsPosition;
+        private double idleTime = 0d;
 
         protected bool IsInRange(float distance) => distance < MaxRange;
 
-        /*internal override void Update(double elapsedTime)
+        protected override void OnInstantiate()
         {
-            Vector3 difference = TGCGame.world.xwing.Position() - (Position + cannonsOffset);
+            CannonsPosition = Position + CannonsOffset;
+        }
+
+        internal override void Update(double elapsedTime)
+        {
+            Vector3 difference = TGCGame.world.xwing.Position() - CannonsPosition;
             float distance = difference.Length();
 
             if (IsInRange(distance))
             {
-                Aim();
-                if (idleTime > MinIdleTime && IsAimed())
+                PhysicUtils.DirectionToEuler(difference, distance, out float objectiveYaw, out float objectivePitch);
+                Aim(difference, objectiveYaw - headAngle, objectivePitch - cannonsAngle, elapsedTime);
+                if (IsAimed(Math.Abs(objectiveYaw - headAngle), Math.Abs(objectivePitch - cannonsAngle)) && idleTime > MinIdleTime)
                 {
                     Fire();
                     idleTime = 0;
                 }
+                else
+                    idleTime += elapsedTime;
             }
             else
                 idleTime += elapsedTime;
         }
 
-        protected abstract void Aim();
-        protected abstract bool IsAimed();
-        protected abstract void Fire();*/
+        protected abstract void Aim(Vector3 difference, float yawDifference, float pitchDifference, double elapsedTime);
+        protected abstract bool IsAimed(float yawDifference, float pitchDifference);
+        protected abstract void Fire();
 
         public override bool HandleCollition(ICollitionHandler other)
         {
