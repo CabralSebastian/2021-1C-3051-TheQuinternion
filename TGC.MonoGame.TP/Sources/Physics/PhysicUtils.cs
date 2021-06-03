@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace TGC.MonoGame.TP.Physics
 {
@@ -21,5 +22,11 @@ namespace TGC.MonoGame.TP.Physics
             2 * (rotation.X * rotation.Y + rotation.W * rotation.Z),
             2 * (rotation.X * rotation.Z - rotation.W * rotation.Y)
         ));
+
+        internal static void DirectionToEuler(Vector3 difference, float distance, out float yaw, out float pitch)
+        {
+            yaw = (float)Math.Atan(difference.X / difference.Z) + (difference.Z > 0 ? MathHelper.Pi : 0f);
+            pitch = -(float)Math.Asin(difference.Y / distance);
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace TGC.MonoGame.TP
             bool[,] matrix = GenerateMatrix();
             CleanMatrix(matrix);
             InstantiateMatrix(matrix);
-            CreateTurrets(matrix);
+            CreateSurfaceTurrets(matrix);
         }
 
         private int RandomMatrixValue() => random.Next(margin, size - margin + 1);
@@ -176,12 +176,17 @@ namespace TGC.MonoGame.TP
 
                         int shape = up + down + right + left;
                         instantiationMethods[shape](new Vector3((x - halfSize) * trenchSize, - 100f, (z - halfSize) * trenchSize));
+
+                        if (shape == 1100 && RandomBool(0.2f))
+                            new SmallTurret(false).Instantiate(new Vector3((x - halfSize) * trenchSize, -110f - trenchHeight, (z - halfSize) * trenchSize));
+                        else if (shape == 0011 && RandomBool(1f))
+                            new SmallTurret(true).Instantiate(new Vector3((x - halfSize) * trenchSize, -110f - trenchHeight, (z - halfSize) * trenchSize), d90);
                     }
                     else
                         instantiationMethods[0000](new Vector3((x - halfSize) * trenchSize, -100f, (z - halfSize) * trenchSize));
         }
 
-        private void CreateTurrets(bool[,] matrix)
+        private void CreateSurfaceTurrets(bool[,] matrix)
         {
             for (int x = 0; x < size; x++)
                 for (int z = 0; z < size; z++)

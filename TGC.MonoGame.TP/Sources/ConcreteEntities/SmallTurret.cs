@@ -6,30 +6,43 @@ using TGC.MonoGame.TP.Physics;
 
 namespace TGC.MonoGame.TP.ConcreteEntities
 {
-    internal class Turret : BaseTurret
+    internal class SmallTurret : BaseTurret
     {
-        private readonly TurretDrawer turretDrawer = new TurretDrawer(TGCGame.content.M_Turret, TGCGame.content.T_Turret);
+        private readonly SmallTurretDrawer turretDrawer = new SmallTurretDrawer(TGCGame.content.M_SmallTurret, TGCGame.content.T_Turret);
         protected override Drawer Drawer() => turretDrawer;
         protected override TypedIndex Shape => TGCGame.content.SH_Turret;
         protected override Vector3 Scale => Vector3.One * DeathStar.trenchScale;
+
+        protected override float MaxRange => 500f;
+        //protected override float MinIdleTime => 1000f;
+
         private float headAngle = 0f, cannonsAngle = 0f;
         private double idleTime = 0;
 
-        protected override float MaxRange => 1000f;
+        private readonly bool rotated;
+        internal SmallTurret(bool rotated) => this.rotated = rotated;
+
         private const float maxRotation = 0.2f;
         private const float minIdleTime = 1000f;
-        private const float precition = (float)Math.PI / 4;
+        private const float precition = (float)Math.PI / 10;
 
-        private Quaternion headRotation = Quaternion.Identity, cannonsRotation = Quaternion.Identity;
 
-        private readonly Vector3 cannonsOffset = new Vector3(0f, 2.8911f, 0f) * 10f;
+        private readonly Vector3 cannonsOffset = new Vector3(0f, 1.70945f, 0f) * 10f;
 
-        private Matrix HeadWorldMatrix()
-            => Matrix.CreateScale(Scale) * Matrix.CreateFromQuaternion(headRotation) * Matrix.CreateTranslation(Position);
+        private Quaternion cannonsRotation = Quaternion.Identity;
+
+        private Matrix rotMatrix;
+        private Vector3 left;
+        protected override void OnInstantiate()
+        {
+            rotMatrix = Matrix.CreateFromQuaternion(Rotation);
+            left = PhysicUtils.Left(Rotation);
+            base.OnInstantiate();
+        }
 
         private Matrix CannonsWorldMatrix()
             => Matrix.CreateScale(Scale) * Matrix.CreateFromQuaternion(cannonsRotation) * Matrix.CreateTranslation(Position + cannonsOffset);
-        
+
         internal override void Update(double elapsedTime)
         {
             Vector3 difference = TGCGame.world.xwing.Position() - (Position + cannonsOffset);
@@ -39,18 +52,19 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             {
                 PhysicUtils.DirectionToEuler(difference, distance, out float objectiveHeadAngle, out float objectiveCannonsAngle);
 
-                float differenceHead = objectiveHeadAngle - headAngle;
                 float differenceCannonsAngle = objectiveCannonsAngle - cannonsAngle;
 
-                headAngle += (differenceHead > 0 ? 1 : -1) * (float)Math.Min(Math.Abs(differenceHead), maxRotation * elapsedTime);
                 cannonsAngle += (differenceCannonsAngle > 0 ? 1 : -1) * (float)Math.Min(Math.Abs(differenceCannonsAngle), maxRotation * elapsedTime);
+                if (!rotated)
+                    headAngle = difference.Z < 0 ? 0 : MathHelper.Pi;
+                else
+                    headAngle = difference.X < 0 ? 0 : MathHelper.Pi;
 
-                headRotation = Quaternion.CreateFromAxisAngle(Vector3.Up, headAngle);
-                cannonsRotation = headRotation * Quaternion.CreateFromAxisAngle(Vector3.Left, cannonsAngle);
+                cannonsRotation = Rotation * Quaternion.CreateFromAxisAngle(Vector3.Up, headAngle) * Quaternion.CreateFromAxisAngle(Vector3.Left, cannonsAngle);
 
-                differenceHead = Math.Abs(objectiveHeadAngle - headAngle);
+                float differenceHead = Math.Abs(objectiveHeadAngle - headAngle);
                 differenceCannonsAngle = Math.Abs(objectiveCannonsAngle - cannonsAngle);
-                if (differenceHead < precition && differenceCannonsAngle < precition && idleTime > minIdleTime)
+                if ((differenceHead < precition || differenceHead - MathHelper.Pi < precition) && differenceCannonsAngle < precition && idleTime > minIdleTime)
                 {
                     Fire();
                     idleTime = 0;
@@ -64,15 +78,14 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         internal override void Draw()
         {
-            turretDrawer.HeadWorldMatrix = HeadWorldMatrix();
             turretDrawer.CannonsWorldMatrix = CannonsWorldMatrix();
             base.Draw();
         }
 
         private void Fire()
         {
-            new Laser().Instantiate(Position + cannonsOffset - PhysicUtils.Left(cannonsRotation) * 2f - PhysicUtils.Forward(cannonsRotation) * 25f, cannonsRotation);
-            new Laser().Instantiate(Position + cannonsOffset + PhysicUtils.Left(cannonsRotation) * 2f - PhysicUtils.Forward(cannonsRotation) * 25f, cannonsRotation);
+            new Laser().Instantiate(Position + cannonsOffset - left * 2f - PhysicUtils.Forward(cannonsRotation) * 25f, cannonsRotation);
+            new Laser().Instantiate(Position + cannonsOffset + left * 2f - PhysicUtils.Forward(cannonsRotation) * 25f, cannonsRotation);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         private readonly Vector3 baseRightDirection = Vector3.Right;
         internal Vector3 forward, rightDirection, upDirection;
 
-        internal float salud = 100;
+        internal float salud = 1000000000000000000;
 
         override internal void Update(double elapsedTime)
         {

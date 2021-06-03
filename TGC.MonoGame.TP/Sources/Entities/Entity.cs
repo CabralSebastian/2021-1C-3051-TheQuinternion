@@ -16,7 +16,7 @@ namespace TGC.MonoGame.TP.Entities
 
         internal virtual void Destroy() => TGCGame.world.Unregister(this);
 
-        internal virtual void OnInstantiate() { }
+        protected virtual void OnInstantiate() { }
         internal virtual void Update(double elapsedTime) { }
 
         internal virtual void Draw() => Drawer().Draw(GeneralWorldMatrix());

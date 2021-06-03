@@ -24,7 +24,7 @@ namespace TGC.MonoGame.TP
         private const string FontsFolder = "Fonts/";
 
         internal readonly Effect E_BasicShader, E_LaserShader;
-        internal readonly Model M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Trench2, M_Laser, M_Turret;
+        internal readonly Model M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Trench2, M_Laser, M_Turret, M_SmallTurret;
         internal readonly TypedIndex Sh_Sphere20, SH_XWing, SH_Laser, SH_Turret, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
         internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Trench2, T_Turret;
         internal readonly Texture2D T_TargetCursor;
@@ -50,7 +50,8 @@ namespace TGC.MonoGame.TP
             M_Trench_End = LoadModel("DeathStar/Trench_End", E_BasicShader);
             M_Trench2 = LoadModel("DeathStar/Trench2", E_BasicShader);
             M_Laser = LoadModel("Laser", E_LaserShader);
-            M_Turret = LoadModel("Turret", E_BasicShader);
+            M_Turret = LoadModel("DeathStar/Turret", E_BasicShader);
+            M_SmallTurret = LoadModel("DeathStar/SmallTurret", E_BasicShader);
 
             // Convex Hulls
 

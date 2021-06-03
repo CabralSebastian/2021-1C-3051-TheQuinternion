@@ -18,7 +18,7 @@ namespace TGC.MonoGame.TP
         protected override Vector3 Scale => new Vector3(Radius, Radius, Lenght) / 100f;
         protected override TypedIndex Shape => TGCGame.content.SH_Laser;
 
-        internal override void OnInstantiate() {
+        protected override void OnInstantiate() {
             BodyReference body = Body();
             body.Velocity.Linear = -PhysicUtils.Forward(body.Pose.Orientation.ToQuaternion()).ToBEPU() * LinearVelocity;
         }
