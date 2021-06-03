@@ -25,7 +25,7 @@ namespace TGC.MonoGame.TP
 
         internal readonly Effect E_BasicShader, E_LaserShader;
         internal readonly Model M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Trench2, M_Laser, M_Turret, M_SmallTurret;
-        internal readonly TypedIndex Sh_Sphere20, SH_XWing, SH_Laser, SH_Turret, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
+        internal readonly TypedIndex Sh_Sphere20, SH_XWing, SH_Laser, SH_Turret, SH_SmallTurret, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
         internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Trench2, T_Turret;
         internal readonly Texture2D T_TargetCursor;
         internal readonly SoundEffect S_Explotion;
@@ -60,6 +60,7 @@ namespace TGC.MonoGame.TP
             SH_XWing = LoadConvexHull("XWing/XWing");
             SH_Laser = LoadShape(new Cylinder(Laser.Radius, Laser.Lenght));
             SH_Turret = LoadShape(new Box(2f * 10f, 5f * 10f, 2f * 10f));
+            SH_SmallTurret = LoadShape(new Box(2f * 5f, 5f * 5f, 2f * 5f));
 
             // DeathStar shapes
             TypedIndex trenchPlain = LoadShape(new Box(DeathStar.trenchSize, DeathStar.trenchHeight, DeathStar.trenchSize));

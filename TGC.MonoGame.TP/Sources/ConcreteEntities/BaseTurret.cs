@@ -18,6 +18,8 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         protected Vector3 CannonsPosition;
         private double idleTime = 0d;
 
+        protected float health = 100f;
+
         protected bool IsInRange(float distance) => distance < MaxRange;
 
         protected override void OnInstantiate()
@@ -53,7 +55,9 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         public override bool HandleCollition(ICollitionHandler other)
         {
             base.HandleCollition(other);
-            Destroy();
+            health -= 20;
+            if (health <= 0)
+                Destroy();
             return false;
         }
     }
