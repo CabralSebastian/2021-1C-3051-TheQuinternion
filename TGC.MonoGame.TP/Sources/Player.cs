@@ -13,6 +13,8 @@ namespace TGC.MonoGame.TP
         private readonly Vector2 mouseOuterBox; 
         private readonly Vector2 mouseInnerBox;
 
+        private Vector2 lastMousePosition;
+
         internal Player(Vector2 screenSize)
         {
             this.screenSize = screenSize;
@@ -35,7 +37,7 @@ namespace TGC.MonoGame.TP
         
         private void ProcessMouseMovement(float elapsedTime)
         {
-            Vector2 mouseDelta = (Input.MousePosition() - screenCenter);
+            Vector2 mouseDelta = (Input.MousePosition() - lastMousePosition);
             var fixValue = 0.001f;
             TGCGame.camera.UpdateYawNPitch(mouseDelta * elapsedTime * fixValue);
 
@@ -50,15 +52,18 @@ namespace TGC.MonoGame.TP
             int limitedToOuterBoxSideY = (int)Math.Clamp(Input.MousePosition().Y, screenCenter.Y - mouseOuterBox.Y, screenCenter.Y + mouseOuterBox.Y);
 
             Mouse.SetPosition(limitedToOuterBoxSideX, limitedToOuterBoxSideY);
-            
+            lastMousePosition = Input.MousePosition();
+
+
         }
 
         internal void DrawHUD(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
             Vector2 mousePosition = Input.MousePosition();
+            Vector3 pos = TGCGame.world.xwing.Position();
             spriteBatch.DrawString(TGCGame.content.F_StarJedi, "Salud: " + TGCGame.world.xwing.salud,
                 new Vector2(graphicsDevice.Viewport.Width / 100, graphicsDevice.Viewport.Width / 100), Color.White);
-            spriteBatch.DrawString(TGCGame.content.F_StarJedi, "Hace mucho tiempo, en una galaxia muy, muy lejana...",
+            spriteBatch.DrawString(TGCGame.content.F_StarJedi, "(" + pos.X + ", " + pos.Y + ", " + pos.Z + ")",
                 new Vector2(graphicsDevice.Viewport.Width/5, 50), Color.White);
             spriteBatch.Draw(
                 TGCGame.content.T_TargetCursor, 
