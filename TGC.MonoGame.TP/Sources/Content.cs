@@ -9,6 +9,7 @@ using TGC.MonoGame.TP.Physics;
 using BEPUVector3 = System.Numerics.Vector3;
 using BEPUQuaternion = System.Numerics.Quaternion;
 using System;
+using TGC.MonoGame.TP.Drawers;
 
 namespace TGC.MonoGame.TP
 {
@@ -30,6 +31,9 @@ namespace TGC.MonoGame.TP
         internal readonly Texture2D T_TargetCursor;
         internal readonly SoundEffect S_Explotion;
         internal readonly SpriteFont F_StarJedi;
+        internal readonly Drawer D_XWing, D_TIE, D_Trench_Plain, D_Trench_Line, D_Trench_Corner, D_Trench_T, D_Trench_Cross, D_Trench_End, D_Trench2, D_Laser;
+        internal readonly TurretDrawer D_Turret;
+        internal readonly SmallTurretDrawer D_SmallTurret;
 
         internal Content(ContentManager contentManager)
         {
@@ -121,6 +125,20 @@ namespace TGC.MonoGame.TP
 
             // Fonts
             F_StarJedi = LoadFont("Starjedi");
+
+            // Drawers
+            D_XWing = new BasicDrawer(M_XWing, T_XWing);
+            D_TIE = new BasicDrawer(M_TIE, T_TIE);
+            D_Trench_Plain = new BasicDrawer(M_Trench_Plain, T_Trench);
+            D_Trench_Line = new BasicDrawer(M_Trench_Line, T_Trench);
+            D_Trench_Corner = new BasicDrawer(M_Trench_Corner, T_Trench);
+            D_Trench_T = new BasicDrawer(M_Trench_T, T_Trench);
+            D_Trench_Cross = new BasicDrawer(M_Trench_Cross, T_Trench);
+            D_Trench_End = new BasicDrawer(M_Trench_End, T_Trench);
+            D_Trench2 = new BasicDrawer(M_Trench2, T_Trench);
+            D_Laser = new LaserDrawer(M_Laser);
+            D_Turret = new TurretDrawer(M_Turret, T_Turret);
+            D_SmallTurret = new SmallTurretDrawer(M_SmallTurret, T_Turret);
         }
 
         private Effect LoadEffect(string name) => contentManager.Load<Effect>(EffectsFolder + name);

@@ -8,8 +8,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 {
     internal class Turret : BaseTurret
     {
-        private readonly TurretDrawer turretDrawer = new TurretDrawer(TGCGame.content.M_Turret, TGCGame.content.T_Turret);
-        protected override Drawer Drawer() => turretDrawer;
+        protected override Drawer Drawer() => TGCGame.content.D_Turret;
         protected override TypedIndex Shape => TGCGame.content.SH_Turret;
 
         protected override float MaxRange => 1000f;
@@ -40,14 +39,16 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         protected override void Fire()
         {
-            new Laser().Instantiate(CannonsPosition - PhysicUtils.Left(cannonsRotation) * 2f - PhysicUtils.Forward(cannonsRotation) * 25f, cannonsRotation);
-            new Laser().Instantiate(CannonsPosition + PhysicUtils.Left(cannonsRotation) * 2f - PhysicUtils.Forward(cannonsRotation) * 25f, cannonsRotation);
+            Vector3 forward = PhysicUtils.Forward(cannonsRotation);
+            Vector3 left = PhysicUtils.Left(cannonsRotation);
+            TGCGame.world.InstantiateLaser(CannonsPosition - left, forward, cannonsRotation);
+            TGCGame.world.InstantiateLaser(CannonsPosition + left, forward, cannonsRotation);
         }
 
         internal override void Draw()
         {
-            turretDrawer.HeadWorldMatrix = HeadWorldMatrix();
-            turretDrawer.CannonsWorldMatrix = CannonsWorldMatrix();
+            TGCGame.content.D_Turret.HeadWorldMatrix = HeadWorldMatrix();
+            TGCGame.content.D_Turret.CannonsWorldMatrix = CannonsWorldMatrix();
             base.Draw();
         }
     }

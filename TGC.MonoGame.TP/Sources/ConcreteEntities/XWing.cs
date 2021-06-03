@@ -11,7 +11,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 {
     internal class XWing : KinematicEntity, IStaticDamageable, ILaserDamageable
     {
-        protected override Drawer Drawer() => new BasicDrawer(TGCGame.content.M_XWing, TGCGame.content.T_XWing);
+        protected override Drawer Drawer() => TGCGame.content.D_XWing;
         protected override Vector3 Scale => Vector3.One;
         protected override TypedIndex Shape => TGCGame.content.SH_XWing;
 

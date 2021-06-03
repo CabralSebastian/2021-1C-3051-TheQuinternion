@@ -48,5 +48,10 @@ namespace TGC.MonoGame.TP
             TurretDrawer.PreDraw();
             entities.ForEach(entity => entity?.Draw());
         }
+
+        internal void InstantiateLaser(Vector3 position, Vector3 forward, Quaternion orientation)
+        {
+            new Laser().Instantiate(position - forward * 25f, orientation);
+        }
     }
 }

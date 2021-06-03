@@ -7,7 +7,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 {
     internal class Trench2 : StaticPhysicEntity
     {
-        protected override Drawer Drawer() => new BasicDrawer(TGCGame.content.M_Trench2, TGCGame.content.T_Trench);
+        protected override Drawer Drawer() => TGCGame.content.D_Trench2;
         protected override Vector3 Scale => Vector3.One / 100f;
         protected override TypedIndex Shape => TGCGame.content.Sh_Sphere20;
     }

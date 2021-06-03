@@ -27,17 +27,17 @@ namespace TGC.MonoGame.TP
 
         protected override void LoadContent()
         {
+            base.LoadContent();
             spriteBatch = new SpriteBatch(GraphicsDevice);
             fullScreenQuad = new FullScreenQuad(GraphicsDevice);
             content = new Content(Content);
-            base.LoadContent();
         }
 
         protected override void Initialize()
         {
+            base.Initialize();
             GraphicsDevice.RasterizerState = new RasterizerState { CullMode = CullMode.CullClockwiseFace };
             player = new Player(new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
-            base.Initialize();
             world.Initialize();
             camera.Initialize(GraphicsDevice);
         }

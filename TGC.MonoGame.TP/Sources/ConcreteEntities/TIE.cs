@@ -12,7 +12,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 {
     internal class TIE : DynamicEntity, IStaticDamageable, ILaserDamageable
     {
-        protected override Drawer Drawer() => new BasicDrawer(TGCGame.content.M_TIE, TGCGame.content.T_TIE);
+        protected override Drawer Drawer() => TGCGame.content.D_TIE;
 
         protected override Vector3 Scale => Vector3.One / 100f;
         protected override TypedIndex Shape => TGCGame.content.Sh_Sphere20;
