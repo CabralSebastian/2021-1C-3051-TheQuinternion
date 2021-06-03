@@ -43,9 +43,29 @@ namespace TGC.MonoGame.TP
 
         internal void Draw()
         {
-            BasicDrawer.PreDraw();
-            LaserDrawer.PreDraw();
-            TurretDrawer.PreDraw();
+            // E_BasicShader
+            /*TGCGame.content.E_BasicShader.Parameters["View"].SetValue(TGCGame.camera.View);
+            TGCGame.content.E_BasicShader.Parameters["Projection"].SetValue(TGCGame.camera.Projection);*/
+
+            // E_BlinnPhong
+            TGCGame.content.E_BlinnPhong.Parameters["ambientColor"].SetValue(new Vector3(1f, 1f, 1f));
+            TGCGame.content.E_BlinnPhong.Parameters["diffuseColor"].SetValue(new Vector3(1f, 1f, 1f));
+            TGCGame.content.E_BlinnPhong.Parameters["specularColor"].SetValue(new Vector3(1f, 1f, 1f));
+
+            TGCGame.content.E_BlinnPhong.Parameters["KAmbient"].SetValue(0.7f);
+            TGCGame.content.E_BlinnPhong.Parameters["KDiffuse"].SetValue(0.8f);
+            TGCGame.content.E_BlinnPhong.Parameters["KSpecular"].SetValue(0.1f);
+            TGCGame.content.E_BlinnPhong.Parameters["shininess"].SetValue(16.0f);
+
+            TGCGame.content.E_BlinnPhong.Parameters["ViewProjection"].SetValue(TGCGame.camera.View * TGCGame.camera.Projection);
+            TGCGame.content.E_BlinnPhong.Parameters["lightPosition"].SetValue(new Vector3(100000f, 80000f, 50000f));
+            TGCGame.content.E_BlinnPhong.Parameters["eyePosition"].SetValue(TGCGame.camera.position);
+
+            // E_LaserShader
+            TGCGame.content.E_LaserShader.Parameters["View"].SetValue(TGCGame.camera.View);
+            TGCGame.content.E_LaserShader.Parameters["Projection"].SetValue(TGCGame.camera.Projection);
+
+            // Draw
             entities.ForEach(entity => entity?.Draw());
         }
 

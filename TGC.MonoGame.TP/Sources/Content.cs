@@ -24,7 +24,7 @@ namespace TGC.MonoGame.TP
         //private const string MusicFolder = "Music/";
         private const string FontsFolder = "Fonts/";
 
-        internal readonly Effect E_BasicShader, E_LaserShader;
+        internal readonly Effect E_BasicShader, E_BlinnPhong, E_PBR, E_LaserShader;
         internal readonly Model M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Trench2, M_Laser, M_Turret, M_SmallTurret;
         internal readonly TypedIndex Sh_Sphere20, SH_XWing, SH_Laser, SH_Turret, SH_SmallTurret, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
         internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Trench2, T_Turret;
@@ -41,21 +41,23 @@ namespace TGC.MonoGame.TP
 
             // Efects
             E_BasicShader = LoadEffect("BasicShader");
+            E_BlinnPhong = LoadEffect("BlinnPhong");
+            E_PBR = LoadEffect("PBR");
             E_LaserShader = LoadEffect("LaserShader");
 
             // Models
-            M_XWing = LoadModel("XWing/XWing", E_BasicShader);
-            M_TIE = LoadModel("TIE/TIE", E_BasicShader);
-            M_Trench_Plain = LoadModel("DeathStar/Trench_Plain", E_BasicShader);
-            M_Trench_Line = LoadModel("DeathStar/Trench_Line", E_BasicShader);
-            M_Trench_Corner = LoadModel("DeathStar/Trench_Corner", E_BasicShader);
-            M_Trench_T = LoadModel("DeathStar/Trench_T", E_BasicShader);
-            M_Trench_Cross = LoadModel("DeathStar/Trench_Cross", E_BasicShader);
-            M_Trench_End = LoadModel("DeathStar/Trench_End", E_BasicShader);
-            M_Trench2 = LoadModel("DeathStar/Trench2", E_BasicShader);
+            M_XWing = LoadModel("XWing/XWing", E_BlinnPhong);
+            M_TIE = LoadModel("TIE/TIE", E_BlinnPhong);
+            M_Trench_Plain = LoadModel("DeathStar/Trench_Plain", E_BlinnPhong);
+            M_Trench_Line = LoadModel("DeathStar/Trench_Line", E_BlinnPhong);
+            M_Trench_Corner = LoadModel("DeathStar/Trench_Corner", E_BlinnPhong);
+            M_Trench_T = LoadModel("DeathStar/Trench_T", E_BlinnPhong);
+            M_Trench_Cross = LoadModel("DeathStar/Trench_Cross", E_BlinnPhong);
+            M_Trench_End = LoadModel("DeathStar/Trench_End", E_BlinnPhong);
+            M_Trench2 = LoadModel("DeathStar/Trench2", E_BlinnPhong);
             M_Laser = LoadModel("Laser", E_LaserShader);
-            M_Turret = LoadModel("DeathStar/Turret", E_BasicShader);
-            M_SmallTurret = LoadModel("DeathStar/SmallTurret", E_BasicShader);
+            M_Turret = LoadModel("DeathStar/Turret", E_BlinnPhong);
+            M_SmallTurret = LoadModel("DeathStar/SmallTurret", E_BlinnPhong);
 
             // Convex Hulls
 
@@ -113,7 +115,9 @@ namespace TGC.MonoGame.TP
             T_TIE = new Texture2D[] { LoadTexture("TIE/TIE_IN_DIFF") };
             T_XWing = new Texture2D[] {
                 LoadTexture("XWing/lambert6_Base_Color"),
-                LoadTexture("XWing/lambert5_Base_Color")
+                LoadTexture("XWing/lambert5_Base_Color"),
+                /*LoadTexture("XWing/lambert6_Normal_DirectX"),
+                LoadTexture("XWing/lambert5_Normal_DirectX")*/
             };
             T_Trench = new Texture2D[] { LoadTexture("DeathStar/DeathStar") };
             T_Trench2 = Enumerable.Repeat(LoadTexture("DeathStar/DeathStar"), 27).ToArray();
@@ -127,15 +131,15 @@ namespace TGC.MonoGame.TP
             F_StarJedi = LoadFont("Starjedi");
 
             // Drawers
-            D_XWing = new BasicDrawer(M_XWing, T_XWing);
-            D_TIE = new BasicDrawer(M_TIE, T_TIE);
-            D_Trench_Plain = new BasicDrawer(M_Trench_Plain, T_Trench);
-            D_Trench_Line = new BasicDrawer(M_Trench_Line, T_Trench);
-            D_Trench_Corner = new BasicDrawer(M_Trench_Corner, T_Trench);
-            D_Trench_T = new BasicDrawer(M_Trench_T, T_Trench);
-            D_Trench_Cross = new BasicDrawer(M_Trench_Cross, T_Trench);
-            D_Trench_End = new BasicDrawer(M_Trench_End, T_Trench);
-            D_Trench2 = new BasicDrawer(M_Trench2, T_Trench);
+            D_XWing = new BlinnPhongDrawer(M_XWing, T_XWing);
+            D_TIE = new BlinnPhongDrawer(M_TIE, T_TIE);
+            D_Trench_Plain = new BlinnPhongDrawer(M_Trench_Plain, T_Trench);
+            D_Trench_Line = new BlinnPhongDrawer(M_Trench_Line, T_Trench);
+            D_Trench_Corner = new BlinnPhongDrawer(M_Trench_Corner, T_Trench);
+            D_Trench_T = new BlinnPhongDrawer(M_Trench_T, T_Trench);
+            D_Trench_Cross = new BlinnPhongDrawer(M_Trench_Cross, T_Trench);
+            D_Trench_End = new BlinnPhongDrawer(M_Trench_End, T_Trench);
+            D_Trench2 = new BlinnPhongDrawer(M_Trench2, T_Trench);
             D_Laser = new LaserDrawer(M_Laser);
             D_Turret = new TurretDrawer(M_Turret, T_Turret);
             D_SmallTurret = new SmallTurretDrawer(M_SmallTurret, T_Turret);

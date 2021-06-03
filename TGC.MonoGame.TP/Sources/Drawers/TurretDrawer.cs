@@ -5,7 +5,7 @@ namespace TGC.MonoGame.TP.Drawers
 {
     internal class TurretDrawer : Drawer
     {
-        private static Effect Effect => TGCGame.content.E_BasicShader;
+        private static Effect Effect => TGCGame.content.E_BlinnPhong;
         protected readonly Model model;
         protected readonly Texture2D[] texture;
         internal Matrix HeadWorldMatrix { private get; set; }
@@ -17,15 +17,9 @@ namespace TGC.MonoGame.TP.Drawers
             this.texture = texture;
         }
 
-        internal static void PreDraw()
-        {
-            Effect.Parameters["View"].SetValue(TGCGame.camera.View);
-            Effect.Parameters["Projection"].SetValue(TGCGame.camera.Projection);
-        }
-
         internal override void Draw(Matrix generalWorldMatrix)
         {
-            Effect.Parameters["ModelTexture"].SetValue(texture[0]);
+            Effect.Parameters["baseTexture"].SetValue(texture[0]);
             DrawMesh(model.Meshes[1], generalWorldMatrix);
             DrawMesh(model.Meshes[2], HeadWorldMatrix);
             DrawMesh(model.Meshes[0], CannonsWorldMatrix);
@@ -33,7 +27,9 @@ namespace TGC.MonoGame.TP.Drawers
 
         private void DrawMesh(ModelMesh mesh, Matrix matrix)
         {
-            Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * matrix);
+            Matrix worldMatrix = mesh.ParentBone.Transform * matrix;
+            Effect.Parameters["World"].SetValue(worldMatrix);
+            Effect.Parameters["InverseTransposeWorld"].SetValue(Matrix.Transpose(Matrix.Invert(worldMatrix)));
             mesh.Draw();
         }
     }

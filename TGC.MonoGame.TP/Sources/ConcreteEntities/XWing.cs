@@ -22,6 +22,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         private readonly Vector3 baseRightDirection = Vector3.Right;
         internal Vector3 forward, rightDirection, upDirection;
 
+        private bool godMode = false;
         internal float salud = 100;
 
         override internal void Update(double elapsedTime)
@@ -135,12 +136,17 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             body.Pose.Position = System.Numerics.Vector3.Zero;
             //body.Pose.Orientation = Quaternion.Normalize(new Quaternion(baseUpDirection * baseRightDirection, 0)).ToBEPU();
         }
+
         internal void PerderSalud(float perdida)
         {
+            if (godMode)
+                return;
             salud -= perdida;
             if (salud <= 0)
                 Reiniciar();
         }
+
+        internal void ToggleGodMode() => godMode = !godMode;
 
         void IStaticDamageable.ReceiveStaticDamage()
         {

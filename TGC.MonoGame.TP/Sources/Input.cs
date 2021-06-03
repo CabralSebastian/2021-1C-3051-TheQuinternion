@@ -16,6 +16,7 @@ namespace TGC.MonoGame.TP
         internal static int HorizontalAxis() => BoolsToAxis(MovingRight(), MovingLeft());
         internal static int VerticalAxis() => BoolsToAxis(MovingUp(), MovingDown());
         internal static bool Accelerate() => KeyboardState.IsKeyDown(Keys.LeftShift);
+        internal static bool GodMode() => KeyboardState.IsKeyDown(Keys.G);
         internal static bool Exit() => KeyboardState.IsKeyDown(Keys.Escape);
 
         //MOUSE//

@@ -6,7 +6,7 @@ namespace TGC.MonoGame.TP
 {
     internal class Camera
     {
-        private Vector3 position = new Vector3();
+        internal Vector3 position = new Vector3();
         public Matrix View { get; private set; }
         public Matrix Projection { get; private set; }
 

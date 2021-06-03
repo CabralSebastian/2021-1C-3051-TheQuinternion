@@ -3,13 +3,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TGC.MonoGame.TP.Drawers
 {
-    internal class BasicDrawer : Drawer
+    internal class BlinnPhongDrawer : Drawer
     {
-        private static Effect Effect => TGCGame.content.E_BasicShader;
+        private static Effect Effect => TGCGame.content.E_BlinnPhong;
         protected readonly Model model;
         protected readonly Texture2D[] textures;
 
-        internal BasicDrawer(Model model, Texture2D[] textures)
+        internal BlinnPhongDrawer(Model model, Texture2D[] textures)
         {
             this.model = model;
             this.textures = textures;
@@ -24,7 +24,7 @@ namespace TGC.MonoGame.TP.Drawers
                 Matrix worldMatrix = mesh.ParentBone.Transform * generalWorldMatrix;
                 Effect.Parameters["World"].SetValue(worldMatrix);
                 Effect.Parameters["InverseTransposeWorld"].SetValue(Matrix.Transpose(Matrix.Invert(worldMatrix)));
-                Effect.Parameters["ModelTexture"].SetValue(textures[index]);
+                Effect.Parameters["baseTexture"].SetValue(textures[index]);
                 mesh.Draw();
                 index++;
             }

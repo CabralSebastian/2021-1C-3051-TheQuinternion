@@ -27,7 +27,9 @@ namespace TGC.MonoGame.TP
         {
             ProcessMouseMovement(elapsedTime);
             if (Input.Fire())
-                TGCGame.world.xwing.Fire(Input.MousePosition()-screenCenter);
+                TGCGame.world.xwing.Fire(Input.MousePosition() - screenCenter);
+            if (Input.GodMode())
+                TGCGame.world.xwing.ToggleGodMode();
         }
 
         //MOUSE//

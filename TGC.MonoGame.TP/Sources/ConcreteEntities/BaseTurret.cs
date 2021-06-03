@@ -22,10 +22,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         protected bool IsInRange(float distance) => distance < MaxRange;
 
-        protected override void OnInstantiate()
-        {
-            CannonsPosition = Position + CannonsOffset;
-        }
+        protected override void OnInstantiate() => CannonsPosition = Position + CannonsOffset;
 
         internal override void Update(double elapsedTime)
         {
