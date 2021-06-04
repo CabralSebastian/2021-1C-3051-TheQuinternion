@@ -50,7 +50,7 @@ namespace TGC.MonoGame.TP
 
             float elapsedTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            world.Update(elapsedTime);
+            world.Update(gameTime);
             camera.Update();
             player.Update(gameTime);
             physicSimulation.Update();

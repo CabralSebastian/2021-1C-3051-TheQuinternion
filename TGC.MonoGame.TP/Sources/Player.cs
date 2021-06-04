@@ -26,7 +26,9 @@ namespace TGC.MonoGame.TP
         internal void Update(GameTime gameTime)
         {
             ProcessMouseMovement((float)gameTime.ElapsedGameTime.TotalMilliseconds);
-            if (Input.Fire())
+            if (Input.SecondaryFire())
+                TGCGame.world.xwing.SecondaryFire(gameTime.TotalGameTime.TotalMilliseconds, Input.MousePosition() - screenCenter);
+            else if (Input.Fire())
                 TGCGame.world.xwing.Fire(gameTime.TotalGameTime.TotalMilliseconds, Input.MousePosition() - screenCenter);
             if (Input.GodMode())
                 TGCGame.world.xwing.ToggleGodMode();

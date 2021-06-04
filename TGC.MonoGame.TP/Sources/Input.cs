@@ -22,5 +22,6 @@ namespace TGC.MonoGame.TP
         //MOUSE//
         internal static Vector2 MousePosition() => Mouse.GetState().Position.ToVector2();
         internal static bool Fire() => Mouse.GetState().LeftButton == ButtonState.Pressed;
+        internal static bool SecondaryFire() => Mouse.GetState().RightButton == ButtonState.Pressed;
     }
 }

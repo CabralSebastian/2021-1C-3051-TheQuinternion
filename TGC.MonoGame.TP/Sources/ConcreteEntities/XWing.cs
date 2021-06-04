@@ -29,6 +29,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         private double lastFire;
         private const double fireCooldownTime = 200;
         private readonly AudioEmitter emitter = new AudioEmitter();
+        private const float laserVolume = 0.2f;
 
         override internal void Update(double elapsedTime)
         {
@@ -134,13 +135,25 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
             Vector3 position = body.Pose.Position.ToVector3();
             Quaternion orientation = body.Pose.Orientation.ToQuaternion();
+            TGCGame.world.InstantiateLaser(position, -forward, orientation, emitter, laserVolume);
+            lastFire = gameTime;
+        }
+
+        internal void SecondaryFire(double gameTime, Vector2 mousePosition)
+        {
+            if (gameTime < lastFire + fireCooldownTime)
+                return;
+
+            BodyReference body = Body();
+
+            Vector3 position = body.Pose.Position.ToVector3();
+            Quaternion orientation = body.Pose.Orientation.ToQuaternion();
             Vector3 up = PhysicUtils.Up(orientation);
             Vector3 left = PhysicUtils.Left(orientation);
-            TGCGame.world.InstantiateLaser(position, -forward, orientation, emitter, 0.4f);
-            /*TGCGame.world.InstantiateLaser(position + up * 1.0f + left * 4.75459f, -forward, orientation, emitter, 0.4f);
-            TGCGame.world.InstantiateLaser(position - up * 1.7f - left * 4.75459f, -forward, orientation, emitter, 0.4f);
-            TGCGame.world.InstantiateLaser(position + up * 1.0f + left * 4.75459f, -forward, orientation, emitter, 0.4f);
-            TGCGame.world.InstantiateLaser(position - up * 1.7f - left * 4.75459f, -forward, orientation, emitter, 0.4f);*/
+            TGCGame.world.InstantiateLaser(position + up * 1.0f + left * 4.75459f, -forward, orientation, emitter, laserVolume);
+            TGCGame.world.InstantiateLaser(position + up * 1.0f - left * 4.75459f, -forward, orientation, emitter, laserVolume);
+            TGCGame.world.InstantiateLaser(position - up * 1.7f + left * 4.75459f, -forward, orientation, emitter, laserVolume);
+            TGCGame.world.InstantiateLaser(position - up * 1.7f - left * 4.75459f, -forward, orientation, emitter, laserVolume);
             lastFire = gameTime;
         }
 

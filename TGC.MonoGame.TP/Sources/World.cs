@@ -3,20 +3,20 @@ using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Collections.Generic;
 using TGC.MonoGame.TP.ConcreteEntities;
-using TGC.MonoGame.TP.Drawers;
 using TGC.MonoGame.TP.Entities;
 
 namespace TGC.MonoGame.TP
 {
     internal class World
     {
-        int RandomNumber = 0;
-        Random Random = new Random();
-
         private readonly List<Entity> pendingEntities = new List<Entity>();
         private readonly List<Entity> entities = new List<Entity>();
         private readonly List<Entity> removedEntities = new List<Entity>();
         internal XWing xwing;
+
+        private readonly Random random = new Random();
+        private double lastTieSpawn;
+        private const double minTIESpawnTime = 2000;
 
         internal void Register(Entity entity) => pendingEntities.Add(entity);
 
@@ -29,22 +29,29 @@ namespace TGC.MonoGame.TP
             xwing.Instantiate(new Vector3(50f, 0f, 0f));
         }
 
-        internal void Update(double elapsedTime)
+        internal void Update(GameTime gameTime)
         {
-            RandomNumber = Random.Next(0, 1000);
-            if (RandomNumber == 1)
-                new TIE().Instantiate(new Vector3((float)Random.Next(-2000, 2000), 0f, 0f));
-
+            TIESpawn(gameTime);
             pendingEntities.ForEach(entity => entities.Add(entity));
             pendingEntities.Clear();
             removedEntities.ForEach(entity => entities.Remove(entity));
             removedEntities.Clear();
-            entities.ForEach(entity => entity?.Update(elapsedTime));
+            entities.ForEach(entity => entity.Update((float)gameTime.ElapsedGameTime.TotalMilliseconds));
+        }
+
+        private void TIESpawn(GameTime gameTime)
+        {
+            if (gameTime.TotalGameTime.TotalMilliseconds < lastTieSpawn + minTIESpawnTime)
+                return;
+
+            if (random.NextDouble() > 0.8f)
+                new TIE().Instantiate(new Vector3((float)random.Next(-2000, 2000), 0f, 0f));
+            lastTieSpawn = gameTime.TotalGameTime.TotalMilliseconds;
         }
 
         internal void Draw()
         {
-            // E_BasicShader
+            // E_BasicShader -- En desuso
             /*TGCGame.content.E_BasicShader.Parameters["View"].SetValue(TGCGame.camera.View);
             TGCGame.content.E_BasicShader.Parameters["Projection"].SetValue(TGCGame.camera.Projection);*/
 
