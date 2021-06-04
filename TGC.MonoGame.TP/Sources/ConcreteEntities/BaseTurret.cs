@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using System;
 using TGC.MonoGame.TP.Entities;
 using TGC.MonoGame.TP.Physics;
@@ -17,12 +18,17 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         protected Vector3 CannonsPosition;
         private double idleTime = 0d;
+        protected readonly AudioEmitter emitter = new AudioEmitter();
 
         protected float health = 100f;
 
         protected bool IsInRange(float distance) => distance < MaxRange;
 
-        protected override void OnInstantiate() => CannonsPosition = Position + CannonsOffset;
+        protected override void OnInstantiate()
+        {
+            CannonsPosition = Position + CannonsOffset;
+            emitter.Position = CannonsPosition;
+        }
 
         internal override void Update(double elapsedTime)
         {

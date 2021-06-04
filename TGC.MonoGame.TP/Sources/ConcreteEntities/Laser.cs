@@ -10,7 +10,7 @@ namespace TGC.MonoGame.TP
 {
     internal class Laser : KinematicEntity
     {
-        private const float LinearVelocity = 700f;
+        private const float LinearVelocity = 1000f;
         internal const float Radius = 0.2f;
         internal const float Lenght = 5f;
 

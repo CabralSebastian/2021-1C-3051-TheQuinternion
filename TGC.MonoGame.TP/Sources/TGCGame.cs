@@ -12,6 +12,7 @@ namespace TGC.MonoGame.TP
         private SpriteBatch spriteBatch;
         private FullScreenQuad fullScreenQuad;
 
+        internal static readonly SoundManager soundManager = new SoundManager();
         internal static readonly World world = new World();
         internal static Camera camera = new Camera();
 
@@ -51,7 +52,7 @@ namespace TGC.MonoGame.TP
 
             world.Update(elapsedTime);
             camera.Update();
-            player.Update(elapsedTime);
+            player.Update(gameTime);
             physicSimulation.Update();
             base.Update(gameTime);
         }

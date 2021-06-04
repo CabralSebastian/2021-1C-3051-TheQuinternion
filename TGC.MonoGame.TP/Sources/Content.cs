@@ -29,7 +29,7 @@ namespace TGC.MonoGame.TP
         internal readonly TypedIndex Sh_Sphere20, SH_XWing, SH_Laser, SH_Turret, SH_SmallTurret, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
         internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Trench2, T_Turret;
         internal readonly Texture2D T_TargetCursor;
-        internal readonly SoundEffect S_Explotion;
+        internal readonly SoundEffect S_Laser, S_Explotion;
         internal readonly SpriteFont F_StarJedi;
         internal readonly Drawer D_XWing, D_TIE, D_Trench_Plain, D_Trench_Line, D_Trench_Corner, D_Trench_T, D_Trench_Cross, D_Trench_End, D_Trench2, D_Laser;
         internal readonly TurretDrawer D_Turret;
@@ -125,6 +125,7 @@ namespace TGC.MonoGame.TP
             T_Turret = new Texture2D[] { LoadTexture("DeathStar/Turret") };
 
             // Sounds
+            S_Laser = LoadSound("Laser");
             S_Explotion = LoadSound("Explotion");
 
             // Fonts

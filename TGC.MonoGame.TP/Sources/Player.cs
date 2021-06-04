@@ -23,11 +23,11 @@ namespace TGC.MonoGame.TP
             mouseInnerBox = screenSize / 10;
         }
 
-        internal void Update(float elapsedTime)
+        internal void Update(GameTime gameTime)
         {
-            ProcessMouseMovement(elapsedTime);
+            ProcessMouseMovement((float)gameTime.ElapsedGameTime.TotalMilliseconds);
             if (Input.Fire())
-                TGCGame.world.xwing.Fire(Input.MousePosition() - screenCenter);
+                TGCGame.world.xwing.Fire(gameTime.TotalGameTime.TotalMilliseconds, Input.MousePosition() - screenCenter);
             if (Input.GodMode())
                 TGCGame.world.xwing.ToggleGodMode();
         }

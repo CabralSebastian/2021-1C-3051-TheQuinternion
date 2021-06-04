@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Collections.Generic;
 using TGC.MonoGame.TP.ConcreteEntities;
@@ -69,9 +70,12 @@ namespace TGC.MonoGame.TP
             entities.ForEach(entity => entity?.Draw());
         }
 
-        internal void InstantiateLaser(Vector3 position, Vector3 forward, Quaternion orientation)
+        internal void InstantiateLaser(Vector3 position, Vector3 forward, Quaternion orientation, AudioEmitter emitter, float volume = 0.01f)
         {
-            new Laser().Instantiate(position - forward * 25f, orientation);
+            new Laser().Instantiate(position - forward * 5f, orientation);
+            SoundEffectInstance sound = TGCGame.content.S_Laser.CreateInstance();
+            sound.Volume = volume;
+            TGCGame.soundManager.PlaySound(sound, emitter);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
@@ -19,6 +20,8 @@ namespace TGC.MonoGame.TP
         private Vector3 rightDirection = Vector3.Right;
         private Vector3 upDirection = Vector3.Up;
 
+        internal readonly AudioListener listener = new AudioListener();
+
         internal void Initialize(GraphicsDevice graphicsDevice)
         {
             Projection = CreateProjectionMatrix(graphicsDevice);
@@ -29,6 +32,7 @@ namespace TGC.MonoGame.TP
         {
             FollowXWing();
             View = CreateViewMatrix();
+            listener.Position = position;
         }
 
         // Matrix

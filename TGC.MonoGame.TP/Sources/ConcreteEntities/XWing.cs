@@ -6,6 +6,7 @@ using TGC.MonoGame.TP.Physics;
 using System;
 using TGC.MonoGame.TP.Drawers;
 using TGC.MonoGame.TP.CollitionInterfaces;
+using Microsoft.Xna.Framework.Audio;
 
 namespace TGC.MonoGame.TP.ConcreteEntities
 {
@@ -25,6 +26,10 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         private bool godMode = false;
         internal float salud = 100;
 
+        private double lastFire;
+        private const double fireCooldownTime = 200;
+        private readonly AudioEmitter emitter = new AudioEmitter();
+
         override internal void Update(double elapsedTime)
         {
             BodyReference body = Body();
@@ -37,6 +42,8 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             Movement((float)elapsedTime, body);
             //Aligment((float)elapsedTime);
             Rotation((float)elapsedTime);
+
+            emitter.Position = Position();
         }
 
         internal Vector3 Position() => Body().Pose.Position.ToVector3();
@@ -107,8 +114,11 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             body.Velocity.Linear = limitedVelocity.ToBEPU();
         }
 
-        internal void Fire(Vector2 mousePosition)
+        internal void Fire(double gameTime, Vector2 mousePosition)
         {
+            if (gameTime < lastFire + fireCooldownTime)
+                return;
+
             BodyReference body = Body();
 
             /*float yaw = 90f-mousePosition.X;
@@ -122,12 +132,21 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             Vector3 fireDirection = Vector3.Normalize(mouseDirection * 50 + body.Pose.Position.ToVector3());
             Quaternion laserQuaternion = new Quaternion(fireDirection, 0);*/
 
-            new Laser().Instantiate(body.Pose.Position.ToVector3() + forward * 20, body.Pose.Orientation.ToQuaternion());
+            Vector3 position = body.Pose.Position.ToVector3();
+            Quaternion orientation = body.Pose.Orientation.ToQuaternion();
+            Vector3 up = PhysicUtils.Up(orientation);
+            Vector3 left = PhysicUtils.Left(orientation);
+            TGCGame.world.InstantiateLaser(position, -forward, orientation, emitter, 0.4f);
+            /*TGCGame.world.InstantiateLaser(position + up * 1.0f + left * 4.75459f, -forward, orientation, emitter, 0.4f);
+            TGCGame.world.InstantiateLaser(position - up * 1.7f - left * 4.75459f, -forward, orientation, emitter, 0.4f);
+            TGCGame.world.InstantiateLaser(position + up * 1.0f + left * 4.75459f, -forward, orientation, emitter, 0.4f);
+            TGCGame.world.InstantiateLaser(position - up * 1.7f - left * 4.75459f, -forward, orientation, emitter, 0.4f);*/
+            lastFire = gameTime;
         }
 
         private void Reiniciar()
         {
-            //TGCGame.content.S_Explotion.CreateInstance().Play();
+            TGCGame.content.S_Explotion.CreateInstance().Play();
             salud = 100;
             BodyReference body = Body();
 

@@ -48,8 +48,8 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         protected override void Fire()
         {
             Vector3 forward = PhysicUtils.Forward(cannonsRotation);
-            TGCGame.world.InstantiateLaser(CannonsPosition - left, forward, cannonsRotation);
-            TGCGame.world.InstantiateLaser(CannonsPosition + left, forward, cannonsRotation);
+            TGCGame.world.InstantiateLaser(CannonsPosition - left, forward, cannonsRotation, emitter);
+            TGCGame.world.InstantiateLaser(CannonsPosition + left, forward, cannonsRotation, emitter);
         }
 
         internal override void Draw()
