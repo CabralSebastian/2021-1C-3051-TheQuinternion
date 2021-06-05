@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using TGC.MonoGame.TP.Physics;
 using TGC.MonoGame.TP.Scenes;
 using TGC.MonoGame.TP.GraphicInterface;
+using TGC.MonoGame.TP.Rendering;
 
 namespace TGC.MonoGame.TP
 {
@@ -13,6 +14,7 @@ namespace TGC.MonoGame.TP
         internal static GUI gui;
         internal static readonly PhysicSimulation physicSimulation = new PhysicSimulation();
         private SpriteBatch spriteBatch;
+        private SkyBox skyBox;
         private FullScreenQuad fullScreenQuad;
 
         internal static readonly SoundManager soundManager = new SoundManager();
@@ -36,6 +38,7 @@ namespace TGC.MonoGame.TP
             gui = new GUI(GraphicsDevice, spriteBatch);
             fullScreenQuad = new FullScreenQuad(GraphicsDevice);
             content = new Content(Content);
+            skyBox = new SkyBox(content.M_SkyBox, content.TC_Space, content.E_SkyBox, 5000f);
         }
 
         protected override void Initialize()
@@ -63,6 +66,7 @@ namespace TGC.MonoGame.TP
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.BlendState = BlendState.Opaque;
 
+            skyBox.Draw(camera.View, camera.Projection, camera.position);
             currentScene.Draw();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, DepthStencilState.DepthRead, RasterizerState.CullNone);
             currentScene.Draw2D(GraphicsDevice, spriteBatch);

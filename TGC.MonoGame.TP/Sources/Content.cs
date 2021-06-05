@@ -25,11 +25,12 @@ namespace TGC.MonoGame.TP
         //private const string MusicFolder = "Music/";
         private const string FontsFolder = "Fonts/";
 
-        internal readonly Effect E_BasicShader, E_BlinnPhong, E_PBR, E_LaserShader;
-        internal readonly Model M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Trench2, M_Laser, M_Turret, M_SmallTurret;
+        internal readonly Effect E_BasicShader, E_BlinnPhong, E_PBR, E_LaserShader, E_SkyBox;
+        internal readonly Model M_SkyBox, M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Trench2, M_Laser, M_Turret, M_SmallTurret;
         internal readonly TypedIndex Sh_Sphere20, SH_XWing, SH_Laser, SH_Turret, SH_SmallTurret, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
         internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Trench2, T_Turret;
         internal readonly Texture2D T_Pixel, T_TargetCursor;
+        internal readonly TextureCube TC_Space;
         internal readonly SoundEffect S_Click1, S_Click2, S_Laser, S_Explotion, S_MenuMusic, S_GameMusic;
         internal readonly SpriteFont F_StarJedi;
         internal readonly Drawer D_XWing, D_TIE, D_Trench_Plain, D_Trench_Line, D_Trench_Corner, D_Trench_T, D_Trench_Cross, D_Trench_End, D_Trench2, D_Laser;
@@ -45,8 +46,10 @@ namespace TGC.MonoGame.TP
             E_BlinnPhong = LoadEffect("BlinnPhong");
             E_PBR = LoadEffect("PBR");
             E_LaserShader = LoadEffect("LaserShader");
+            E_SkyBox = LoadEffect("SkyBox");
 
             // Models
+            M_SkyBox =  LoadModel("SkyBox/Cube", E_SkyBox);
             M_XWing = LoadModel("XWing/XWing", E_BlinnPhong);
             M_TIE = LoadModel("TIE/TIE", E_BlinnPhong);
             M_Trench_Plain = LoadModel("DeathStar/Trench_Plain", E_BlinnPhong);
@@ -126,6 +129,9 @@ namespace TGC.MonoGame.TP
             T_Pixel = LoadTexture("HUD/Pixel");
             T_TargetCursor = LoadTexture("HUD/TargetCursor");
 
+            // TextureCubes
+            TC_Space = LoadTextureCube("SkyBox/Space");
+
             // Sounds
             S_Click1 = LoadSound("Click1");
             S_Click2 = LoadSound("Click2");
@@ -172,6 +178,7 @@ namespace TGC.MonoGame.TP
         }
         private TypedIndex LoadConvexHull(string name) => LoadShape(ConvexHullGenerator.Generate(contentManager.Load<Model>(ModelsFolder + name)));
         private Texture2D LoadTexture(string name) => contentManager.Load<Texture2D>(TexturesFolder + name);
+        private TextureCube LoadTextureCube(string name) => contentManager.Load<TextureCube>(TexturesFolder + name);
         private SoundEffect LoadSound(string name) => contentManager.Load<SoundEffect>(SoundsFolder + name);
         private SpriteFont LoadFont(string name) => contentManager.Load<SpriteFont>(FontsFolder + name);
     }
