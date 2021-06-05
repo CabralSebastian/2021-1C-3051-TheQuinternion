@@ -64,7 +64,10 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             base.HandleCollition(other);
             health -= 20;
             if (health <= 0)
+            {
+                TGCGame.soundManager.PlaySound(TGCGame.content.S_Explotion.CreateInstance(), emitter);
                 Destroy();
+            }
             return false;
         }
     }

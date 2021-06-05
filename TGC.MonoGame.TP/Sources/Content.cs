@@ -66,7 +66,7 @@ namespace TGC.MonoGame.TP
             Sh_Sphere20 = LoadShape(new Sphere(20f));
             SH_XWing = LoadConvexHull("XWing/XWing");
             SH_Laser = LoadShape(new Cylinder(Laser.Radius / 2f, Laser.Lenght / 10f));
-            SH_Turret = LoadShape(new Box(2f * 10f, 5f * 10f, 2f * 10f));
+            SH_Turret = LoadShape(new Box(2f * 10f, 7f * 10f, 2f * 10f));
             SH_SmallTurret = LoadShape(new Box(2f * 5f, 5f * 5f, 2f * 5f));
 
             // DeathStar shapes
