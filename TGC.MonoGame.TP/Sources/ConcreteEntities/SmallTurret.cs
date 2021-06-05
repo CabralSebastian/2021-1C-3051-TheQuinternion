@@ -12,12 +12,13 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         protected override Drawer Drawer() => TGCGame.content.D_SmallTurret;
         protected override TypedIndex Shape => TGCGame.content.SH_Turret;
 
-        protected override float MaxRange => 500f;
+        protected override float MaxRange => 800f;
         protected override float MinIdleTime => 1000f;
         protected override Vector3 CannonsOffset => new Vector3(0f, 1.70945f, 0f) * 10f;
 
         private const float rotationSpeed = 0.2f;
-        private const float precition = (float)Math.PI / 10;
+        private const float precitionYaw = (float)Math.PI / 30;
+        private const float precitionPitch = (float)Math.PI / 10;
 
         private readonly bool rotated;
         internal SmallTurret(bool rotated) => this.rotated = rotated;
@@ -25,6 +26,8 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         private Vector3 left;
         protected override void OnInstantiate()
         {
+            if (rotated)
+                headAngle = MathHelper.PiOver2;
             left = PhysicUtils.Left(Rotation);
             base.OnInstantiate();
         }
@@ -44,7 +47,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             cannonsRotation = Rotation * Quaternion.CreateFromAxisAngle(Vector3.Up, headAngle) * Quaternion.CreateFromAxisAngle(Vector3.Left, cannonsAngle);
         }
 
-        protected override bool IsAimed(float yawDifference, float pitchDifference) => (yawDifference < precition || yawDifference - MathHelper.Pi < precition) && pitchDifference < precition;
+        protected override bool IsAimed(float yawDifference, float pitchDifference) => (yawDifference < precitionYaw || yawDifference - MathHelper.Pi < precitionYaw) && pitchDifference < precitionPitch;
 
         protected override void Fire()
         {

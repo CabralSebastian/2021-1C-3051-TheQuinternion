@@ -180,10 +180,10 @@ namespace TGC.MonoGame.TP
 
                         if (createTurrets)
                         {
-                            if (shape == 1100 && RandomBool(0.2f))
-                                new SmallTurret(false).Instantiate(new Vector3((x - halfSize) * trenchSize, -110f - trenchHeight, (z - halfSize) * trenchSize));
-                            else if (shape == 0011 && RandomBool(0.2f))
-                                new SmallTurret(true).Instantiate(new Vector3((x - halfSize) * trenchSize, -110f - trenchHeight, (z - halfSize) * trenchSize), d90);
+                            if (shape == 1100 && RandomBool(0.3f))
+                                new SmallTurret(false).Instantiate(new Vector3((x - halfSize) * trenchSize + RandomLineTrenchOffset(), -110f - trenchHeight, (z - halfSize) * trenchSize + RandomTrenchSizeOffset()));
+                            else if (shape == 0011 && RandomBool(0.3f))
+                                new SmallTurret(true).Instantiate(new Vector3((x - halfSize) * trenchSize + RandomTrenchSizeOffset(), -110f - trenchHeight, (z - halfSize) * trenchSize + RandomLineTrenchOffset()), d90);
                         }
                     }
                     else
@@ -194,8 +194,16 @@ namespace TGC.MonoGame.TP
         {
             for (int x = 0; x < size; x++)
                 for (int z = 0; z < size; z++)
-                    if (!matrix[x, z] && RandomBool(0.2f))
-                        new Turret().Instantiate(new Vector3((x - halfSize) * trenchSize, -100f, (z - halfSize) * trenchSize));
+                    if (!matrix[x, z] && RandomBool(0.3f))
+                        new Turret().Instantiate(new Vector3(
+                            ((x - halfSize) * trenchSize) + RandomTrenchSizeOffset(),
+                            -100f,
+                            ((z - halfSize) * trenchSize) + RandomTrenchSizeOffset()
+                        ));
         }
+
+        private float RandomTrenchSizeOffset() => -trenchSize / 2 + ((float)random.NextDouble() * trenchSize);
+
+        private float RandomLineTrenchOffset() => -10 + ((float)random.NextDouble() * 20);
     }
 }

@@ -33,7 +33,7 @@ namespace TGC.MonoGame.TP.Scenes
         {
             gameMusic = TGCGame.content.S_GameMusic.CreateInstance();
             gameMusic.IsLooped = true;
-            gameMusic.Volume = 0.1f;
+            gameMusic.Volume = 0.2f;
             gameMusic.Play();
         }
 
