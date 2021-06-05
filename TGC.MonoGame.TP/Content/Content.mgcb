@@ -31,12 +31,6 @@
 /processorParam:DebugMode=Auto
 /build:Effects/LaserShader.fx
 
-#begin Effects/PBR.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:Effects/PBR.fx
-
 #begin Effects/SkyBox.fx
 /importer:EffectImporter
 /processor:EffectProcessor

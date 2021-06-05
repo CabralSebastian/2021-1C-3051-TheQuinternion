@@ -44,7 +44,6 @@ namespace TGC.MonoGame.TP
             // Efects
             E_BasicShader = LoadEffect("BasicShader");
             E_BlinnPhong = LoadEffect("BlinnPhong");
-            E_PBR = LoadEffect("PBR");
             E_LaserShader = LoadEffect("LaserShader");
             E_SkyBox = LoadEffect("SkyBox");
 
