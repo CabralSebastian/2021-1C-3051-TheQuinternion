@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using TGC.MonoGame.TP.ConcreteEntities;
+using TGC.MonoGame.TP.Scenes;
 
 namespace TGC.MonoGame.TP
 {
@@ -22,6 +24,8 @@ namespace TGC.MonoGame.TP
 
         internal readonly AudioListener listener = new AudioListener();
 
+        private XWing target;
+
         internal void Initialize(GraphicsDevice graphicsDevice)
         {
             Projection = CreateProjectionMatrix(graphicsDevice);
@@ -30,25 +34,34 @@ namespace TGC.MonoGame.TP
 
         internal void Update()
         {
-            FollowXWing();
+            if (target != null)
+                FollowTarget();
             View = CreateViewMatrix();
             listener.Position = position;
         }
+
+        internal void SetLocation(Vector3 position, Vector3 frontDirection)
+        {
+            this.position = position;
+            this.frontDirection = frontDirection;
+        }
+
+        internal void SetTarget(XWing newTarget) => target = newTarget;
 
         // Matrix
         private Matrix CreateProjectionMatrix(GraphicsDevice graphicsDevice) => Matrix.CreatePerspectiveFieldOfView(fieldOfView, graphicsDevice.Viewport.AspectRatio, nearPlaneDistance, farPlaneDistance);
         private Matrix CreateViewMatrix() => Matrix.CreateLookAt(position, position + frontDirection, upDirection);
 
-        private void FollowXWing()
+        private void FollowTarget()
         {
-            Vector3 xwingPosition = TGCGame.world.xwing.Position();
+            Vector3 xwingPosition = target.Position();
 
-            float xwingVelocityScale = Math.Max(0, Vector3.Dot(TGCGame.world.xwing.Velocity(), TGCGame.world.xwing.forward) / (TGCGame.world.xwing.forward.Length() * TGCGame.world.xwing.forward.Length())) / TGCGame.world.xwing.maxSpeed;
+            float xwingVelocityScale = Math.Max(0, Vector3.Dot(target.Velocity(), target.forward) / (target.forward.Length() * target.forward.Length())) / target.maxSpeed;
             float xwingDistance = 45 + 20 * xwingVelocityScale;
             float cametaHeightDistance = 15 + 3 * xwingVelocityScale;
 
-            if (Vector3.Equals(position, Vector3.Zero))
-                position = xwingPosition - xwingDistance * TGCGame.world.xwing.forward + cametaHeightDistance * TGCGame.world.xwing.upDirection;
+            if (Equals(position, Vector3.Zero))
+                position = xwingPosition - xwingDistance * target.forward + cametaHeightDistance * target.upDirection;
 
             Vector3 newForward = Vector3.Normalize(xwingPosition - position);
             position = xwingPosition - xwingDistance * newForward;
@@ -58,10 +71,11 @@ namespace TGC.MonoGame.TP
                 MathF.Sin(MathHelper.ToRadians(yaw)) * MathF.Cos(MathHelper.ToRadians(pitch))
             ));*/
 
-            frontDirection = Vector3.Normalize(10 * frontDirection + TGCGame.world.xwing.forward); //Vector3.Normalize(xwingPosition + 10 * TGCGame.world.xwing.upDirection - position
+            frontDirection = Vector3.Normalize(10 * frontDirection + target.forward); //Vector3.Normalize(xwingPosition + 10 * TGCGame.world.xwing.upDirection - position
             rightDirection = Vector3.Normalize(Vector3.Cross(frontDirection, Vector3.Up));
             upDirection = Vector3.Normalize(upDirection * 5 + Vector3.Cross(rightDirection, frontDirection));
         }
+
         internal void UpdateYawNPitch(Vector2 mouseDelta)
         {
             yaw += mouseDelta.X;

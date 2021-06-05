@@ -2,42 +2,32 @@
 using Microsoft.Xna.Framework;
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.MonoGame.TP.Scenes;
 
 namespace TGC.MonoGame.TP
 {
     internal class Player
     {
-        private readonly Vector2 screenSize;
-        private readonly Vector2 screenCenter;
-
-        private readonly Vector2 mouseOuterBox; 
-        private readonly Vector2 mouseInnerBox;
+        private Vector2 MouseOuterBox => TGCGame.gui.ScreenSize / 7;
+        private Vector2 MouseInnerBox => TGCGame.gui.ScreenSize / 10;
 
         private Vector2 lastMousePosition;
-
-        internal Player(Vector2 screenSize)
-        {
-            this.screenSize = screenSize;
-            this.screenCenter = screenSize / 2;
-            mouseOuterBox = screenSize / 7;
-            mouseInnerBox = screenSize / 10;
-        }
 
         internal void Update(GameTime gameTime)
         {
             ProcessMouseMovement((float)gameTime.ElapsedGameTime.TotalMilliseconds);
             if (Input.SecondaryFire())
-                TGCGame.world.xwing.SecondaryFire(gameTime.TotalGameTime.TotalMilliseconds, Input.MousePosition() - screenCenter);
+                World.xwing.SecondaryFire(gameTime.TotalGameTime.TotalMilliseconds, Input.MousePosition() - TGCGame.gui.ScreenCenter);
             else if (Input.Fire())
-                TGCGame.world.xwing.Fire(gameTime.TotalGameTime.TotalMilliseconds, Input.MousePosition() - screenCenter);
+                World.xwing.Fire(gameTime.TotalGameTime.TotalMilliseconds, Input.MousePosition() - TGCGame.gui.ScreenCenter);
             if (Input.GodMode())
-                TGCGame.world.xwing.ToggleGodMode();
+                World.xwing.ToggleGodMode();
         }
 
         //MOUSE//
         private bool MouseIsInside() =>
-            (Input.MousePosition().X < screenCenter.X + mouseInnerBox.X && Input.MousePosition().X > screenCenter.X - mouseInnerBox.X) && 
-            (Input.MousePosition().Y < screenCenter.Y + mouseInnerBox.Y && Input.MousePosition().Y > screenCenter.Y - mouseInnerBox.Y);
+            (Input.MousePosition().X < TGCGame.gui.ScreenCenter.X + MouseInnerBox.X && Input.MousePosition().X > TGCGame.gui.ScreenCenter.X - MouseInnerBox.X) && 
+            (Input.MousePosition().Y < TGCGame.gui.ScreenCenter.Y + MouseInnerBox.Y && Input.MousePosition().Y > TGCGame.gui.ScreenCenter.Y - MouseInnerBox.Y);
         
         private void ProcessMouseMovement(float elapsedTime)
         {
@@ -52,23 +42,19 @@ namespace TGC.MonoGame.TP
             //if (Input.MousePosition().Y == screenCenter.Y + mouseInnerBox.Y || Input.MousePosition().Y == screenCenter.Y - mouseInnerBox.Y)
             //    TGCGame.world.xwing.addRotation(new Vector3(Math.Sign(mouseDelta.Y), 0, 0));
 
-            int limitedToOuterBoxSideX = (int)Math.Clamp(Input.MousePosition().X, screenCenter.X - mouseOuterBox.X, screenCenter.X + mouseOuterBox.X);
-            int limitedToOuterBoxSideY = (int)Math.Clamp(Input.MousePosition().Y, screenCenter.Y - mouseOuterBox.Y, screenCenter.Y + mouseOuterBox.Y);
+            int limitedToOuterBoxSideX = (int)Math.Clamp(Input.MousePosition().X, TGCGame.gui.ScreenCenter.X - MouseOuterBox.X, TGCGame.gui.ScreenCenter.X + MouseOuterBox.X);
+            int limitedToOuterBoxSideY = (int)Math.Clamp(Input.MousePosition().Y, TGCGame.gui.ScreenCenter.Y - MouseOuterBox.Y, TGCGame.gui.ScreenCenter.Y + MouseOuterBox.Y);
 
             Mouse.SetPosition(limitedToOuterBoxSideX, limitedToOuterBoxSideY);
             lastMousePosition = Input.MousePosition();
-
-
         }
 
-        internal void DrawHUD(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        internal void DrawHUD(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
         {
             Vector2 mousePosition = Input.MousePosition();
-            Vector3 pos = TGCGame.world.xwing.Position();
-            spriteBatch.DrawString(TGCGame.content.F_StarJedi, "Salud: " + TGCGame.world.xwing.salud,
-                new Vector2(graphicsDevice.Viewport.Width / 100, graphicsDevice.Viewport.Width / 100), Color.White);
-            spriteBatch.DrawString(TGCGame.content.F_StarJedi, "(" + pos.X + ", " + pos.Y + ", " + pos.Z + ")",
-                new Vector2(graphicsDevice.Viewport.Width/5, 50), Color.White);
+            Vector3 pos = World.xwing.Position();
+            TGCGame.gui.DrawText("Salud: " + World.xwing.salud, new Vector2(graphicsDevice.Viewport.Width / 100, graphicsDevice.Viewport.Width / 100), 12f);
+            TGCGame.gui.DrawText("(" + pos.X + ", " + pos.Y + ", " + pos.Z + ")", new Vector2(graphicsDevice.Viewport.Width / 5, 50), 12f);
             spriteBatch.Draw(
                 TGCGame.content.T_TargetCursor, 
                 new Rectangle(

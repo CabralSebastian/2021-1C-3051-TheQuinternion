@@ -7,6 +7,7 @@ using System;
 using TGC.MonoGame.TP.Drawers;
 using TGC.MonoGame.TP.CollitionInterfaces;
 using Microsoft.Xna.Framework.Audio;
+using TGC.MonoGame.TP.Scenes;
 
 namespace TGC.MonoGame.TP.ConcreteEntities
 {
@@ -31,13 +32,16 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         private readonly AudioEmitter emitter = new AudioEmitter();
         private const float laserVolume = 0.2f;
 
+        protected override void OnInstantiate()
+        {
+            base.OnInstantiate();
+            UpdateOrientation(Body());
+        }
+
         override internal void Update(double elapsedTime)
         {
             BodyReference body = Body();
-            Quaternion rotation = body.Pose.Orientation.ToQuaternion();
-            forward = -PhysicUtils.Forward(rotation);
-            rightDirection = PhysicUtils.Left(rotation);
-            upDirection = PhysicUtils.Up(rotation);
+            UpdateOrientation(body);
 
             Brakement((float)elapsedTime, body);
             Movement((float)elapsedTime, body);
@@ -45,6 +49,14 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             Rotation((float)elapsedTime);
 
             emitter.Position = Position();
+        }
+
+        private void UpdateOrientation(BodyReference body)
+        {
+            Quaternion rotation = body.Pose.Orientation.ToQuaternion();
+            forward = -PhysicUtils.Forward(rotation);
+            rightDirection = PhysicUtils.Left(rotation);
+            upDirection = PhysicUtils.Up(rotation);
         }
 
         internal Vector3 Position() => Body().Pose.Position.ToVector3();
@@ -135,7 +147,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
             Vector3 position = body.Pose.Position.ToVector3();
             Quaternion orientation = body.Pose.Orientation.ToQuaternion();
-            TGCGame.world.InstantiateLaser(position, -forward, orientation, emitter, laserVolume);
+            World.InstantiateLaser(position, -forward, orientation, emitter, laserVolume);
             lastFire = gameTime;
         }
 
@@ -150,10 +162,10 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             Quaternion orientation = body.Pose.Orientation.ToQuaternion();
             Vector3 up = PhysicUtils.Up(orientation);
             Vector3 left = PhysicUtils.Left(orientation);
-            TGCGame.world.InstantiateLaser(position + up * 1.0f + left * 4.75459f, -forward, orientation, emitter, laserVolume);
-            TGCGame.world.InstantiateLaser(position + up * 1.0f - left * 4.75459f, -forward, orientation, emitter, laserVolume);
-            TGCGame.world.InstantiateLaser(position - up * 1.7f + left * 4.75459f, -forward, orientation, emitter, laserVolume);
-            TGCGame.world.InstantiateLaser(position - up * 1.7f - left * 4.75459f, -forward, orientation, emitter, laserVolume);
+            World.InstantiateLaser(position + up * 1.0f + left * 4.75459f, -forward, orientation, emitter, laserVolume);
+            World.InstantiateLaser(position + up * 1.0f - left * 4.75459f, -forward, orientation, emitter, laserVolume);
+            World.InstantiateLaser(position - up * 1.7f + left * 4.75459f, -forward, orientation, emitter, laserVolume);
+            World.InstantiateLaser(position - up * 1.7f - left * 4.75459f, -forward, orientation, emitter, laserVolume);
             lastFire = gameTime;
         }
 

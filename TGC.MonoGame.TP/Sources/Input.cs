@@ -7,6 +7,7 @@ namespace TGC.MonoGame.TP
     {
         private static KeyboardState KeyboardState => Keyboard.GetState();
 
+        internal static bool Submit() => KeyboardState.IsKeyDown(Keys.Enter) || KeyboardState.IsKeyDown(Keys.Insert);
         private static bool MovingRight() => KeyboardState.IsKeyDown(Keys.D) || KeyboardState.IsKeyDown(Keys.Right);
         private static bool MovingLeft() => KeyboardState.IsKeyDown(Keys.A) || KeyboardState.IsKeyDown(Keys.Left);
         private static bool MovingUp() => KeyboardState.IsKeyDown(Keys.S);

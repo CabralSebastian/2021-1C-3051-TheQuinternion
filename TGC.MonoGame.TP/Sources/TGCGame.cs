@@ -1,25 +1,29 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TGC.MonoGame.TP.Physics;
+using TGC.MonoGame.TP.Scenes;
+using TGC.MonoGame.TP.GraphicInterface;
 
 namespace TGC.MonoGame.TP
 {
     internal class TGCGame : Game
     {
-        
+        internal static TGCGame game;
         internal static Content content;
+        internal static GUI gui;
         internal static readonly PhysicSimulation physicSimulation = new PhysicSimulation();
         private SpriteBatch spriteBatch;
         private FullScreenQuad fullScreenQuad;
 
         internal static readonly SoundManager soundManager = new SoundManager();
-        internal static readonly World world = new World();
+        internal static Scene currentScene;
         internal static Camera camera = new Camera();
 
-        private Player player;
+        internal Vector2 WindowSize() => new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
 
         internal TGCGame()
         {
+            game = this;
             new GraphicsDeviceManager(this);
             // Graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
@@ -30,6 +34,7 @@ namespace TGC.MonoGame.TP
         {
             base.LoadContent();
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            gui = new GUI(GraphicsDevice, spriteBatch);
             fullScreenQuad = new FullScreenQuad(GraphicsDevice);
             content = new Content(Content);
         }
@@ -38,8 +43,7 @@ namespace TGC.MonoGame.TP
         {
             base.Initialize();
             GraphicsDevice.RasterizerState = new RasterizerState { CullMode = CullMode.CullClockwiseFace };
-            player = new Player(new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
-            world.Initialize();
+            ChangeScene(new MainMenu());
             camera.Initialize(GraphicsDevice);
         }
 
@@ -48,11 +52,8 @@ namespace TGC.MonoGame.TP
             if (Input.Exit())
                 Exit();
 
-            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-            world.Update(gameTime);
+            currentScene.Update(gameTime);
             camera.Update();
-            player.Update(gameTime);
             physicSimulation.Update();
             base.Update(gameTime);
         }
@@ -63,10 +64,9 @@ namespace TGC.MonoGame.TP
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.BlendState = BlendState.Opaque;
 
-            world.Draw();
-
+            currentScene.Draw();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, DepthStencilState.DepthRead, RasterizerState.CullNone);
-            player.DrawHUD(spriteBatch, GraphicsDevice);
+            currentScene.Draw2D(GraphicsDevice, spriteBatch);
             spriteBatch.End();
         }
 
@@ -76,6 +76,13 @@ namespace TGC.MonoGame.TP
             physicSimulation.Dispose();
             fullScreenQuad.Dispose();
             base.UnloadContent();
+        }
+
+        internal void ChangeScene(Scene scene)
+        {
+            currentScene?.Destroy();
+            currentScene = scene;
+            scene.Initialize();
         }
     }
 }

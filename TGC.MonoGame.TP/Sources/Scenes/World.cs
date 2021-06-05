@@ -1,0 +1,58 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using TGC.MonoGame.TP.ConcreteEntities;
+
+namespace TGC.MonoGame.TP.Scenes
+{
+    internal class World : Scene
+    {
+        internal static XWing xwing;
+        private Player player;
+
+        private readonly Random random = new Random();
+        private double lastTieSpawn;
+        private const double minTIESpawnTime = 2000;
+
+        internal override void Initialize()
+        {
+            player = new Player();
+            new DeathStar().Create(true);
+            xwing = new XWing();
+            xwing.Instantiate(new Vector3(50f, 0f, 0f));
+            TGCGame.camera.SetLocation(new Vector3(80f, 0f, 0f), Vector3.Forward);
+            TGCGame.camera.SetTarget(xwing);
+        }
+
+        internal override void Update(GameTime gameTime)
+        {
+            TIESpawn(gameTime);
+            player.Update(gameTime);
+            base.Update(gameTime);
+        }
+
+        internal override void Draw2D(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
+        {
+            player.DrawHUD(graphicsDevice, spriteBatch);
+        }
+
+        private void TIESpawn(GameTime gameTime)
+        {
+            if (gameTime.TotalGameTime.TotalMilliseconds < lastTieSpawn + minTIESpawnTime)
+                return;
+
+            if (random.NextDouble() > 0.8f)
+                new TIE().Instantiate(new Vector3((float)random.Next(-2000, 2000), 0f, 0f));
+            lastTieSpawn = gameTime.TotalGameTime.TotalMilliseconds;
+        }
+
+        internal static void InstantiateLaser(Vector3 position, Vector3 forward, Quaternion orientation, AudioEmitter emitter, float volume = 0.01f)
+        {
+            new Laser().Instantiate(position - forward * 5f, orientation);
+            SoundEffectInstance sound = TGCGame.content.S_Laser.CreateInstance();
+            sound.Volume = volume;
+            TGCGame.soundManager.PlaySound(sound, emitter);
+        }
+    }
+}

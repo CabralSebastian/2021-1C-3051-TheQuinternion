@@ -10,11 +10,11 @@ namespace TGC.MonoGame.TP.Entities
 
         internal virtual void Instantiate(Vector3 position, Quaternion rotation)
         {
-            TGCGame.world.Register(this);
+            TGCGame.currentScene.Register(this);
             OnInstantiate();
         }
 
-        internal virtual void Destroy() => TGCGame.world.Unregister(this);
+        internal virtual void Destroy() => TGCGame.currentScene.Unregister(this);
 
         protected virtual void OnInstantiate() { }
         internal virtual void Update(double elapsedTime) { }

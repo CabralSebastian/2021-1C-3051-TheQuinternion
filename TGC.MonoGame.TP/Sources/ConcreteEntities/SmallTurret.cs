@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System;
 using TGC.MonoGame.TP.Drawers;
 using TGC.MonoGame.TP.Physics;
+using TGC.MonoGame.TP.Scenes;
 
 namespace TGC.MonoGame.TP.ConcreteEntities
 {
@@ -48,8 +49,8 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         protected override void Fire()
         {
             Vector3 forward = PhysicUtils.Forward(cannonsRotation);
-            TGCGame.world.InstantiateLaser(CannonsPosition - left, forward, cannonsRotation, emitter);
-            TGCGame.world.InstantiateLaser(CannonsPosition + left, forward, cannonsRotation, emitter);
+            World.InstantiateLaser(CannonsPosition - left, forward, cannonsRotation, emitter);
+            World.InstantiateLaser(CannonsPosition + left, forward, cannonsRotation, emitter);
         }
 
         internal override void Draw()

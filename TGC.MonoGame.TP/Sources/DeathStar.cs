@@ -21,12 +21,13 @@ namespace TGC.MonoGame.TP
         private const int margin = 1;
         private const int trenchCountReference = 400;
 
-        internal void Create() 
+        internal void Create(bool createTurrets) 
         {
             bool[,] matrix = GenerateMatrix();
             CleanMatrix(matrix);
-            InstantiateMatrix(matrix);
-            CreateSurfaceTurrets(matrix);
+            InstantiateMatrix(matrix, createTurrets);
+            if (createTurrets)
+                CreateSurfaceTurrets(matrix);
         }
 
         private int RandomMatrixValue() => random.Next(margin, size - margin + 1);
@@ -137,7 +138,7 @@ namespace TGC.MonoGame.TP
                         matrix[x + (RandomBool() ? 1 : 0), z + (RandomBool() ? 1 : 0)] = false;
         }
 
-        private void InstantiateMatrix(bool[,] matrix)
+        private void InstantiateMatrix(bool[,] matrix, bool createTurrets)
         {
             Quaternion d0 = Quaternion.Identity;
             Quaternion d90 = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)Math.PI / 2);
@@ -177,10 +178,13 @@ namespace TGC.MonoGame.TP
                         int shape = up + down + right + left;
                         instantiationMethods[shape](new Vector3((x - halfSize) * trenchSize, - 100f, (z - halfSize) * trenchSize));
 
-                        if (shape == 1100 && RandomBool(0.2f))
-                            new SmallTurret(false).Instantiate(new Vector3((x - halfSize) * trenchSize, -110f - trenchHeight, (z - halfSize) * trenchSize));
-                        else if (shape == 0011 && RandomBool(0.2f))
-                            new SmallTurret(true).Instantiate(new Vector3((x - halfSize) * trenchSize, -110f - trenchHeight, (z - halfSize) * trenchSize), d90);
+                        if (createTurrets)
+                        {
+                            if (shape == 1100 && RandomBool(0.2f))
+                                new SmallTurret(false).Instantiate(new Vector3((x - halfSize) * trenchSize, -110f - trenchHeight, (z - halfSize) * trenchSize));
+                            else if (shape == 0011 && RandomBool(0.2f))
+                                new SmallTurret(true).Instantiate(new Vector3((x - halfSize) * trenchSize, -110f - trenchHeight, (z - halfSize) * trenchSize), d90);
+                        }
                     }
                     else
                         instantiationMethods[0000](new Vector3((x - halfSize) * trenchSize, -100f, (z - halfSize) * trenchSize));

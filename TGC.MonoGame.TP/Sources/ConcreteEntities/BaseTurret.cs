@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Audio;
 using System;
 using TGC.MonoGame.TP.Entities;
 using TGC.MonoGame.TP.Physics;
+using TGC.MonoGame.TP.Scenes;
 
 namespace TGC.MonoGame.TP.ConcreteEntities
 {
@@ -32,7 +33,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         internal override void Update(double elapsedTime)
         {
-            Vector3 difference = TGCGame.world.xwing.Position() - CannonsPosition;
+            Vector3 difference = World.xwing.Position() - CannonsPosition;
             float distance = difference.Length();
 
             if (IsInRange(distance))
