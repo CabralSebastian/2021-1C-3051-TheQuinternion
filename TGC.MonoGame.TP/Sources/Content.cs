@@ -25,10 +25,10 @@ namespace TGC.MonoGame.TP
         //private const string MusicFolder = "Music/";
         private const string FontsFolder = "Fonts/";
 
-        internal readonly Effect E_BasicShader, E_BlinnPhong, E_PBR, E_LaserShader, E_SkyBox;
+        internal readonly Effect E_BasicShader, E_BlinnPhong, E_LaserShader, E_SkyBox;
         internal readonly Model M_SkyBox, M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Trench2, M_Laser, M_Turret, M_SmallTurret;
         internal readonly TypedIndex Sh_Sphere20, SH_XWing, SH_Laser, SH_Turret, SH_SmallTurret, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
-        internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Trench2, T_Turret;
+        internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Turret;
         internal readonly Texture2D T_Pixel, T_TargetCursor;
         internal readonly TextureCube TC_Space;
         internal readonly SoundEffect S_Click1, S_Click2, S_Laser, S_Explotion, S_MenuMusic, S_GameMusic;
@@ -123,7 +123,6 @@ namespace TGC.MonoGame.TP
                 LoadTexture("XWing/lambert5_Normal_DirectX")*/
             };
             T_Trench = new Texture2D[] { LoadTexture("DeathStar/DeathStar") };
-            T_Trench2 = Enumerable.Repeat(LoadTexture("DeathStar/DeathStar"), 27).ToArray();
             T_Turret = new Texture2D[] { LoadTexture("DeathStar/Turret") };
             T_Pixel = LoadTexture("HUD/Pixel");
             T_TargetCursor = LoadTexture("HUD/TargetCursor");
