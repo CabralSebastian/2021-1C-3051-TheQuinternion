@@ -8,7 +8,7 @@ namespace TGC.MonoGame.TP.Scenes
     internal abstract class Scene
     {
         private readonly List<Entity> pendingEntities = new List<Entity>();
-        private readonly List<Entity> entities = new List<Entity>();
+        protected readonly List<Entity> entities = new List<Entity>();
         private readonly List<Entity> removedEntities = new List<Entity>();
 
         internal void Register(Entity entity) => pendingEntities.Add(entity);

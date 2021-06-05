@@ -33,6 +33,9 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         internal override void Update(double elapsedTime)
         {
+            if (World.xwing == null)
+                return;
+
             Vector3 difference = World.xwing.Position() - CannonsPosition;
             float distance = difference.Length();
 

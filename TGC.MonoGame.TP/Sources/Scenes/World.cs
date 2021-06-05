@@ -8,6 +8,7 @@ namespace TGC.MonoGame.TP.Scenes
 {
     internal class World : Scene
     {
+        private SoundEffectInstance gameMusic;
         internal static XWing xwing;
         private Player player;
 
@@ -23,6 +24,17 @@ namespace TGC.MonoGame.TP.Scenes
             xwing.Instantiate(new Vector3(50f, 0f, 0f));
             TGCGame.camera.SetLocation(new Vector3(80f, 0f, 0f), Vector3.Forward);
             TGCGame.camera.SetTarget(xwing);
+
+            PlayMusic();
+            TGCGame.game.IsMouseVisible = false;
+        }
+
+        private void PlayMusic()
+        {
+            gameMusic = TGCGame.content.S_GameMusic.CreateInstance();
+            gameMusic.IsLooped = true;
+            gameMusic.Volume = 0.1f;
+            gameMusic.Play();
         }
 
         internal override void Update(GameTime gameTime)
@@ -53,6 +65,12 @@ namespace TGC.MonoGame.TP.Scenes
             SoundEffectInstance sound = TGCGame.content.S_Laser.CreateInstance();
             sound.Volume = volume;
             TGCGame.soundManager.PlaySound(sound, emitter);
+        }
+
+        internal override void Destroy()
+        {
+            gameMusic.Stop();
+            base.Destroy();
         }
     }
 }

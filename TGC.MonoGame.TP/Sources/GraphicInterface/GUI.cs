@@ -19,12 +19,10 @@ namespace TGC.MonoGame.TP.GraphicInterface
 
         private float FixScale(float size) => size / 96;
 
-        internal void DrawSprite(Texture2D sprite, Vector2 position, Vector2 size)
-        {
-            spriteBatch.Draw(sprite, new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y), Color.White);
-        }
+        internal void DrawSprite(Texture2D sprite, Vector2 position, Vector2 size, Color color) =>
+            spriteBatch.Draw(sprite, new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y), color);
 
-        internal void DrawCenteredSprite(Texture2D sprite, Vector2 position, Vector2 size) => DrawSprite(sprite, position - size / 2, size);
+        internal void DrawCenteredSprite(Texture2D sprite, Vector2 position, Vector2 size, Color color) => DrawSprite(sprite, position - size / 2, size, color);
 
         internal void DrawText(string text, Vector2 position, float size) =>
             spriteBatch.DrawString(TGCGame.content.F_StarJedi, text, position, Color.White, 0f, Vector2.Zero, FixScale(size), SpriteEffects.None, 0);

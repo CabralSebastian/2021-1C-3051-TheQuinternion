@@ -27,7 +27,6 @@ namespace TGC.MonoGame.TP
             new GraphicsDeviceManager(this);
             // Graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
-            IsMouseVisible = false;
         }
 
         protected override void LoadContent()

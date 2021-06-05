@@ -10,6 +10,7 @@ using BEPUVector3 = System.Numerics.Vector3;
 using BEPUQuaternion = System.Numerics.Quaternion;
 using System;
 using TGC.MonoGame.TP.Drawers;
+using Microsoft.Xna.Framework.Media;
 
 namespace TGC.MonoGame.TP
 {
@@ -28,8 +29,8 @@ namespace TGC.MonoGame.TP
         internal readonly Model M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Trench2, M_Laser, M_Turret, M_SmallTurret;
         internal readonly TypedIndex Sh_Sphere20, SH_XWing, SH_Laser, SH_Turret, SH_SmallTurret, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
         internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Trench2, T_Turret;
-        internal readonly Texture2D T_TargetCursor;
-        internal readonly SoundEffect S_Laser, S_Explotion;
+        internal readonly Texture2D T_Pixel, T_TargetCursor;
+        internal readonly SoundEffect S_Click1, S_Click2, S_Laser, S_Explotion, S_MenuMusic, S_GameMusic;
         internal readonly SpriteFont F_StarJedi;
         internal readonly Drawer D_XWing, D_TIE, D_Trench_Plain, D_Trench_Line, D_Trench_Corner, D_Trench_T, D_Trench_Cross, D_Trench_End, D_Trench2, D_Laser;
         internal readonly TurretDrawer D_Turret;
@@ -121,12 +122,17 @@ namespace TGC.MonoGame.TP
             };
             T_Trench = new Texture2D[] { LoadTexture("DeathStar/DeathStar") };
             T_Trench2 = Enumerable.Repeat(LoadTexture("DeathStar/DeathStar"), 27).ToArray();
-            T_TargetCursor = LoadTexture("HUD/TargetCursor");
             T_Turret = new Texture2D[] { LoadTexture("DeathStar/Turret") };
+            T_Pixel = LoadTexture("HUD/Pixel");
+            T_TargetCursor = LoadTexture("HUD/TargetCursor");
 
             // Sounds
+            S_Click1 = LoadSound("Click1");
+            S_Click2 = LoadSound("Click2");
             S_Laser = LoadSound("Laser");
             S_Explotion = LoadSound("Explotion");
+            S_MenuMusic = LoadSound("StarWarsBattlefront2-KaminoLoadingLoopA");
+            S_GameMusic = LoadSound("StarWarsBattlefront2-KaminoLoadingLoopB");
 
             // Fonts
             F_StarJedi = LoadFont("Starjedi");
