@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using TGC.MonoGame.TP.ConcreteEntities;
-using TGC.MonoGame.TP.Scenes;
 
 namespace TGC.MonoGame.TP
 {

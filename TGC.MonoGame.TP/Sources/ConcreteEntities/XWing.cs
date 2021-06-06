@@ -17,18 +17,24 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         protected override Vector3 Scale => Vector3.One;
         protected override TypedIndex Shape => TGCGame.content.SH_XWing;
 
+        internal readonly float minSpeed = 100f;
         internal readonly float maxSpeed = 200f;
         private const float acceleration = 1f;
 
+        private readonly Vector3 rotationFixValues = new Vector3(0.0008f, 0.002f, 0.002f);
         private readonly Vector3 baseUpDirection = Vector3.Up;
         private readonly Vector3 baseRightDirection = Vector3.Right;
         internal Vector3 forward, rightDirection, upDirection;
+        private Vector2 movementAxis = Vector2.Zero;
 
         private bool godMode = false;
         internal float salud = 100;
 
         private double lastFire;
-        private const double fireCooldownTime = 200;
+        private const double fireCooldownTime = 400;
+        private float barrelRollCooldownProgress;
+        private const float barrelRollCooldownTime = 5000;
+        private const float barrelRollDuration = 1000;
         private readonly AudioEmitter emitter = new AudioEmitter();
         private const float laserVolume = 0.2f;
 
@@ -45,7 +51,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
             Brakement((float)elapsedTime, body);
             Movement((float)elapsedTime, body);
-            //Aligment((float)elapsedTime);
+            Aligment((float)elapsedTime);
             Rotation((float)elapsedTime);
 
             emitter.Position = Position();
@@ -72,46 +78,26 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         private void Brakement(float elapsedTime, BodyReference body)
         {
             Vector3 velocity = Velocity();
+            float brakmentForce = -acceleration / 10;
 
             Vector3 forwardBreakment = !Input.Accelerate() ? forward : Vector3.Zero;
             float horizontalSpeed = Vector3.Dot(velocity, rightDirection) / (rightDirection.Length() * rightDirection.Length());
-            Vector3 horizontalBrakment = Input.HorizontalAxis() == 0 && horizontalSpeed != 0 ? Vector3.Normalize(rightDirection * horizontalSpeed) : Vector3.Zero;
+            Vector3 horizontalBrakment = horizontalSpeed != 0 ? Vector3.Normalize(rightDirection * horizontalSpeed) : Vector3.Zero;
             float verticalSpeed = Vector3.Dot(velocity, upDirection) / (upDirection.Length() * upDirection.Length());
-            Vector3 verticalBrakment = Input.VerticalAxis() == 0 && verticalSpeed != 0 ? Vector3.Normalize(upDirection * verticalSpeed) : Vector3.Zero;
+            Vector3 verticalBrakment = verticalSpeed != 0 ? Vector3.Normalize(upDirection * verticalSpeed) : Vector3.Zero;
 
-            AddLinearVelocity(body, (forwardBreakment + horizontalBrakment + verticalBrakment) * -acceleration * elapsedTime);
+            AddLinearVelocity(body, (forwardBreakment + horizontalBrakment + verticalBrakment) * brakmentForce * elapsedTime);
         }
-
-        private void Aligment(float elapsedTime)
+        internal void Aligment(float elapsedTime)
         {
-            float fixValue = 0.005f;
-
-
-            if (!Equals(upDirection, baseUpDirection) && Input.VerticalAxis() == 0)
-            {
-                float angleUp = (float)Math.Acos(Vector3.Dot(baseUpDirection, upDirection));
-
-                Quaternion alignedUpQuaternion = Quaternion.CreateFromAxisAngle(Vector3.Cross(upDirection, forward), angleUp / 2 * elapsedTime * fixValue);
-
-                Body().Pose.Orientation *= alignedUpQuaternion.ToBEPU();
-            }
-
-            if (!Equals(rightDirection, baseRightDirection) && Input.HorizontalAxis() == 0)
-            {
-                float angleRight = (float)Math.Acos(Vector3.Dot(baseRightDirection, rightDirection));
-                Quaternion alignedRightQuaternion = Quaternion.CreateFromAxisAngle(Vector3.Cross(rightDirection, forward), angleRight / 2 * elapsedTime * fixValue);
-
-                Body().Pose.Orientation *= alignedRightQuaternion.ToBEPU();
-            }
+            Body().Pose.Orientation *= Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), -Input.FrontalRotationAxis() * elapsedTime * rotationFixValues.Z).ToBEPU();
         }
+        internal void Move(Vector2 directionAxis) { movementAxis = directionAxis; }
 
         internal void Rotation(float elapsedTime)
         {
-            var xFixValue = 0.0008f;
-            var yFixValue = 0.002f;
-
-            Quaternion horizontalRotation = Quaternion.CreateFromAxisAngle(new Vector3(0, 1, 0), -Input.HorizontalAxis() * elapsedTime * yFixValue);
-            Quaternion verticalRotation = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), Input.VerticalAxis() * elapsedTime * xFixValue);
+            Quaternion horizontalRotation = Quaternion.CreateFromAxisAngle(new Vector3(0, 1, 0), -Math.Sign(Input.HorizontalAxis() + movementAxis.X) * elapsedTime * rotationFixValues.Y);
+            Quaternion verticalRotation = Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), Math.Sign(Input.VerticalAxis() - movementAxis.Y) * elapsedTime * rotationFixValues.X);
 
             Body().Pose.Orientation *= (horizontalRotation * verticalRotation).ToBEPU();
         }
@@ -121,33 +107,25 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             var newVelocity = body.Velocity.Linear.ToVector3() + velocity;
 
             float forwardSpeed = Vector3.Dot(newVelocity, forward) / (forward.Length() * forward.Length());
-            Vector3 forwardVelocity = Math.Clamp(forwardSpeed, 0, maxSpeed) * forward;
+            Vector3 forwardVelocity = Math.Clamp(forwardSpeed, minSpeed, maxSpeed) * forward;
             Vector3 limitedVelocity = forwardVelocity;
 
             body.Velocity.Linear = limitedVelocity.ToBEPU();
         }
 
-        internal void Fire(double gameTime, Vector2 mousePosition)
+        internal void Fire(double gameTime, Vector3 mouseDirection)
         {
             if (gameTime < lastFire + fireCooldownTime)
                 return;
 
             BodyReference body = Body();
-
-            /*float yaw = 90f-mousePosition.X;
-            float pitch = 90f-mousePosition.Y;
-
-            Vector3 mouseDirection;
-            mouseDirection.X = -MathF.Cos(MathHelper.ToRadians(yaw)) * MathF.Cos(MathHelper.ToRadians(pitch));
-            mouseDirection.Y = MathF.Sin(MathHelper.ToRadians(yaw)) * MathF.Cos(MathHelper.ToRadians(pitch));
-            mouseDirection.Z = MathF.Sin(MathHelper.ToRadians(pitch));
-
-            Vector3 fireDirection = Vector3.Normalize(mouseDirection * 50 + body.Pose.Position.ToVector3());
-            Quaternion laserQuaternion = new Quaternion(fireDirection, 0);*/
+            Vector3 mousePivot = mouseDirection;
+            mouseDirection.X = mousePivot.Z;
+            mouseDirection.Z = mousePivot.X;
 
             Vector3 position = body.Pose.Position.ToVector3();
-            Quaternion orientation = body.Pose.Orientation.ToQuaternion();
-            World.InstantiateLaser(position, -forward, orientation, emitter, laserVolume);
+            Quaternion laserOrientation = Quaternion.Normalize(new Quaternion(mouseDirection, 0));
+            World.InstantiateLaser(position, -forward, laserOrientation, emitter, laserVolume);
             lastFire = gameTime;
         }
 
@@ -166,6 +144,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             World.InstantiateLaser(position + up * 1.0f - left * 4.75459f, -forward, orientation, emitter, laserVolume/4);
             World.InstantiateLaser(position - up * 1.7f + left * 4.75459f, -forward, orientation, emitter, laserVolume/4);
             World.InstantiateLaser(position - up * 1.7f - left * 4.75459f, -forward, orientation, emitter, laserVolume/4);
+
             lastFire = gameTime;
         }
 
