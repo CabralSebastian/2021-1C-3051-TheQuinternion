@@ -35,13 +35,20 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         private float barrelRollCooldownProgress;
         private const float barrelRollCooldownTime = 5000;
         private const float barrelRollDuration = 1000;
+
         private readonly AudioEmitter emitter = new AudioEmitter();
         private const float laserVolume = 0.2f;
+        private SoundEffectInstance engineSound;
 
         protected override void OnInstantiate()
         {
             base.OnInstantiate();
             UpdateOrientation(Body());
+
+            engineSound = TGCGame.content.S_TIEEngine.CreateInstance();
+            engineSound.IsLooped = true;
+            engineSound.Volume = 0.01f;
+            TGCGame.soundManager.PlaySound(engineSound, emitter);
         }
 
         override internal void Update(double elapsedTime)

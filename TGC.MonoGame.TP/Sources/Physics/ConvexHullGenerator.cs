@@ -7,7 +7,7 @@ namespace TGC.MonoGame.TP.Physics
 {
     internal static class ConvexHullGenerator
     {
-        internal static ConvexHull Generate(Model model)
+        internal static ConvexHull Generate(Model model, float scale)
         {
             int vertexCount = GetVertexCount(model);
             TGCGame.physicSimulation.bufferPool.Take<Vector3>(vertexCount, out var points);
@@ -20,7 +20,7 @@ namespace TGC.MonoGame.TP.Physics
                     Vector3[] vertices = GetVertexElement(meshPart, VertexElementUsage.Position);
                     foreach (Vector3 vertex in vertices)
                     {
-                        points[pointIndex] = vertex;
+                        points[pointIndex] = vertex * scale;
                         pointIndex++;
                     }
                 }

@@ -10,7 +10,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
     internal class SmallTurret : BaseTurret
     {
         protected override Drawer Drawer() => TGCGame.content.D_SmallTurret;
-        protected override TypedIndex Shape => TGCGame.content.SH_Turret;
+        protected override TypedIndex Shape => TGCGame.content.SH_SmallTurret;
 
         protected override float MaxRange => 800f;
         protected override float MinIdleTime => 1000f;

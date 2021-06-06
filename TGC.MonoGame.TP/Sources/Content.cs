@@ -64,16 +64,16 @@ namespace TGC.MonoGame.TP
 
             // Shapes
             Sh_Sphere20 = LoadShape(new Sphere(20f));
-            SH_XWing = LoadConvexHull("XWing/XWing");
+            SH_XWing = LoadConvexHull("XWing/XWing", 1f);
             SH_Laser = LoadShape(new Cylinder(Laser.Radius / 2f, Laser.Lenght / 10f));
-            SH_Turret = LoadShape(new Box(2f * 10f, 7f * 10f, 2f * 10f));
-            SH_SmallTurret = LoadShape(new Box(2f * 5f, 5f * 5f, 2f * 5f));
+            SH_Turret = LoadShape(new Box(28f, 66f, 28f));
+            SH_SmallTurret = LoadShape(new Box(1f * 10f, 2.1f * 20f, 1f * 10f));
 
             // DeathStar shapes
             TypedIndex trenchPlain = LoadShape(new Box(DeathStar.trenchSize, DeathStar.trenchHeight, DeathStar.trenchSize));
             TypedIndex trenchLine = LoadShape(new Box(DeathStar.trenchSize, DeathStar.trenchHeight, DeathStar.trenchSize / 1.6f));
             TypedIndex trenchQuarter = LoadShape(new Box(DeathStar.trenchSize / 1.6f, DeathStar.trenchHeight, DeathStar.trenchSize / 1.6f));
-            RigidPose plainPose = new RigidPose(new BEPUVector3(0f, -DeathStar.trenchHeight * 1.5f, 0f));
+            RigidPose plainPose = new RigidPose(new BEPUVector3(0f, -DeathStar.trenchHeight * 1.8f, 0f));
             float colliderYPos = -DeathStar.trenchHeight / 2f;
             float sideOffset = DeathStar.trenchSize * 3.5f / 8f;
             BEPUQuaternion d90Rotation = BEPUQuaternion.CreateFromAxisAngle(BEPUVector3.UnitY, (float)Math.PI / 2f);
@@ -173,7 +173,7 @@ namespace TGC.MonoGame.TP
             builder.BuildKinematicCompound(out Buffer<CompoundChild> buffer);
             return TGCGame.physicSimulation.LoadShape(new Compound(buffer));
         }
-        private TypedIndex LoadConvexHull(string name) => LoadShape(ConvexHullGenerator.Generate(contentManager.Load<Model>(ModelsFolder + name)));
+        private TypedIndex LoadConvexHull(string name, float scale) => LoadShape(ConvexHullGenerator.Generate(contentManager.Load<Model>(ModelsFolder + name), scale));
         private Texture2D LoadTexture(string name) => contentManager.Load<Texture2D>(TexturesFolder + name);
         private TextureCube LoadTextureCube(string name) => contentManager.Load<TextureCube>(TexturesFolder + name);
         private SoundEffect LoadSound(string name) => contentManager.Load<SoundEffect>(SoundsFolder + name);
