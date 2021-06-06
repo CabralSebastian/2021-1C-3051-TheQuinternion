@@ -44,6 +44,7 @@ namespace TGC.MonoGame.TP
         protected override void Initialize()
         {
             base.Initialize();
+            Window.Title = "Star Wars: Trench Run";
             GraphicsDevice.RasterizerState = new RasterizerState { CullMode = CullMode.CullClockwiseFace };
             ChangeScene(new MainMenu());
             camera.Initialize(GraphicsDevice);
