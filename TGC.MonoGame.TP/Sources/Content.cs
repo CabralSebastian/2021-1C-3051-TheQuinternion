@@ -22,7 +22,6 @@ namespace TGC.MonoGame.TP
         private const string ModelsFolder = "Models/";
         private const string TexturesFolder = "Textures/";
         private const string SoundsFolder = "Sounds/";
-        //private const string MusicFolder = "Music/";
         private const string FontsFolder = "Fonts/";
 
         internal readonly Effect E_BasicShader, E_BlinnPhong, E_LaserShader, E_SkyBox;
@@ -31,9 +30,9 @@ namespace TGC.MonoGame.TP
         internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Turret;
         internal readonly Texture2D T_Pixel, T_TargetCursor;
         internal readonly TextureCube TC_Space;
-        internal readonly SoundEffect S_Click1, S_Click2, S_Laser, S_Explotion, S_MenuMusic, S_GameMusic;
+        internal readonly SoundEffect S_Click1, S_Click2, S_Laser, S_Explotion, S_XWingEngine, S_TIEEngine, S_MenuMusic, S_GameMusic;
         internal readonly SpriteFont F_StarJedi;
-        internal readonly Drawer D_XWing, D_TIE, D_Trench_Plain, D_Trench_Line, D_Trench_Corner, D_Trench_T, D_Trench_Cross, D_Trench_End, D_Trench2, D_Laser;
+        internal readonly Drawer D_XWing, D_TIE, D_Trench_Plain, D_Trench_Line, D_Trench_Corner, D_Trench_T, D_Trench_Cross, D_Trench_End, D_Laser;
         internal readonly TurretDrawer D_Turret;
         internal readonly SmallTurretDrawer D_SmallTurret;
 
@@ -134,6 +133,8 @@ namespace TGC.MonoGame.TP
             S_Click2 = LoadSound("Click2");
             S_Laser = LoadSound("Laser");
             S_Explotion = LoadSound("Explotion");
+            S_XWingEngine = LoadSound("XWingEngine");
+            S_TIEEngine = LoadSound("TIEEngine");
             S_MenuMusic = LoadSound("StarWarsBattlefront2-KaminoLoadingLoopA");
             S_GameMusic = LoadSound("StarWarsBattlefront2-KaminoLoadingLoopB");
 

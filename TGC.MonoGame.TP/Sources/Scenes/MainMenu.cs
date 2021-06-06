@@ -15,7 +15,7 @@ namespace TGC.MonoGame.TP.Scenes
         internal override void Initialize()
         {
             new DeathStar().Create(true);
-            TGCGame.camera.SetLocation(new Vector3(0f, 0f, 0f), Vector3.Forward);
+            TGCGame.camera.SetLocation(new Vector3(0f, 0f, 0f), Vector3.Forward, Vector3.Up);
 
             Quaternion toLeft = Quaternion.CreateFromAxisAngle(Vector3.Up, MathHelper.PiOver2);
             Quaternion toRight = Quaternion.CreateFromAxisAngle(Vector3.Up, -MathHelper.PiOver2);
@@ -43,15 +43,6 @@ namespace TGC.MonoGame.TP.Scenes
             startButton.Update(TGCGame.gui.ScreenCenter + new Vector2(0, 50));
             exitButton.Update(TGCGame.gui.ScreenCenter + new Vector2(0, 100));
             base.Update(gameTime);
-        }
-
-
-        private void SpawnSquad(float speed, float baseX, float baseY, float baseZ, Quaternion direction)
-        {
-            Random random = new Random();
-            new DummyTIE(speed, baseX, -baseX).Instantiate(new Vector3(baseX + (float)random.NextDouble() * 50, baseY + 10f + (float)random.NextDouble() * 10, baseZ), direction);
-            new DummyTIE(speed, baseX, -baseX).Instantiate(new Vector3(baseX + (float)random.NextDouble() * 50, baseY + -10f - (float)random.NextDouble() * 10, baseZ), direction);
-            new DummyTIE(speed, baseX, -baseX).Instantiate(new Vector3(baseX + (float)random.NextDouble() * 50, baseY + 0f + (float)random.NextDouble() * 5, baseZ), direction);
         }
 
         private void SpawnSquad(int number, float speed, float baseX, float baseY, float baseZ, Quaternion direction)

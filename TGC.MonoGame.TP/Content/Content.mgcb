@@ -500,6 +500,18 @@
 /processorParam:Quality=Best
 /build:Sounds/StarWarsBattlefront2-KaminoLoadingLoopB.mp3
 
+#begin Sounds/TIEEngine.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/TIEEngine.wav
+
+#begin Sounds/XWingEngine.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/XWingEngine.wav
+
 #begin Textures/DeathStar/DeathStar.jpg
 /importer:TextureImporter
 /processor:TextureProcessor

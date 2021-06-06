@@ -28,5 +28,14 @@ namespace TGC.MonoGame.TP.Physics
             yaw = (float)Math.Atan(difference.X / difference.Z) + (difference.Z > 0 ? MathHelper.Pi : 0f);
             pitch = -(float)Math.Asin(difference.Y / distance);
         }
+
+        internal static Quaternion DirectionsToQuaternion(Vector3 forward, Vector3 up)
+        {
+            Matrix matrix = Matrix.Identity;
+            matrix.Forward = forward;
+            matrix.Right = Vector3.Normalize(Vector3.Cross(matrix.Forward, up));
+            matrix.Up = Vector3.Cross(matrix.Right, matrix.Forward);
+            return Quaternion.CreateFromRotationMatrix(matrix);
+        }
     }
 }

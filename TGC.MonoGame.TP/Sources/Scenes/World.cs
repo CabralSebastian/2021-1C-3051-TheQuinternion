@@ -22,7 +22,7 @@ namespace TGC.MonoGame.TP.Scenes
             new DeathStar().Create(true);
             xwing = new XWing();
             xwing.Instantiate(new Vector3(50f, 0f, 0f));
-            TGCGame.camera.SetLocation(new Vector3(80f, 0f, 0f), Vector3.Forward);
+            TGCGame.camera.SetLocation(new Vector3(80f, 0f, 0f), Vector3.Forward, Vector3.Up);
             TGCGame.camera.SetTarget(xwing);
 
             PlayMusic();
