@@ -1,5 +1,6 @@
 ﻿using BepuPhysics;
 using BepuPhysics.Collidables;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using System.Numerics;
 using TGC.MonoGame.TP.Drawers;
@@ -32,7 +33,7 @@ namespace TGC.MonoGame.TP
         protected override void OnInstantiate()
         {
             BodyReference body = Body();
-            Vector3 velocity = PhysicUtils.Forward(body.Pose.Orientation.ToQuaternion()).ToBEPU() * linearVelocity;
+            System.Numerics.Vector3 velocity = PhysicUtils.Forward(body.Pose.Orientation.ToQuaternion()).ToBEPU() * linearVelocity;
             body.Velocity.Linear = velocity;
 
             engineSound = TGCGame.content.S_TIEEngine.CreateInstance();
@@ -42,7 +43,7 @@ namespace TGC.MonoGame.TP
             TGCGame.soundManager.PlaySound(engineSound, emitter);
         }
 
-        internal override void Update(double elapsedTime)
+        internal override void Update(double elapsedTime, GameTime gameTime)
         {
             BodyReference body = Body();
             if (body.Pose.Position.X > maxX)

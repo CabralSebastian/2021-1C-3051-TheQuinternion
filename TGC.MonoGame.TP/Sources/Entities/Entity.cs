@@ -17,7 +17,7 @@ namespace TGC.MonoGame.TP.Entities
         internal virtual void Destroy() => TGCGame.currentScene.Unregister(this);
 
         protected virtual void OnInstantiate() { }
-        internal virtual void Update(double elapsedTime) { }
+        internal virtual void Update(double elapsedTime, GameTime gameTime) { }
 
         internal virtual void Draw() => Drawer().Draw(GeneralWorldMatrix());
     }

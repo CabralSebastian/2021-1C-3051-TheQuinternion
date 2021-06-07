@@ -23,7 +23,7 @@ namespace TGC.MonoGame.TP
             body.Velocity.Linear = -PhysicUtils.Forward(body.Pose.Orientation.ToQuaternion()).ToBEPU() * LinearVelocity;
         }
 
-        internal override void Update(double elapsedTime)
+        internal override void Update(double elapsedTime, GameTime gameTime)
         {
             if (Body().Pose.Position.Length() > 100000f)
                 Destroy();

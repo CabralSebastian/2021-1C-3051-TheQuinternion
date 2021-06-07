@@ -31,7 +31,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             emitter.Position = CannonsPosition;
         }
 
-        internal override void Update(double elapsedTime)
+        internal override void Update(double elapsedTime, GameTime gameTime)
         {
             if (World.xwing == null)
                 return;

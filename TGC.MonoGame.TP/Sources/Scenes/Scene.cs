@@ -23,7 +23,7 @@ namespace TGC.MonoGame.TP.Scenes
             pendingEntities.Clear();
             removedEntities.ForEach(entity => entities.Remove(entity));
             removedEntities.Clear();
-            entities.ForEach(entity => entity.Update((float)gameTime.ElapsedGameTime.TotalMilliseconds));
+            entities.ForEach(entity => entity.Update((float)gameTime.ElapsedGameTime.TotalMilliseconds, gameTime));
         }
 
         internal virtual void Draw()

@@ -51,7 +51,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             TGCGame.soundManager.PlaySound(engineSound, emitter);
         }
 
-        override internal void Update(double elapsedTime)
+        override internal void Update(double elapsedTime, GameTime gameTime)
         {
             BodyReference body = Body();
             UpdateOrientation(body);
