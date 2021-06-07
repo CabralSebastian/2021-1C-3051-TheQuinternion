@@ -19,7 +19,7 @@ namespace TGC.MonoGame.TP
 
         protected override Drawer Drawer() => TGCGame.content.D_TIE;
         protected override Microsoft.Xna.Framework.Vector3 Scale => Microsoft.Xna.Framework.Vector3.One * scale;
-        protected override TypedIndex Shape => TGCGame.content.Sh_Sphere20;
+        protected override TypedIndex Shape => TGCGame.content.SH_TIE;
 
         internal DummyTIE(float linearVelocity, float minX, float maxX, float scale = 1 / 100f)
         {

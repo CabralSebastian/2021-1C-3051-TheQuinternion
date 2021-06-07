@@ -26,7 +26,7 @@ namespace TGC.MonoGame.TP
 
         internal readonly Effect E_BasicShader, E_BlinnPhong, E_LaserShader, E_SkyBox;
         internal readonly Model M_SkyBox, M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Laser, M_Turret, M_SmallTurret;
-        internal readonly TypedIndex Sh_Sphere20, SH_XWing, SH_Laser, SH_Turret, SH_SmallTurret, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
+        internal readonly TypedIndex SH_XWing, SH_TIE, SH_Laser, SH_Turret, SH_SmallTurret, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
         internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Turret;
         internal readonly Texture2D T_Pixel, T_TargetCursor;
         internal readonly TextureCube TC_Space;
@@ -63,8 +63,8 @@ namespace TGC.MonoGame.TP
             // Convex Hulls
 
             // Shapes
-            Sh_Sphere20 = LoadShape(new Sphere(20f));
             SH_XWing = LoadConvexHull("XWing/XWing", 1f);
+            SH_TIE = LoadShape(new Sphere(8f));
             SH_Laser = LoadShape(new Cylinder(Laser.Radius / 2f, Laser.Lenght / 10f));
             SH_Turret = LoadShape(new Box(28f, 66f, 28f));
             SH_SmallTurret = LoadShape(new Box(1f * 10f, 2.1f * 20f, 1f * 10f));

@@ -17,7 +17,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         protected override Drawer Drawer() => TGCGame.content.D_TIE;
 
         protected override Vector3 Scale => Vector3.One / 100f;
-        protected override TypedIndex Shape => TGCGame.content.Sh_Sphere20;
+        protected override TypedIndex Shape => TGCGame.content.SH_TIE;
         protected override float Mass => 100f;
 
         protected State CurrentState = State.SEEKING;
