@@ -46,6 +46,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
             if (Health <= 0)
             {
+                TGCGame.content.S_Explotion.CreateInstance().Play();
                 Destroy();
             }
 
@@ -252,6 +253,16 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         void ILaserDamageable.ReceiveLaserDamage()
         {
             Health -= 40;
+        }
+
+        public override bool HandleCollition(ICollitionHandler other)
+        {
+            if (!Destroyed)
+            {
+                if (other is Xwing _)
+                    Health -= 1000;
+            }
+            return false;
         }
     }
 }

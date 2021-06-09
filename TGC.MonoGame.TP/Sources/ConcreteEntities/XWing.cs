@@ -203,5 +203,15 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         {
             PerderSalud(15);
         }
+
+        public override bool HandleCollition(ICollitionHandler other)
+        {
+            if (!Destroyed)
+            {
+                if (other is TIE _)
+                    Reiniciar();
+            }
+            return false;
+        }
     }
 }
