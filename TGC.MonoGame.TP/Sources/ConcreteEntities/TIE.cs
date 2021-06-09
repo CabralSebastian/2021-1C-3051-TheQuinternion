@@ -24,10 +24,10 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         protected bool ShortFlee = false;
         protected int Health = 100;
-        protected float Regulator = 20f;
-        protected float SlowVelocity = 100f;
         protected float StandarVelocity = 150f;
         protected float FastVelocity = 200f;
+
+        protected float TimeCount = 0f;
 
         private double LastFire;
         private const double FireCooldownTime = 400;
@@ -158,23 +158,15 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         private bool CloseToXWing(BodyReference body)
         {
-            return DistanceToXWing(body) < 500f;
+            return DistanceToXWing(body) < 300f;
         }
 
         private bool TooClose(BodyReference body)
         {
-            return DistanceToXWing(body) < 200f;
+            return DistanceToXWing(body) < 100f;
         }
 
-        private void Flee(BodyReference body, GameTime gameTime)
-        {
-            Quaternion rotation = body.Pose.Orientation.ToQuaternion();
-            Vector3 forward = PhysicUtils.Forward(rotation);
-
-            body.Velocity.Linear = (forward * FastVelocity).ToBEPU();
-        }
-
-        private float DistanceToXWing(BodyReference body) 
+        private float DistanceToXWing(BodyReference body)
         {
             Vector3 TIEPosition = body.Pose.Position.ToVector3();
             Vector3 XWingPosition = World.xwing.Position();
@@ -185,11 +177,34 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             return DistanceVector.Length();
         }
 
+        private void Flee(BodyReference body, GameTime gameTime)
+        {
+            Quaternion DegreeRotation = new Quaternion(new Vector3(0, 1, 0), 1f);
+            DegreeRotation.Normalize();
+            Quaternion ActualRotation = body.Pose.Orientation.ToQuaternion();
+            ActualRotation.Normalize();
+
+            Quaternion FinalRotation = Quaternion.Slerp(DegreeRotation, ActualRotation, TimeCount);
+            TimeCount += (float) gameTime.ElapsedGameTime.TotalSeconds;
+
+            body.Pose.Orientation = FinalRotation.ToBEPU();
+
+            Quaternion rotation = body.Pose.Orientation.ToQuaternion();
+            Vector3 forward = PhysicUtils.Forward(rotation);
+
+            body.Velocity.Linear = (forward * FastVelocity).ToBEPU();
+        }      
+
         private void GetCloseToXWing(BodyReference body, GameTime gameTime) 
         {
             Vector3 XWingDirection = World.xwing.Position() - body.Pose.Position.ToVector3();
             Quaternion RotationToXWing = new Quaternion(XWingDirection, 1f);
-            Quaternion FinalRotation = Quaternion.Lerp(RotationToXWing, body.Pose.Orientation.ToQuaternion(), 5 * (float) gameTime.ElapsedGameTime.TotalSeconds);
+            RotationToXWing.Normalize();
+            Quaternion ActualRotation = body.Pose.Orientation.ToQuaternion();
+            ActualRotation.Normalize();
+
+            Quaternion FinalRotation = Quaternion.Slerp(RotationToXWing, ActualRotation, 3 * (float) gameTime.ElapsedGameTime.TotalSeconds);
+
             body.Pose.Orientation = FinalRotation.ToBEPU();
 
             Quaternion rotation = body.Pose.Orientation.ToQuaternion();
@@ -202,7 +217,10 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         {
             Vector3 XWingDirection = World.xwing.Position() - body.Pose.Position.ToVector3();
             Quaternion RotationToXWing = new Quaternion(XWingDirection, 1f);
-            Quaternion FinalRotation = Quaternion.Lerp(RotationToXWing, body.Pose.Orientation.ToQuaternion(), 20 * (float) gameTime.ElapsedGameTime.TotalSeconds);
+            RotationToXWing.Normalize();
+            Quaternion ActualRotation = body.Pose.Orientation.ToQuaternion();
+            ActualRotation.Normalize();
+            Quaternion FinalRotation = Quaternion.Slerp(RotationToXWing, ActualRotation, 8 * (float) gameTime.ElapsedGameTime.TotalSeconds);
             body.Pose.Orientation = FinalRotation.ToBEPU();
 
             Quaternion rotation = body.Pose.Orientation.ToQuaternion();
