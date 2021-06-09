@@ -259,7 +259,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         {
             if (!Destroyed)
             {
-                if (other is Xwing _)
+                if (other is XWing _)
                     Health -= 1000;
             }
             return false;
