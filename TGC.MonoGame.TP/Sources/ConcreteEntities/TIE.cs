@@ -31,6 +31,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         private double LastFire;
         private const double FireCooldownTime = 400;
+        private int FireCounter = 0;
 
         private readonly AudioEmitter Emitter = new AudioEmitter();
         private const float LaserVolume = 0.2f;
@@ -50,11 +51,19 @@ namespace TGC.MonoGame.TP.ConcreteEntities
                 Destroy();
             }
 
+            if (TooClose(body))
+            {
+                CurrentState = State.FLEEING;
+                ShortFlee = true;
+                Flee(body, gameTime);
+                FireCounter = 0;
+            }
+
             if (CurrentState == State.SEEKING)
             {
                 if (XWingInSight(body))
                 {
-                    GetCloseToXWing(body);
+                    GetCloseToXWing(body, gameTime);
 
                     if (CloseToXWing(body))
                     {
@@ -65,18 +74,27 @@ namespace TGC.MonoGame.TP.ConcreteEntities
                     if (Health < 40)
                     {
                         CurrentState = State.FLEEING;
-                        Flee(body);
+                        Flee(body, gameTime);
+                        FireCounter = 0;
                     }
                 }
                 else
                 {
                     CurrentState = State.SEEKING;
-                    GetCloseToXWing(body); 
+                    GetCloseToXWing(body, gameTime); 
                 }
             }
 
             else if (CurrentState == State.ATTACKING)
             {
+                if (FireCounter >= 15)
+                {
+                    CurrentState = State.FLEEING;
+                    ShortFlee = true;
+                    Flee(body, gameTime);
+                    FireCounter = 0;
+                }
+
                 if (CloseToXWing(body))
                 {
                     ShootXWing(body, gameTime);
@@ -86,35 +104,35 @@ namespace TGC.MonoGame.TP.ConcreteEntities
                     if (Health < 40)
                     {
                         CurrentState = State.FLEEING;
-                        Flee(body);
+                        Flee(body, gameTime);
+                        FireCounter = 0;
                     }
                     else 
                     {
                         CurrentState = State.FLEEING;
                         ShortFlee = true;
-                        Flee(body);                      
+                        Flee(body, gameTime);
+                        FireCounter = 0;
                     }
                 }
             }
 
             else if (CurrentState == State.FLEEING)
             {
+
+                Flee(body, gameTime);
+
                 if (ShortFlee)
-                {
-                    Flee(body);
-                        
+                {                       
                     if (ShortFleeSuccess(body))
                     {
                         CurrentState = State.SEEKING;
                         ShortFlee = false;
                     }
-
                 }
 
                 else
                 {
-                    Flee(body);
-
                     if (FleeSuccess(body))
                     {
                         CurrentState = State.SEEKING;
@@ -125,22 +143,31 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         private bool FleeSuccess(BodyReference body)
         {
-            return DistanceToXWing(body) > 3000f;
+            return DistanceToXWing(body) > 4000f;
         }
 
         private bool ShortFleeSuccess(BodyReference body)
         {
-            return DistanceToXWing(body) > 1500f;
+            return DistanceToXWing(body) > 2000f;
         }
 
-        private void Flee(BodyReference body)
+        private bool XWingInSight(BodyReference body)
         {
-            Vector3 XWingDirection = World.xwing.Position() - body.Pose.Position.ToVector3();
-            XWingDirection.Y = 0;
-            Quaternion RotationFromXWing = new Quaternion(-XWingDirection, 1f);
-            Quaternion FinalRotation = Quaternion.Lerp(RotationFromXWing, body.Pose.Orientation.ToQuaternion(), 3f);
-            body.Pose.Orientation = FinalRotation.ToBEPU();
+            return DistanceToXWing(body) < 1000f;
+        }
 
+        private bool CloseToXWing(BodyReference body)
+        {
+            return DistanceToXWing(body) < 500f;
+        }
+
+        private bool TooClose(BodyReference body)
+        {
+            return DistanceToXWing(body) < 200f;
+        }
+
+        private void Flee(BodyReference body, GameTime gameTime)
+        {
             Quaternion rotation = body.Pose.Orientation.ToQuaternion();
             Vector3 forward = PhysicUtils.Forward(rotation);
 
@@ -158,11 +185,11 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             return DistanceVector.Length();
         }
 
-        private void GetCloseToXWing(BodyReference body) 
+        private void GetCloseToXWing(BodyReference body, GameTime gameTime) 
         {
             Vector3 XWingDirection = World.xwing.Position() - body.Pose.Position.ToVector3();
             Quaternion RotationToXWing = new Quaternion(XWingDirection, 1f);
-            Quaternion FinalRotation = Quaternion.Lerp(RotationToXWing, body.Pose.Orientation.ToQuaternion(), 4f);
+            Quaternion FinalRotation = Quaternion.Lerp(RotationToXWing, body.Pose.Orientation.ToQuaternion(), 5 * (float) gameTime.ElapsedGameTime.TotalSeconds);
             body.Pose.Orientation = FinalRotation.ToBEPU();
 
             Quaternion rotation = body.Pose.Orientation.ToQuaternion();
@@ -171,27 +198,22 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             body.Velocity.Linear = (forward * StandarVelocity).ToBEPU();
         }
 
-        private void FaceXWing(BodyReference body)
+        private void FaceXWing(BodyReference body, GameTime gameTime)
         {
             Vector3 XWingDirection = World.xwing.Position() - body.Pose.Position.ToVector3();
             Quaternion RotationToXWing = new Quaternion(XWingDirection, 1f);
-            Quaternion FinalRotation = Quaternion.Lerp(RotationToXWing, body.Pose.Orientation.ToQuaternion(), 2f);
+            Quaternion FinalRotation = Quaternion.Lerp(RotationToXWing, body.Pose.Orientation.ToQuaternion(), 20 * (float) gameTime.ElapsedGameTime.TotalSeconds);
             body.Pose.Orientation = FinalRotation.ToBEPU();
 
             Quaternion rotation = body.Pose.Orientation.ToQuaternion();
             Vector3 forward = PhysicUtils.Forward(rotation);
 
-            body.Velocity.Linear = (forward * SlowVelocity).ToBEPU();
-        }
-
-        private bool CloseToXWing(BodyReference body)
-        {
-            return DistanceToXWing(body) < 800f;
+            body.Velocity.Linear = (forward * StandarVelocity).ToBEPU();
         }
 
         private void ShootXWing(BodyReference body, GameTime gameTime)
         {
-            FaceXWing(body);
+            FaceXWing(body, gameTime);
             Fire(body, gameTime);
         }
     
@@ -207,11 +229,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             Quaternion laserOrientation = PhysicUtils.DirectionsToQuaternion(forward, Vector3.Up);
             World.InstantiateLaser(position, -forward, laserOrientation, Emitter, LaserVolume);
             LastFire = totalTime;
-        }
-
-        private bool XWingInSight(BodyReference body)
-        {
-            return DistanceToXWing(body) < 2000f;
+            FireCounter++;
         }
 
         void IStaticDamageable.ReceiveStaticDamage()
