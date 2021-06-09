@@ -27,8 +27,13 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         internal Vector3 forward, rightDirection, upDirection;
         private Vector2 movementAxis = Vector2.Zero;
 
-        private bool godMode = false;
+        internal bool godMode = false;
         internal float salud = 100;
+        internal const float maxTurbo = 3000;
+        private const float turboRegeneration = 0.3f;
+        private double lastTurbo = 0;
+        private const double turboRegenerationTime = 2000f;
+        internal float turbo = maxTurbo;
 
         private double lastFire;
         private const double fireCooldownTime = 400;
@@ -65,6 +70,11 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             emitter.Forward = forward;
             emitter.Up = upDirection;
             emitter.Velocity = body.Velocity.Linear.ToVector3();
+
+            if (Input.Accelerate())
+                lastTurbo = gameTime.TotalGameTime.TotalMilliseconds;
+            if (gameTime.TotalGameTime.TotalMilliseconds > lastTurbo + turboRegenerationTime)
+                turbo = Math.Min(turbo + turboRegeneration * (float)elapsedTime, maxTurbo);
         }
 
         private void UpdateOrientation(BodyReference body)
@@ -79,10 +89,16 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         internal Vector3 Velocity() => Body().Velocity.Linear.ToVector3();
         private void Movement(float elapsedTime, BodyReference body)
         {
-            Vector3 accelerationDirection = Input.Accelerate() ? forward : Vector3.Zero;
-            Vector3 velocity = accelerationDirection * acceleration * elapsedTime;
-
-            AddLinearVelocity(body, velocity);
+            if (Input.Accelerate())
+            {
+                float speed = acceleration * elapsedTime;
+                speed = Math.Min(speed, turbo);
+                AddLinearVelocity(body, forward * speed);
+                turbo -= speed;
+            }
+            else
+                AddLinearVelocity(body, Vector3.Zero);
+            
         }
 
         private void Brakement(float elapsedTime, BodyReference body)
@@ -90,7 +106,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             Vector3 velocity = Velocity();
             float brakmentForce = -acceleration / 10;
 
-            Vector3 forwardBreakment = !Input.Accelerate() ? forward : Vector3.Zero;
+            Vector3 forwardBreakment = (!Input.Accelerate() || turbo == 0) ? forward : Vector3.Zero;
             float horizontalSpeed = Vector3.Dot(velocity, rightDirection) / (rightDirection.Length() * rightDirection.Length());
             Vector3 horizontalBrakment = horizontalSpeed != 0 ? Vector3.Normalize(rightDirection * horizontalSpeed) : Vector3.Zero;
             float verticalSpeed = Vector3.Dot(velocity, upDirection) / (upDirection.Length() * upDirection.Length());
@@ -158,6 +174,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         {
             TGCGame.content.S_Explotion.CreateInstance().Play();
             salud = 100;
+            turbo = maxTurbo;
             BodyReference body = Body();
 
             /*body.Velocity.Linear = System.Numerics.Vector3.Zero;
@@ -184,7 +201,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         void ILaserDamageable.ReceiveLaserDamage()
         {
-            PerderSalud(20);
+            PerderSalud(15);
         }
     }
 }
