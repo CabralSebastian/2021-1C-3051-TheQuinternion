@@ -27,8 +27,6 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         protected float StandarVelocity = 150f;
         protected float FastVelocity = 200f;
 
-        protected float TimeCount = 0f;
-
         private double LastFire;
         private const double FireCooldownTime = 400;
         private int FireCounter = 0;
@@ -184,9 +182,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             Quaternion ActualRotation = body.Pose.Orientation.ToQuaternion();
             ActualRotation.Normalize();
 
-            Quaternion FinalRotation = Quaternion.Slerp(DegreeRotation, ActualRotation, TimeCount);
-            TimeCount += (float) gameTime.ElapsedGameTime.TotalSeconds;
-
+            Quaternion FinalRotation = Quaternion.Slerp(DegreeRotation, ActualRotation, (float) gameTime.ElapsedGameTime.TotalSeconds);
             body.Pose.Orientation = FinalRotation.ToBEPU();
 
             Quaternion rotation = body.Pose.Orientation.ToQuaternion();
@@ -202,9 +198,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             RotationToXWing.Normalize();
             Quaternion ActualRotation = body.Pose.Orientation.ToQuaternion();
             ActualRotation.Normalize();
-
             Quaternion FinalRotation = Quaternion.Slerp(RotationToXWing, ActualRotation, 3 * (float) gameTime.ElapsedGameTime.TotalSeconds);
-
             body.Pose.Orientation = FinalRotation.ToBEPU();
 
             Quaternion rotation = body.Pose.Orientation.ToQuaternion();
