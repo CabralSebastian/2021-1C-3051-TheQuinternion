@@ -15,8 +15,8 @@ namespace TGC.MonoGame.TP
 
         private Vector2 lastMousePosition;
 
-        private readonly Bar healthBar = new Bar(new Vector2(150f, 30f), Color.Red * 0.6f, 100f);
-        private readonly Bar turboBar = new Bar(new Vector2(150f, 30f), Color.Yellow * 0.6f, XWing.maxTurbo);
+        private readonly Bar healthBar = new Bar(new Vector2(150f, 25f), Color.Red * 0.6f, 100f);
+        private readonly Bar turboBar = new Bar(new Vector2(150f, 25f), Color.Yellow * 0.6f, XWing.maxTurbo);
 
         internal void Update(GameTime gameTime)
         {
@@ -83,8 +83,8 @@ namespace TGC.MonoGame.TP
                 ), 
                 Color.White);
 
-            healthBar.Draw(TGCGame.gui.ScreenSize - new Vector2(150f / 2 + 5f, 30f / 2 + 5f), World.xwing.salud);
-            turboBar.Draw(TGCGame.gui.ScreenSize - new Vector2(150f / 2 + 5f, 30f + 30f / 2 + 10f), World.xwing.turbo);
+            healthBar.Draw(TGCGame.gui.ScreenSize - new Vector2(150f / 2 + 5f, 25f / 2 + 5f), World.xwing.salud);
+            turboBar.Draw(TGCGame.gui.ScreenSize - new Vector2(150f / 2 + 5f, 25f + 25f / 2 + 10f), World.xwing.turbo);
 
             if (World.xwing.godMode)
                 TGCGame.gui.DrawText("God mode", new Vector2(5f, TGCGame.gui.ScreenSize.Y - 25f), 12f);

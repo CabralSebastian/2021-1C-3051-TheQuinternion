@@ -17,11 +17,11 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         protected override Vector3 Scale => Vector3.One;
         protected override TypedIndex Shape => TGCGame.content.SH_XWing;
 
-        internal readonly float minSpeed = 100f;
-        internal readonly float maxSpeed = 200f;
+        internal readonly float minSpeed = 200f;
+        internal readonly float maxSpeed = 280f;
         private const float acceleration = 1f;
 
-        private readonly Vector3 rotationFixValues = new Vector3(0.0008f, 0.002f, 0.002f);
+        private readonly Vector3 rotationFixValues = new Vector3(0.0008f, 0.002f, 0.004f);
         private readonly Vector3 baseUpDirection = Vector3.Up;
         private readonly Vector3 baseRightDirection = Vector3.Right;
         internal Vector3 forward, rightDirection, upDirection;
