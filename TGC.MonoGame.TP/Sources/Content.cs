@@ -11,6 +11,7 @@ using BEPUQuaternion = System.Numerics.Quaternion;
 using System;
 using TGC.MonoGame.TP.Drawers;
 using Microsoft.Xna.Framework.Media;
+using TGC.MonoGame.TP.Rendering;
 
 namespace TGC.MonoGame.TP
 {
@@ -35,6 +36,7 @@ namespace TGC.MonoGame.TP
         internal readonly Drawer D_XWing, D_TIE, D_Trench_Plain, D_Trench_Line, D_Trench_Corner, D_Trench_T, D_Trench_Cross, D_Trench_End, D_Laser;
         internal readonly TurretDrawer D_Turret;
         internal readonly SmallTurretDrawer D_SmallTurret;
+        internal readonly Material trenchMaterial, turretMaterial, xWingMaterial;
 
         internal Content(ContentManager contentManager)
         {
@@ -141,18 +143,23 @@ namespace TGC.MonoGame.TP
             // Fonts
             F_StarJedi = LoadFont("Starjedi");
 
+            // Materials
+            trenchMaterial = new Material(0.8f, 0.8f, 0.1f, 8.0f);
+            turretMaterial = new Material(1.0f, 0.5f, 0.01f, 8.0f);
+            xWingMaterial = new Material(0.8f, 0.8f, 0.1f, 8.0f);
+
             // Drawers
-            D_XWing = new MainDrawer(M_XWing, T_XWing);
-            D_TIE = new MainDrawer(M_TIE, T_TIE);
-            D_Trench_Plain = new MainDrawer(M_Trench_Plain, T_Trench);
-            D_Trench_Line = new MainDrawer(M_Trench_Line, T_Trench);
-            D_Trench_Corner = new MainDrawer(M_Trench_Corner, T_Trench);
-            D_Trench_T = new MainDrawer(M_Trench_T, T_Trench);
-            D_Trench_Cross = new MainDrawer(M_Trench_Cross, T_Trench);
-            D_Trench_End = new MainDrawer(M_Trench_End, T_Trench);
+            D_XWing = new MainDrawer(M_XWing, T_XWing, xWingMaterial);
+            D_TIE = new MainDrawer(M_TIE, T_TIE, xWingMaterial);
+            D_Trench_Plain = new MainDrawer(M_Trench_Plain, T_Trench, trenchMaterial);
+            D_Trench_Line = new MainDrawer(M_Trench_Line, T_Trench, trenchMaterial);
+            D_Trench_Corner = new MainDrawer(M_Trench_Corner, T_Trench, trenchMaterial);
+            D_Trench_T = new MainDrawer(M_Trench_T, T_Trench, trenchMaterial);
+            D_Trench_Cross = new MainDrawer(M_Trench_Cross, T_Trench, trenchMaterial);
+            D_Trench_End = new MainDrawer(M_Trench_End, T_Trench, trenchMaterial);
             D_Laser = new LaserDrawer(M_Laser);
-            D_Turret = new TurretDrawer(M_Turret, T_Turret);
-            D_SmallTurret = new SmallTurretDrawer(M_SmallTurret, T_Turret);
+            D_Turret = new TurretDrawer(M_Turret, T_Turret, turretMaterial);
+            D_SmallTurret = new SmallTurretDrawer(M_SmallTurret, T_Turret, turretMaterial);
         }
 
         private Effect LoadEffect(string name) => contentManager.Load<Effect>(EffectsFolder + name);

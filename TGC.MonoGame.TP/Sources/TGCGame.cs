@@ -18,7 +18,7 @@ namespace TGC.MonoGame.TP
         private SpriteBatch spriteBatch;
         private SkyBox skyBox;
         private FullScreenQuad fullScreenQuad;
-        internal const int shadowmapSize = 2048 * 3;
+        internal const int shadowmapSize = 2048 * 2;
         private RenderTarget2D shadowMapRenderTarget, mainRenderTarget, bloomRenderTarget;
 
         internal static readonly SoundManager soundManager = new SoundManager();

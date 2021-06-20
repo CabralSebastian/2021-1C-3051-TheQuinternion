@@ -45,11 +45,6 @@ namespace TGC.MonoGame.TP.Scenes
             TGCGame.content.E_MainShader.Parameters["diffuseColor"]?.SetValue(new Vector3(1f, 1f, 1f));
             TGCGame.content.E_MainShader.Parameters["specularColor"]?.SetValue(new Vector3(1f, 1f, 1f));
 
-            TGCGame.content.E_MainShader.Parameters["KAmbient"]?.SetValue(0.8f);
-            TGCGame.content.E_MainShader.Parameters["KDiffuse"]?.SetValue(0.8f);
-            TGCGame.content.E_MainShader.Parameters["KSpecular"]?.SetValue(0.1f);
-            TGCGame.content.E_MainShader.Parameters["shininess"]?.SetValue(8.0f);
-
             //TGCGame.content.E_BlinnPhong.Parameters["ViewProjection"].SetValue(TGCGame.camera.View * TGCGame.camera.Projection);
             //TGCGame.content.E_BlinnPhong.Parameters["lightPosition"].SetValue(new Vector3(100000f, 80000f, 50000f));
             //TGCGame.content.E_BlinnPhong.Parameters["eyePosition"].SetValue(TGCGame.camera.position);
