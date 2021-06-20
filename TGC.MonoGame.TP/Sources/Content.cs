@@ -12,6 +12,7 @@ using System;
 using TGC.MonoGame.TP.Drawers;
 using Microsoft.Xna.Framework.Media;
 using TGC.MonoGame.TP.Rendering;
+using TGC.MonoGame.TP.ConcreteEntities;
 
 namespace TGC.MonoGame.TP
 {
@@ -25,7 +26,7 @@ namespace TGC.MonoGame.TP
         private const string SoundsFolder = "Sounds/";
         private const string FontsFolder = "Fonts/";
 
-        internal readonly Effect E_BasicShader, E_MainShader, E_LaserShader, E_SkyBox, E_PostProcessing;
+        internal readonly Effect E_MainShader, E_LaserShader, E_SkyBox, E_PostProcessing;
         internal readonly Model M_SkyBox, M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Laser, M_Turret, M_SmallTurret;
         internal readonly TypedIndex SH_XWing, SH_TIE, SH_Laser, SH_Turret, SH_SmallTurret, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
         internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Turret;
@@ -62,20 +63,18 @@ namespace TGC.MonoGame.TP
             M_Turret = LoadModel("DeathStar/Turret", E_MainShader);
             M_SmallTurret = LoadModel("DeathStar/SmallTurret", E_MainShader);
 
-            // Convex Hulls
-
             // Shapes
             SH_XWing = LoadConvexHull("XWing/XWing", 1f);
             SH_TIE = LoadShape(new Sphere(8f));
-            SH_Laser = LoadShape(new Cylinder(Laser.Radius / 2f, Laser.Lenght / 10f));
-            SH_Turret = LoadShape(new Box(28f, 66f, 28f));
-            SH_SmallTurret = LoadShape(new Box(1f * 10f, 2.1f * 20f, 1f * 10f));
+            SH_Laser = LoadShape(new Cylinder(Laser.Radius / 2f, Laser.Lenght / 50f));
+            SH_Turret = LoadShape(new Box(2 * 1.0f * Turret.scale * 100, 2 * 3.29f * Turret.scale * 100, 2 * 1.0f * Turret.scale * 100));
+            SH_SmallTurret = LoadShape(new Box(2 * 0.45f * SmallTurret.scale * 100, 2 * 2.1f * SmallTurret.scale * 100, 2 * 0.45f * SmallTurret.scale * 100));
 
             // DeathStar shapes
             TypedIndex trenchPlain = LoadShape(new Box(DeathStar.trenchSize, DeathStar.trenchHeight, DeathStar.trenchSize));
             TypedIndex trenchLine = LoadShape(new Box(DeathStar.trenchSize, DeathStar.trenchHeight, DeathStar.trenchSize / 1.6f));
             TypedIndex trenchQuarter = LoadShape(new Box(DeathStar.trenchSize / 1.6f, DeathStar.trenchHeight, DeathStar.trenchSize / 1.6f));
-            RigidPose plainPose = new RigidPose(new BEPUVector3(0f, -DeathStar.trenchHeight * 1.8f, 0f));
+            RigidPose plainPose = new RigidPose(new BEPUVector3(0f, -DeathStar.trenchHeight, 0f));
             float colliderYPos = -DeathStar.trenchHeight / 2f;
             float sideOffset = DeathStar.trenchSize * 3.5f / 8f;
             BEPUQuaternion d90Rotation = BEPUQuaternion.CreateFromAxisAngle(BEPUVector3.UnitY, (float)Math.PI / 2f);

@@ -12,9 +12,9 @@ namespace TGC.MonoGame.TP
 
         internal const float originalTrenchSize = 28.2857f;
         internal const float originalTrenchHeight = 11f;
-        internal const float trenchScale = 1/10f;
+        internal const float trenchScale = 1/7f;
         internal const float trenchSize = originalTrenchSize * trenchScale * 100f;
-        internal const float trenchHeight = originalTrenchHeight * trenchScale * 50f;
+        internal const float trenchHeight = originalTrenchHeight * trenchScale * 100f * 1.3f;
         
         private const int size = 40;
         private const int halfSize = size / 2;
@@ -181,9 +181,9 @@ namespace TGC.MonoGame.TP
                         if (createTurrets)
                         {
                             if (shape == 1100 && RandomBool(0.3f))
-                                new SmallTurret(false).Instantiate(new Vector3((x - halfSize) * trenchSize + RandomLineTrenchOffset(), -110f - trenchHeight, (z - halfSize) * trenchSize + RandomTrenchSizeOffset()));
+                                new SmallTurret(false).Instantiate(new Vector3((x - halfSize) * trenchSize + RandomLineTrenchOffset(), -trenchHeight, (z - halfSize) * trenchSize + RandomTrenchSizeOffset()));
                             else if (shape == 0011 && RandomBool(0.3f))
-                                new SmallTurret(true).Instantiate(new Vector3((x - halfSize) * trenchSize + RandomTrenchSizeOffset(), -110f - trenchHeight, (z - halfSize) * trenchSize + RandomLineTrenchOffset()), d90);
+                                new SmallTurret(true).Instantiate(new Vector3((x - halfSize) * trenchSize + RandomTrenchSizeOffset(), -trenchHeight, (z - halfSize) * trenchSize + RandomLineTrenchOffset()), d90);
                         }
                     }
                     else

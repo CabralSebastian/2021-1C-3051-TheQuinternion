@@ -9,12 +9,15 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 {
     internal class Turret : BaseTurret
     {
+        internal const float scale = DeathStar.trenchScale * 1.2f;
+        protected override Vector3 Scale => Vector3.One * scale;
         protected override Drawer Drawer() => TGCGame.content.D_Turret;
         protected override TypedIndex Shape => TGCGame.content.SH_Turret;
 
         protected override float MaxRange => 800f;
         protected override float MinIdleTime => 1000f;
-        protected override Vector3 CannonsOffset => new Vector3(0f, 2.8911f, 0f) * 10f;
+        private const float scaleFactor = 1 / 7f;
+        protected override Vector3 CannonsOffset => new Vector3(0f, 2.8911f, 0f) * 100 * scale;
 
         private const float rotationSpeed = 0.2f;
         private const float precition = (float)Math.PI / 4;

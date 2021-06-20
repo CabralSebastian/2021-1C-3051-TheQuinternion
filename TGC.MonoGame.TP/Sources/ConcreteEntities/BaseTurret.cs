@@ -9,8 +9,6 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 {
     internal abstract class BaseTurret : StaticPhysicEntity
     {
-        protected override Vector3 Scale => Vector3.One * DeathStar.trenchScale;
-
         protected abstract float MaxRange { get; }
         protected abstract float MinIdleTime { get; }
         protected abstract Vector3 CannonsOffset { get; }

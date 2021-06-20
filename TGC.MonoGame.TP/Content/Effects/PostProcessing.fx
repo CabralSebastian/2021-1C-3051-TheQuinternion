@@ -54,7 +54,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR0
     float4 sceneColor = tex2D(textureSampler, input.TextureCoordinates);
     float4 bloomColor = tex2D(bloomTextureSampler, input.TextureCoordinates);
     float notBloom = step(bloomColor.w, 0);
-    return (sceneColor * 0.6 * notBloom) + bloomColor;
+    return (sceneColor * 0.6) + bloomColor;
 }
 
 // ===== Techniques =====
