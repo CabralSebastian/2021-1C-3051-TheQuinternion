@@ -18,6 +18,8 @@ namespace TGC.MonoGame.TP
         private readonly Bar healthBar = new Bar(new Vector2(150f, 25f), Color.Red * 0.6f, 100f);
         private readonly Bar turboBar = new Bar(new Vector2(150f, 25f), Color.Yellow * 0.6f, XWing.maxTurbo);
 
+        private bool showF1 = false;
+
         internal void Update(GameTime gameTime)
         {
             double totalTime = gameTime.TotalGameTime.TotalMilliseconds;
@@ -30,6 +32,9 @@ namespace TGC.MonoGame.TP
                 World.xwing.Fire(totalTime);
             if (Input.GodMode())
                 World.xwing.ToggleGodMode();
+
+            if (Input.ToggleF1())
+                showF1 = !showF1;
         }
 
         //MOUSE//
@@ -88,6 +93,9 @@ namespace TGC.MonoGame.TP
 
             if (World.xwing.godMode)
                 TGCGame.gui.DrawText("God mode", new Vector2(5f, TGCGame.gui.ScreenSize.Y - 25f), 12f);
+
+            if (showF1)
+                TGCGame.gui.DrawText(Math.Round(TGCGame.game.LastFPS).ToString() + " FPS", new Vector2(5f, 5f), 12f);
         }
     }
 }

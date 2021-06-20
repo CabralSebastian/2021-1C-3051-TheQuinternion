@@ -20,6 +20,7 @@ namespace TGC.MonoGame.TP
         internal static bool Accelerate() => KeyboardState.IsKeyDown(Keys.LeftShift);
         internal static bool GodMode() => KeyboardState.IsKeyDown(Keys.G);
         internal static bool Exit() => KeyboardState.IsKeyDown(Keys.Escape);
+        internal static bool ToggleF1() => KeyboardState.IsKeyDown(Keys.F1);
 
         //MOUSE//
         internal static Vector2 MousePosition() => Mouse.GetState().Position.ToVector2();

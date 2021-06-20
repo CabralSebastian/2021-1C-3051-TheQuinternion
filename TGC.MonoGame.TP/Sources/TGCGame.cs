@@ -5,6 +5,7 @@ using TGC.MonoGame.TP.Scenes;
 using TGC.MonoGame.TP.GraphicInterface;
 using TGC.MonoGame.TP.Rendering;
 using TGC.MonoGame.TP.Rendering.Cameras;
+using System;
 
 namespace TGC.MonoGame.TP
 {
@@ -27,6 +28,7 @@ namespace TGC.MonoGame.TP
         internal static readonly LightCamera lightCamera = new LightCamera();
 
         internal Vector2 WindowSize() => new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
+        internal double LastFPS { get; private set; }
 
         internal TGCGame()
         {
@@ -73,6 +75,8 @@ namespace TGC.MonoGame.TP
 
         protected override void Draw(GameTime gameTime)
         {
+            LastFPS = 1 / gameTime.ElapsedGameTime.TotalSeconds;
+
             GraphicsDevice.Clear(Color.Black);
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.BlendState = BlendState.Opaque;
