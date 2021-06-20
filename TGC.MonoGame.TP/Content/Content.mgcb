@@ -13,23 +13,17 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Effects/BasicShader.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:Effects/BasicShader.fx
-
-#begin Effects/BlinnPhong.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:Effects/BlinnPhong.fx
-
 #begin Effects/LaserShader.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:Effects/LaserShader.fx
+
+#begin Effects/MainShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/MainShader.fx
 
 #begin Effects/SkyBox.fx
 /importer:EffectImporter

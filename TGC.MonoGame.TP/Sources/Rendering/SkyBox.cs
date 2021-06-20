@@ -18,7 +18,7 @@ namespace TGC.MonoGame.TP.Rendering
             this.size = size;
         }
 
-        public void Draw(Matrix view, Matrix projection, Vector3 cameraPosition)
+        public void Draw(Matrix viewProjection, Vector3 cameraPosition)
         {
             foreach (var pass in effect.CurrentTechnique.Passes)
             {
@@ -29,8 +29,7 @@ namespace TGC.MonoGame.TP.Rendering
                     {
                         part.Effect = effect;
                         part.Effect.Parameters["World"].SetValue(Matrix.CreateScale(size) * Matrix.CreateTranslation(cameraPosition));
-                        part.Effect.Parameters["View"].SetValue(view);
-                        part.Effect.Parameters["Projection"].SetValue(projection);
+                        part.Effect.Parameters["ViewProjection"].SetValue(viewProjection);
                         part.Effect.Parameters["SkyBoxTexture"].SetValue(texture);
                         part.Effect.Parameters["CameraPosition"].SetValue(cameraPosition);
                     }

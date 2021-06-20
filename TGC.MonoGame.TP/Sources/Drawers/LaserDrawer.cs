@@ -13,12 +13,6 @@ namespace TGC.MonoGame.TP.Drawers
             this.model = model;
         }
 
-        internal static void PreDraw()
-        {
-            Effect.Parameters["View"].SetValue(TGCGame.camera.View);
-            Effect.Parameters["Projection"].SetValue(TGCGame.camera.Projection);
-        }
-
         internal override void Draw(Matrix generalWorldMatrix)
         {
             int index = 0;

@@ -5,7 +5,7 @@ namespace TGC.MonoGame.TP.Drawers
 {
     internal class SmallTurretDrawer : Drawer
     {
-        private static Effect Effect => TGCGame.content.E_BlinnPhong;
+        private static Effect Effect => TGCGame.content.E_MainShader;
         protected readonly Model model;
         protected readonly Texture2D[] texture;
         internal Matrix CannonsWorldMatrix { private get; set; }

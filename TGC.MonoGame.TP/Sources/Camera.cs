@@ -9,12 +9,13 @@ namespace TGC.MonoGame.TP
     internal class Camera
     {
         internal Vector3 position = new Vector3();
-        public Matrix View { get; private set; }
-        public Matrix Projection { get; private set; }
+        private Matrix View;
+        private Matrix Projection;
+        internal Matrix ViewProjection { get; private set; }
 
         private const float fieldOfView = MathHelper.PiOver4;
         private const float nearPlaneDistance = 0.1f;
-        private const float farPlaneDistance = 10000f;
+        private const float farPlaneDistance = 4000f;
         private const float normalizedNearPlaneDistance = nearPlaneDistance / farPlaneDistance;
 
         private Vector3 forward = Vector3.Forward, up = Vector3.Up, right = Vector3.Right;
@@ -27,6 +28,7 @@ namespace TGC.MonoGame.TP
         {
             Projection = CreateProjectionMatrix(graphicsDevice);
             View = CreateViewMatrix();
+            ViewProjection = View * Projection;
         }
 
         internal void Update()
@@ -34,6 +36,7 @@ namespace TGC.MonoGame.TP
             if (target != null)
                 FollowTarget();
             View = CreateViewMatrix();
+            ViewProjection = View * Projection;
             listener.Position = position;
             listener.Forward = forward;
             listener.Up = up;

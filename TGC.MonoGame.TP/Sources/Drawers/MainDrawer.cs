@@ -3,13 +3,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TGC.MonoGame.TP.Drawers
 {
-    internal class BlinnPhongDrawer : Drawer
+    internal class MainDrawer : Drawer
     {
-        private static Effect Effect => TGCGame.content.E_BlinnPhong;
+        private static Effect Effect => TGCGame.content.E_MainShader;
         protected readonly Model model;
         protected readonly Texture2D[] textures;
 
-        internal BlinnPhongDrawer(Model model, Texture2D[] textures)
+        internal MainDrawer(Model model, Texture2D[] textures)
         {
             this.model = model;
             this.textures = textures;
