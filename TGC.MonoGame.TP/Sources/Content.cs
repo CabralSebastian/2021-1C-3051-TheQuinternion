@@ -24,7 +24,7 @@ namespace TGC.MonoGame.TP
         private const string SoundsFolder = "Sounds/";
         private const string FontsFolder = "Fonts/";
 
-        internal readonly Effect E_BasicShader, E_MainShader, E_LaserShader, E_SkyBox;
+        internal readonly Effect E_BasicShader, E_MainShader, E_LaserShader, E_SkyBox, E_PostProcessing;
         internal readonly Model M_SkyBox, M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Laser, M_Turret, M_SmallTurret;
         internal readonly TypedIndex SH_XWing, SH_TIE, SH_Laser, SH_Turret, SH_SmallTurret, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
         internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Turret;
@@ -41,10 +41,10 @@ namespace TGC.MonoGame.TP
             this.contentManager = contentManager;
 
             // Efects
-            E_BasicShader = LoadEffect("BasicShader");
             E_MainShader = LoadEffect("MainShader");
             E_LaserShader = LoadEffect("LaserShader");
             E_SkyBox = LoadEffect("SkyBox");
+            E_PostProcessing = LoadEffect("PostProcessing");
 
             // Models
             M_SkyBox =  LoadModel("SkyBox/Cube", E_SkyBox);

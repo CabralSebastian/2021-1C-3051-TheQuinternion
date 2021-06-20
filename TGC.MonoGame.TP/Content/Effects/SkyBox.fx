@@ -23,6 +23,8 @@ samplerCUBE SkyBoxSampler = sampler_state
     AddressV = Mirror;
 };
 
+// ===== Skybox =====
+
 struct VertexShaderInput
 {
     float4 Position : POSITION0;
@@ -51,6 +53,8 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
     return float4(texCUBE(SkyBoxSampler, normalize(input.TextureCoordinate)).rgb, 1);
 }
+
+// ===== Techniques =====
 
 technique Skybox
 {

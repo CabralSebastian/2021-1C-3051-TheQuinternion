@@ -49,6 +49,15 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	return float4(1, 0, 0, 1);
 }
 
+// ===== BloomPass =====
+
+float4 BloomPS(VertexShaderOutput input) : COLOR
+{
+	return float4(1, 0, 0, 1);
+}
+
+// ===== Techniques =====
+
 technique DepthPass
 {
 	pass Pass0
@@ -64,5 +73,14 @@ technique DrawShadowed
 	{
 		VertexShader = compile VS_SHADERMODEL MainVS();
 		PixelShader = compile PS_SHADERMODEL MainPS();
+	}
+};
+
+technique BloomPass
+{
+	pass Pass0
+	{
+		VertexShader = compile VS_SHADERMODEL MainVS();
+		PixelShader = compile PS_SHADERMODEL BloomPS();
 	}
 };

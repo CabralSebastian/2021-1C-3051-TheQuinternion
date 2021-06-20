@@ -25,6 +25,12 @@
 /processorParam:DebugMode=Auto
 /build:Effects/MainShader.fx
 
+#begin Effects/PostProcessing.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/PostProcessing.fx
+
 #begin Effects/SkyBox.fx
 /importer:EffectImporter
 /processor:EffectProcessor

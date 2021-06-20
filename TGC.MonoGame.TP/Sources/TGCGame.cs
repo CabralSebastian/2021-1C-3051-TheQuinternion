@@ -18,9 +18,8 @@ namespace TGC.MonoGame.TP
         private SpriteBatch spriteBatch;
         private SkyBox skyBox;
         private FullScreenQuad fullScreenQuad;
-        internal const int shadowmapSize = 2048 * 8;
-        internal const int cameraSize = 2048 * 2;
-        private RenderTarget2D shadowMapRenderTarget;
+        internal const int shadowmapSize = 2048 * 3;
+        private RenderTarget2D shadowMapRenderTarget, mainRenderTarget, bloomRenderTarget;
 
         internal static readonly SoundManager soundManager = new SoundManager();
         internal static Scene currentScene;
@@ -46,7 +45,13 @@ namespace TGC.MonoGame.TP
             fullScreenQuad = new FullScreenQuad(GraphicsDevice);
             content = new Content(Content);
             skyBox = new SkyBox(content.M_SkyBox, content.TC_Space, content.E_SkyBox, 3000f);
-            shadowMapRenderTarget = new RenderTarget2D(GraphicsDevice, shadowmapSize, shadowmapSize, false, SurfaceFormat.Single, DepthFormat.Depth24, 0, RenderTargetUsage.PlatformContents);
+
+            shadowMapRenderTarget = new RenderTarget2D(GraphicsDevice, shadowmapSize, shadowmapSize,
+                false, SurfaceFormat.Single, DepthFormat.Depth24, 0, RenderTargetUsage.PlatformContents);
+            mainRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height,
+                false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8, 0, RenderTargetUsage.DiscardContents);
+            bloomRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 
+                false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8, 0, RenderTargetUsage.DiscardContents);
         }
 
         protected override void Initialize()
@@ -81,15 +86,17 @@ namespace TGC.MonoGame.TP
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.BlendState = BlendState.Opaque;
 
-            FirstPass();
-            SecondPass();
+            ShadowMapPass();
+            MainPass();
+            BloomPass();
+            FinalPass();
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, DepthStencilState.DepthRead, RasterizerState.CullNone);
             currentScene.Draw2D(GraphicsDevice, spriteBatch);
             spriteBatch.End();
         }
 
-        private void FirstPass()
+        private void ShadowMapPass()
         {
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.SetRenderTarget(shadowMapRenderTarget); //shadowMapRenderTarget null
@@ -106,9 +113,9 @@ namespace TGC.MonoGame.TP
             currentScene.Draw();
         }
 
-        private void SecondPass()
+        private void MainPass()
         {
-            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.SetRenderTarget(mainRenderTarget);
             GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
 
             content.E_MainShader.CurrentTechnique = content.E_MainShader.Techniques["DrawShadowed"];
@@ -117,13 +124,34 @@ namespace TGC.MonoGame.TP
             content.E_MainShader.Parameters["ViewProjection"].SetValue(camera.ViewProjection);
             content.E_LaserShader.Parameters["ViewProjection"].SetValue(camera.ViewProjection);
 
-            content.E_MainShader.Parameters["cameraPosition"]?.SetValue(camera.position);
+            content.E_MainShader.Parameters["cameraPosition"].SetValue(camera.position);
             content.E_MainShader.Parameters["LightViewProjection"].SetValue(lightCamera.ViewProjection);
             content.E_MainShader.Parameters["lightDirection"].SetValue(-lightCamera.Direction);
-            content.E_MainShader.Parameters["shadowMap"]?.SetValue(shadowMapRenderTarget);
+            content.E_MainShader.Parameters["shadowMap"].SetValue(shadowMapRenderTarget);
 
             skyBox.Draw(camera.ViewProjection, camera.position);
             currentScene.Draw();
+        }
+
+        private void BloomPass()
+        {
+            GraphicsDevice.SetRenderTarget(bloomRenderTarget);
+            GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
+
+            content.E_MainShader.CurrentTechnique = content.E_MainShader.Techniques["BloomPass"];
+            content.E_LaserShader.CurrentTechnique = content.E_LaserShader.Techniques["BloomPass"];
+
+            currentScene.Draw();
+        }
+
+        private void FinalPass()
+        {
+            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
+
+            content.E_PostProcessing.Parameters["baseTexture"].SetValue(mainRenderTarget);
+            content.E_PostProcessing.Parameters["bloomTexture"].SetValue(bloomRenderTarget);
+            fullScreenQuad.Draw(content.E_PostProcessing);
         }
 
         protected override void UnloadContent()

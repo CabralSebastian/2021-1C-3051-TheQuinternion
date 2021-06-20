@@ -14,8 +14,6 @@ namespace TGC.MonoGame.TP.Rendering.Cameras
         internal Vector3 Position { get; private set; }
 
         private readonly Vector3 cameraOffset;
-        private const float fieldOfViewDegrees = MathHelper.PiOver2;
-        private const float aspectRatio = 1f;
         private const float nearPlaneDistance = 1f;
         private const float farPlaneDistance = 10000f;
 
@@ -36,7 +34,7 @@ namespace TGC.MonoGame.TP.Rendering.Cameras
         }
 
         //private Matrix BuildProjection() => Matrix.CreatePerspectiveFieldOfView(fieldOfViewDegrees, aspectRatio, nearPlaneDistance, farPlaneDistance);
-        private Matrix BuildProjection() => Matrix.CreateOrthographic(TGCGame.cameraSize, TGCGame.cameraSize, nearPlaneDistance, farPlaneDistance);
+        private Matrix BuildProjection() => Matrix.CreateOrthographic(TGCGame.shadowmapSize, TGCGame.shadowmapSize, nearPlaneDistance, farPlaneDistance);
 
         internal Matrix ViewProjection { get; private set; }
 

@@ -23,6 +23,8 @@ float shininess;
 float3 lightDirection;
 float3 cameraPosition;
 
+float3 bloomColor;
+
 texture baseTexture;
 sampler2D textureSampler = sampler_state
 {
@@ -144,10 +146,37 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     
     // Final calculation
     float4 textureColor = tex2D(textureSampler, input.TextureCoordinates);
+
     float4 result = float4(saturate(ambientColor * KAmbient + diffuseLight) * textureColor.rgb + specularLight, textureColor.a);
     result.rgb *= 0.25 + 0.75 * notInShadow;
     return result;
 }
+
+// ===== BloomPass =====
+
+struct BloomVertexShaderOutput
+{
+    float4 Position : SV_POSITION;
+    float2 TextureCoordinates : TEXCOORD0;
+};
+
+BloomVertexShaderOutput BloomVS(in VertexShaderInput input)
+{
+    BloomVertexShaderOutput output = (BloomVertexShaderOutput)0;
+    output.Position = mul(mul(input.Position, World), ViewProjection);
+    output.TextureCoordinates = input.TextureCoordinates;
+    return output;
+}
+
+float4 BloomPS(BloomVertexShaderOutput input) : COLOR
+{
+    float4 color = tex2D(textureSampler, input.TextureCoordinates);
+    float distanceToTargetColor = distance(color.rgb, float3(1, 0, 0));
+    float filter = step(distanceToTargetColor, 0.2);
+    return float4(bloomColor * filter, filter);
+}
+
+// ===== Techniques =====
 
 technique DepthPass
 {
@@ -164,5 +193,14 @@ technique DrawShadowed
     {
         VertexShader = compile VS_SHADERMODEL MainVS();
         PixelShader = compile PS_SHADERMODEL MainPS();
+    }
+};
+
+technique BloomPass
+{
+    pass Pass0
+    {
+        VertexShader = compile VS_SHADERMODEL BloomVS();
+        PixelShader = compile PS_SHADERMODEL BloomPS();
     }
 };
