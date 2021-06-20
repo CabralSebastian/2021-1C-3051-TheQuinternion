@@ -145,7 +145,7 @@ namespace TGC.MonoGame.TP
             // Materials
             trenchMaterial = new Material(0.8f, 0.8f, 0.1f, 8.0f);
             turretMaterial = new Material(1.0f, 0.5f, 0.01f, 8.0f);
-            xWingMaterial = new Material(0.8f, 0.8f, 0.1f, 8.0f);
+            xWingMaterial = new Material(0.7f, 0.9f, 0.4f, 4.0f);
 
             // Drawers
             D_XWing = new MainDrawer(M_XWing, T_XWing, xWingMaterial);
