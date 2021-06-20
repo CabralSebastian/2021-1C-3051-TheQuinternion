@@ -12,16 +12,16 @@ float4x4 InverseTransposeWorld;
 float4x4 World;
 float4x4 LightViewProjection;
 
-float3 ambientColor; // Light's Ambient Color
-float3 diffuseColor; // Light's Diffuse Color
-float3 specularColor; // Light's Specular Color
+float3 ambientColor;
+float3 diffuseColor;
+float3 specularColor;
 float KAmbient;
 float KDiffuse;
 float KSpecular;
 float shininess;
 //float3 lightPosition;
 float3 lightDirection;
-float3 cameraPosition; // Camera position
+float3 cameraPosition;
 
 texture baseTexture;
 sampler2D textureSampler = sampler_state
@@ -103,55 +103,6 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     return output;
 }
 
-/*float4 MainPS(VertexShaderOutput input) : COLOR
-{
-    // Base vectors
-    float3 lightDirection = normalize(lightPosition - input.WorldSpacePosition.xyz);
-    float3 viewDirection = normalize(cameraPosition - input.WorldSpacePosition.xyz);
-    float3 halfVector = normalize(lightDirection + viewDirection);
-
-    // Shadow
-    float2 shadowMapTextureCoordinates = 0.5 * lightPosition.xy + float2(0.5, 0.5);
-    shadowMapTextureCoordinates.y = 1.0f - shadowMapTextureCoordinates.y;
-    float inclinationBias = max(modulatedEpsilon * (1.0 - dot(input.Normal.xyz, lightDirection)), maxEpsilon);
-
-    // Get the texture texel
-    float4 texelColor = tex2D(textureSampler, input.TextureCoordinates);
-
-    // Calculate the diffuse light
-    float NdotL = saturate(dot(input.Normal.xyz, lightDirection));
-    float3 diffuseLight = KDiffuse * diffuseColor * NdotL;
-
-    // Calculate the specular light
-    float NdotH = dot(input.Normal.xyz, halfVector);
-    float3 specularLight = sign(NdotL) * KSpecular * specularColor * pow(saturate(NdotH), shininess);
-
-    //float shadowMapDepth = tex2D(shadowMapSampler, shadowMapTextureCoordinates).r + inclinationBias;
-    //float notInShadow = step(lightPosition.z, shadowMapDepth);
-
-    float notInShadow = 0.0;
-    float2 texelSize = 1.0 / shadowMapSize;
-    for (int x = -1; x <= 1; x++)
-        for (int y = -1; y <= 1; y++)
-        {
-            float pcfDepth = tex2D(shadowMapSampler, shadowMapTextureCoordinates + float2(x, y) * texelSize).r + inclinationBias;
-            notInShadow += step(lightPosition.z, pcfDepth) / 9.0;
-        }
-
-    // Final calculation
-    //float4 result = float4(saturate(ambientColor * KAmbient + diffuseLight) * texelColor.rgb + specularLight, texelColor.a);
-    //result.rgb *= 0.5 + 0.5 * notInShadow;
-    //return result;
-
-    float4 baseColor = tex2D(textureSampler, input.TextureCoordinates);
-    baseColor.rgb *= 0.5 + 0.5 * notInShadow;
-    return baseColor;
-}*/
-/*
-static const float modulatedEpsilon = 0.000004;
-static const float maxEpsilon = 0.000004;*/
-float Time;
-
 static const float modulatedEpsilon = 0.000709990182749889791011810302734375;
 static const float maxEpsilon = 0.00023200045689009130001068115234375;
 
@@ -171,8 +122,8 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     float NdotH = dot(normal, halfVector);
     float3 specularLight = sign(NdotL) * KSpecular * specularColor * pow(saturate(NdotH), shininess);
 
-    float3 lightSpacePosition = input.LightSpacePosition.xyz / input.LightSpacePosition.w; // Posición de la luz en el espacio
-    float2 shadowMapTextureCoordinates = 0.5 * lightSpacePosition.xy + float2(0.5, 0.5); // Coordenadas del shadowmap
+    float3 lightSpacePosition = input.LightSpacePosition.xyz / input.LightSpacePosition.w;
+    float2 shadowMapTextureCoordinates = 0.5 * lightSpacePosition.xy + float2(0.5, 0.5);
     shadowMapTextureCoordinates.y = 1.0f - shadowMapTextureCoordinates.y;
 
     float inclinationBias = min(modulatedEpsilon * (1.0 - NdotL), maxEpsilon); // Bias
