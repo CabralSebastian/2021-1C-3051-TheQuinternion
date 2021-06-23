@@ -173,7 +173,7 @@ float4 BloomPS(BloomVertexShaderOutput input) : COLOR
     float4 color = tex2D(textureSampler, input.TextureCoordinates);
     float distanceToTargetColor = distance(color.rgb, float3(1, 0, 0));
     float filter = step(distanceToTargetColor, 0.2);
-    return float4(bloomColor * filter, filter);
+    return float4(bloomColor * filter, 1);
 }
 
 // ===== Techniques =====
