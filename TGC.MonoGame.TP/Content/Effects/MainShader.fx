@@ -108,7 +108,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
 }
 
 static const float modulatedEpsilon = 0.000709990182749889791011810302734375;
-static const float maxEpsilon = 0.00023200045689009130001068115234375;
+static const float maxEpsilon = 0.00027200045689009130001068115234375;
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
