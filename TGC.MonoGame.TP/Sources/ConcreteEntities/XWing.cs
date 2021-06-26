@@ -76,7 +76,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             if (gameTime.TotalGameTime.TotalMilliseconds > lastTurbo + turboRegenerationTime)
                 turbo = Math.Min(turbo + turboRegeneration * (float)elapsedTime, maxTurbo);
 
-            TGCGame.content.E_MainShader.Parameters["bloomColor"].SetValue(Color.DarkRed.ToVector3() * body.Velocity.Linear.Length() / maxSpeed);
+            TGCGame.content.E_MainShader.Parameters["bloomColor"].SetValue(Color.DarkRed.ToVector3() * body.Velocity.Linear.Length() / maxSpeed * 20000);
         }
 
         private void UpdateOrientation(BodyReference body)

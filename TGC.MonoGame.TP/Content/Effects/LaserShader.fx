@@ -23,15 +23,30 @@ struct VertexShaderOutput
 
 // ===== DepthPass =====
 
-VertexShaderOutput DepthVS(in VertexShaderInput input)
+struct DepthPassVertexShaderInput
 {
-	return (VertexShaderOutput)0;
+	float4 Position : POSITION0;
+};
+
+struct DepthPassVertexShaderOutput
+{
+	float4 Position : SV_POSITION;
+	float4 ScreenSpacePosition : TEXCOORD1;
+};
+
+DepthPassVertexShaderOutput DepthVS(in DepthPassVertexShaderInput input)
+{
+	DepthPassVertexShaderOutput output;
+	matrix worldViewProjection = mul(World, ViewProjection);
+	output.Position = mul(input.Position, worldViewProjection);
+	output.ScreenSpacePosition = output.Position;
+	return output;
 }
 
-float4 DepthPS(VertexShaderOutput input) : COLOR
+float4 DepthPS(DepthPassVertexShaderOutput input) : COLOR
 {
-	discard;
-	return float4(0, 0, 0, 0);
+	float depth = input.ScreenSpacePosition.z / input.ScreenSpacePosition.w;
+	return float4(depth, depth, depth, 1.0);
 }
 
 // ===== DrawShadowed =====

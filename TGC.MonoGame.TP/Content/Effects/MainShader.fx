@@ -91,7 +91,8 @@ struct VertexShaderOutput
 	float2 TextureCoordinates : TEXCOORD0;
 	float4 WorldSpacePosition : TEXCOORD1;
 	float4 LightSpacePosition : TEXCOORD2;
-    float4 Normal : TEXCOORD3;
+    float4 ScreenSpacePosition : TEXCOORD3;
+    float4 Normal : TEXCOORD4;
 };
 
 VertexShaderOutput MainVS(in VertexShaderInput input)
@@ -102,6 +103,7 @@ VertexShaderOutput MainVS(in VertexShaderInput input)
     output.WorldSpacePosition = mul(input.Position, World);
     output.LightSpacePosition = mul(output.WorldSpacePosition, LightViewProjection);
     output.Normal = mul(float4(input.Normal, 1), InverseTransposeWorld);
+    output.ScreenSpacePosition = output.Position;
     return output;
 }
 
@@ -147,7 +149,8 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     // Final calculation
     float4 textureColor = tex2D(textureSampler, input.TextureCoordinates);
 
-    float4 result = float4(saturate(ambientColor * KAmbient + diffuseLight) * textureColor.rgb + specularLight, textureColor.a);
+    float depth = input.ScreenSpacePosition.z / input.ScreenSpacePosition.w;
+    float4 result = float4(saturate(ambientColor * KAmbient + diffuseLight) * textureColor.rgb + specularLight, depth);
     result.rgb *= 0.25 + 0.75 * notInShadow;
     return result;
 }
@@ -173,7 +176,7 @@ float4 BloomPS(BloomVertexShaderOutput input) : COLOR
     float4 color = tex2D(textureSampler, input.TextureCoordinates);
     float distanceToTargetColor = distance(color.rgb, float3(1, 0, 0));
     float filter = step(distanceToTargetColor, 0.2);
-    return float4(bloomColor * filter, 1);
+    return float4(bloomColor * filter, color.a);
 }
 
 // ===== Techniques =====

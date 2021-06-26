@@ -19,7 +19,7 @@ namespace TGC.MonoGame.TP
         private SkyBox skyBox;
         private FullScreenQuad fullScreenQuad;
         internal const int shadowmapSize = 2048 * 3;
-        private RenderTarget2D shadowMapRenderTarget, mainRenderTarget, bloomRenderTarget;
+        private RenderTarget2D shadowMapRenderTarget, mainRenderTarget, bloomRenderTarget, integratedBloomRenderTarget;
 
         internal static readonly SoundManager soundManager = new SoundManager();
         internal static Scene currentScene;
@@ -47,11 +47,15 @@ namespace TGC.MonoGame.TP
             skyBox = new SkyBox(content.M_SkyBox, content.TC_Space, content.E_SkyBox, 3000f);
 
             shadowMapRenderTarget = new RenderTarget2D(GraphicsDevice, shadowmapSize, shadowmapSize,
-                false, SurfaceFormat.Single, DepthFormat.Depth24, 0, RenderTargetUsage.PlatformContents);
+                false, SurfaceFormat.Single, DepthFormat.Depth24Stencil8, 0, RenderTargetUsage.PlatformContents);
             mainRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height,
                 false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8, 0, RenderTargetUsage.DiscardContents);
             bloomRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 
                 false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8, 0, RenderTargetUsage.DiscardContents);
+            integratedBloomRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height,
+                false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+
+            content.E_PostProcessing.Parameters["screenSize"]?.SetValue(new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
         }
 
         protected override void Initialize()
@@ -63,8 +67,7 @@ namespace TGC.MonoGame.TP
             ChangeScene(new MainMenu());
             camera.Initialize(GraphicsDevice);
 
-            content.E_MainShader.Parameters["shadowMapSize"]?.SetValue(Vector2.One * shadowmapSize);
-            content.E_MainShader.Parameters["lightPosition"]?.SetValue(lightCamera.Position);
+            content.E_MainShader.Parameters["shadowMapSize"].SetValue(Vector2.One * shadowmapSize);
         }
 
         protected override void Update(GameTime gameTime)
@@ -89,7 +92,8 @@ namespace TGC.MonoGame.TP
             ShadowMapPass();
             MainPass();
             BloomPass();
-            FinalPass();
+            BloomIntegratePass();
+            BlurPass();
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, DepthStencilState.DepthRead, RasterizerState.CullNone);
             currentScene.Draw2D(GraphicsDevice, spriteBatch);
@@ -144,13 +148,26 @@ namespace TGC.MonoGame.TP
             currentScene.Draw();
         }
 
-        private void FinalPass()
+        private void BloomIntegratePass()
+        {
+            GraphicsDevice.SetRenderTarget(integratedBloomRenderTarget);
+            GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
+
+            content.E_PostProcessing.CurrentTechnique = content.E_PostProcessing.Techniques["BloomPass"];
+            content.E_PostProcessing.Parameters["baseTexture"].SetValue(mainRenderTarget);
+            content.E_PostProcessing.Parameters["bloomTexture"].SetValue(bloomRenderTarget);
+            fullScreenQuad.Draw(content.E_PostProcessing);
+        }
+
+        private void BlurPass()
         {
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
 
-            content.E_PostProcessing.Parameters["baseTexture"].SetValue(mainRenderTarget);
-            content.E_PostProcessing.Parameters["bloomTexture"].SetValue(bloomRenderTarget);
+            content.E_PostProcessing.CurrentTechnique = content.E_PostProcessing.Techniques["BlurPass"];
+            content.E_PostProcessing.Parameters["InverseViewProjection"].SetValue(camera.InverseViewProjection);
+            content.E_PostProcessing.Parameters["PrevViewProjection"].SetValue(camera.PrevViewProjection);
+            content.E_PostProcessing.Parameters["baseTexture"].SetValue(integratedBloomRenderTarget);
             fullScreenQuad.Draw(content.E_PostProcessing);
         }
 

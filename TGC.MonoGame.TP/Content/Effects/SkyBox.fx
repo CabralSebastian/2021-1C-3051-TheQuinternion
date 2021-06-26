@@ -33,6 +33,7 @@ struct VertexShaderInput
 struct VertexShaderOutput
 {
     float4 Position : POSITION0;
+    float4 ScreenSpacePosition : TEXCOORD1;
     float3 TextureCoordinate : TEXCOORD0;
 };
 
@@ -46,12 +47,14 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
     float4 VertexPosition = mul(input.Position, World);
     output.TextureCoordinate = VertexPosition.xyz - CameraPosition;
 
+    output.ScreenSpacePosition = output.Position;
     return output;
 }
 
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
-    return float4(texCUBE(SkyBoxSampler, normalize(input.TextureCoordinate)).rgb, 1);
+    float depth = input.ScreenSpacePosition.z / input.ScreenSpacePosition.w;
+    return float4(texCUBE(SkyBoxSampler, normalize(input.TextureCoordinate)).rgb, depth);
 }
 
 // ===== Techniques =====

@@ -12,6 +12,8 @@ namespace TGC.MonoGame.TP
         private Matrix View;
         private Matrix Projection;
         internal Matrix ViewProjection { get; private set; }
+        internal Matrix PrevViewProjection { get; private set; }
+        internal Matrix InverseViewProjection { get; private set; }
 
         private const float fieldOfView = MathHelper.PiOver4;
         private const float nearPlaneDistance = 0.1f;
@@ -29,6 +31,8 @@ namespace TGC.MonoGame.TP
             Projection = CreateProjectionMatrix(graphicsDevice);
             View = CreateViewMatrix();
             ViewProjection = View * Projection;
+            PrevViewProjection = ViewProjection;
+            InverseViewProjection = Matrix.Invert(ViewProjection);
         }
 
         internal void Update()
@@ -36,7 +40,9 @@ namespace TGC.MonoGame.TP
             if (target != null)
                 FollowTarget();
             View = CreateViewMatrix();
+            PrevViewProjection = ViewProjection;
             ViewProjection = View * Projection;
+            InverseViewProjection = Matrix.Invert(ViewProjection);
             listener.Position = position;
             listener.Forward = forward;
             listener.Up = up;
