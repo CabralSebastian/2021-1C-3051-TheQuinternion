@@ -21,22 +21,25 @@ namespace TGC.MonoGame.TP
         private const int margin = 1;
         private const int trenchCountReference = 400;
 
+        internal WeakPoint weakPoint;
+
         internal void Create(bool createTurrets) 
         {
-            bool[,] matrix = GenerateMatrix();
+            byte[,] matrix = GenerateMatrix();
             CleanMatrix(matrix);
             InstantiateMatrix(matrix, createTurrets);
             if (createTurrets)
                 CreateSurfaceTurrets(matrix);
+            CreateWeakPoint(matrix);
         }
 
         private int RandomMatrixValue() => random.Next(margin, size - margin + 1);
         private (int, int) RandomMatrixPosition() => (RandomMatrixValue(), RandomMatrixValue());
         private bool RandomBool(float trueProbability = 0.5f) => random.NextDouble() <= trueProbability;
 
-        private bool[,] GenerateMatrix()
+        private byte[,] GenerateMatrix()
         {
-            bool[,] matrix = new bool[size, size];
+            byte[,] matrix = new byte[size, size];
             int totalTrenches = 0;
 
             AdvanceInMatrix(matrix, ref totalTrenches, (halfSize, halfSize), directions.Up, 1);
@@ -64,11 +67,11 @@ namespace TGC.MonoGame.TP
 
         private bool IsValidMatrixPosition((int, int) position) => position.Item1 > margin && position.Item1 < size - margin && position.Item2 > margin && position.Item2 < size - margin;
 
-        private bool IsAvailable(bool[,] matrix, (int, int) position) => IsValidMatrixPosition(position) && !matrix[position.Item1, position.Item2];
+        private bool IsAvailable(byte[,] matrix, (int, int) position) => IsValidMatrixPosition(position) && matrix[position.Item1, position.Item2] == 0;
 
-        private void AdvanceInMatrix(bool[,] matrix, ref int totalTrenches, (int, int) position, Direction direction, int forwardLenght)
+        private void AdvanceInMatrix(byte[,] matrix, ref int totalTrenches, (int, int) position, Direction direction, int forwardLenght)
         {
-            matrix[position.Item1, position.Item2] = true;
+            matrix[position.Item1, position.Item2] = 1;
             totalTrenches++;
             Direction forward = direction.forward;
             Direction backward = direction.backward;
@@ -130,15 +133,15 @@ namespace TGC.MonoGame.TP
             }
         }
 
-        private void CleanMatrix(bool[,] matrix)
+        private void CleanMatrix(byte[,] matrix)
         {
             for (int x = 0; x < size - 1; x++)
                 for (int z = 0; z < size - 1; z++)
-                    if (matrix[x, z] && matrix[x + 1, z] && matrix[x, z + 1] && matrix[x + 1, z + 1])
-                        matrix[x + (RandomBool() ? 1 : 0), z + (RandomBool() ? 1 : 0)] = false;
+                    if (matrix[x, z] == 1 && matrix[x + 1, z] == 1 && matrix[x, z + 1] == 1 && matrix[x + 1, z + 1] == 1)
+                        matrix[x + (RandomBool() ? 1 : 0), z + (RandomBool() ? 1 : 0)] = 0;
         }
 
-        private void InstantiateMatrix(bool[,] matrix, bool createTurrets)
+        private void InstantiateMatrix(byte[,] matrix, bool createTurrets)
         {
             Quaternion d0 = Quaternion.Identity;
             Quaternion d90 = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)Math.PI / 2);
@@ -168,12 +171,12 @@ namespace TGC.MonoGame.TP
 
             for (int x = 0; x < size; x++)
                 for (int z = 0; z < size; z++)
-                    if (matrix[x, z])
+                    if (matrix[x, z] > 0)
                     {
-                        int up = IsValidMatrixPosition((x, z + 1)) && matrix[x, z + 1] ? 1000 : 0;
-                        int down = IsValidMatrixPosition((x, z - 1)) && matrix[x, z - 1] ? 100 : 0;
-                        int right = IsValidMatrixPosition((x - 1, z)) && matrix[x - 1, z] ? 10 : 0;
-                        int left = IsValidMatrixPosition((x + 1, z)) && matrix[x + 1, z] ? 1 : 0;
+                        int up = IsValidMatrixPosition((x, z + 1)) && matrix[x, z + 1] > 0 ? 1000 : 0;
+                        int down = IsValidMatrixPosition((x, z - 1)) && matrix[x, z - 1] > 0 ? 100 : 0;
+                        int right = IsValidMatrixPosition((x - 1, z)) && matrix[x - 1, z] > 0 ? 10 : 0;
+                        int left = IsValidMatrixPosition((x + 1, z)) && matrix[x + 1, z] > 0 ? 1 : 0;
 
                         int shape = up + down + right + left;
                         instantiationMethods[shape](new Vector3((x - halfSize) * trenchSize, - 100f, (z - halfSize) * trenchSize));
@@ -181,25 +184,50 @@ namespace TGC.MonoGame.TP
                         if (createTurrets)
                         {
                             if (shape == 1100 && RandomBool(0.3f))
+                            {
                                 new SmallTurret(false).Instantiate(new Vector3((x - halfSize) * trenchSize + RandomLineTrenchOffset(), -trenchHeight, (z - halfSize) * trenchSize + RandomTrenchSizeOffset()));
+                                matrix[x, z] = 2;
+                            }
                             else if (shape == 0011 && RandomBool(0.3f))
+                            {
                                 new SmallTurret(true).Instantiate(new Vector3((x - halfSize) * trenchSize + RandomTrenchSizeOffset(), -trenchHeight, (z - halfSize) * trenchSize + RandomLineTrenchOffset()), d90);
+                                matrix[x, z] = 2;
+                            }
                         }
                     }
                     else
                         instantiationMethods[0000](new Vector3((x - halfSize) * trenchSize, -100f, (z - halfSize) * trenchSize));
         }
 
-        private void CreateSurfaceTurrets(bool[,] matrix)
+        private void CreateSurfaceTurrets(byte[,] matrix)
         {
             for (int x = 0; x < size; x++)
                 for (int z = 0; z < size; z++)
-                    if (!matrix[x, z] && RandomBool(0.3f))
+                    if (matrix[x, z] == 0 && RandomBool(0.3f))
                         new Turret().Instantiate(new Vector3(
                             ((x - halfSize) * trenchSize) + RandomTrenchSizeOffset(),
                             -100f,
                             ((z - halfSize) * trenchSize) + RandomTrenchSizeOffset()
                         ));
+        }
+
+        private void CreateWeakPoint(byte[,] matrix)
+        {
+            while (true)
+            {
+                for (int x = 0; x < size; x++)
+                    for (int z = 0; z < size; z++)
+                        if (x + z > 10 && matrix[x, z] == 2 && RandomBool(0.1f))
+                        {
+                            weakPoint = new WeakPoint();
+                            weakPoint.Instantiate(new Vector3(
+                                (x - halfSize) * trenchSize,
+                                -trenchHeight,
+                                (z - halfSize) * trenchSize
+                            ));
+                            return;
+                        }
+            }
         }
 
         private float RandomTrenchSizeOffset() => -trenchSize / 2 + ((float)random.NextDouble() * trenchSize);

@@ -72,6 +72,7 @@ namespace TGC.MonoGame.TP
 
         protected override void Update(GameTime gameTime)
         {
+            Input.Update();
             if (Input.Exit())
                 Exit();
 

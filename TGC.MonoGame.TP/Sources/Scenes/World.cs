@@ -9,6 +9,7 @@ namespace TGC.MonoGame.TP.Scenes
     internal class World : Scene
     {
         private SoundEffectInstance gameMusic;
+        internal static DeathStar deathStar;
         internal static XWing xwing;
         private Player player;
 
@@ -19,7 +20,8 @@ namespace TGC.MonoGame.TP.Scenes
         internal override void Initialize()
         {
             player = new Player();
-            new DeathStar().Create(true);
+            deathStar = new DeathStar();
+            deathStar.Create(true);
             xwing = new XWing();
             xwing.Instantiate(new Vector3(50f, 0f, 0f));
             TGCGame.camera.SetLocation(new Vector3(80f, 0f, 0f), Vector3.Forward, Vector3.Up);

@@ -27,14 +27,14 @@ namespace TGC.MonoGame.TP
         private const string FontsFolder = "Fonts/";
 
         internal readonly Effect E_MainShader, E_LaserShader, E_SkyBox, E_PostProcessing;
-        internal readonly Model M_SkyBox, M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Laser, M_Turret, M_SmallTurret;
-        internal readonly TypedIndex SH_XWing, SH_TIE, SH_Laser, SH_Turret, SH_SmallTurret, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross;
+        internal readonly Model M_SkyBox, M_XWing, M_TIE, M_Trench_Plain, M_Trench_Line, M_Trench_Corner, M_Trench_T, M_Trench_Cross, M_Trench_End, M_Laser, M_Turret, M_SmallTurret, M_WeakPoint;
+        internal readonly TypedIndex SH_XWing, SH_TIE, SH_Laser, SH_Turret, SH_SmallTurret, Sh_Trench_Plain, Sh_Trench_Line, Sh_Trench_Corner, Sh_Trench_T, Sh_Trench_End, Sh_Trench_Cross, SH_WeakPoint;
         internal readonly Texture2D[] T_DeathStar, T_XWing, T_TIE, T_Trench, T_Turret;
         internal readonly Texture2D T_Pixel, T_TargetCursor;
         internal readonly TextureCube TC_Space;
         internal readonly SoundEffect S_Click1, S_Click2, S_Laser, S_Explotion, S_XWingEngine, S_TIEEngine, S_MenuMusic, S_GameMusic;
         internal readonly SpriteFont F_StarJedi;
-        internal readonly Drawer D_XWing, D_TIE, D_Trench_Plain, D_Trench_Line, D_Trench_Corner, D_Trench_T, D_Trench_Cross, D_Trench_End, D_Laser;
+        internal readonly Drawer D_XWing, D_TIE, D_Trench_Plain, D_Trench_Line, D_Trench_Corner, D_Trench_T, D_Trench_Cross, D_Trench_End, D_Laser, D_WeakPoint;
         internal readonly TurretDrawer D_Turret;
         internal readonly SmallTurretDrawer D_SmallTurret;
         internal readonly Material trenchMaterial, turretMaterial, xWingMaterial;
@@ -62,6 +62,7 @@ namespace TGC.MonoGame.TP
             M_Laser = LoadModel("Laser", E_LaserShader);
             M_Turret = LoadModel("DeathStar/Turret", E_MainShader);
             M_SmallTurret = LoadModel("DeathStar/SmallTurret", E_MainShader);
+            M_WeakPoint = LoadModel("DeathStar/WeakPoint", E_MainShader);
 
             // Shapes
             SH_XWing = LoadConvexHull("XWing/XWing", 1f);
@@ -69,6 +70,7 @@ namespace TGC.MonoGame.TP
             SH_Laser = LoadShape(new Cylinder(Laser.Radius / 2f, Laser.Lenght / 50f));
             SH_Turret = LoadShape(new Box(2 * 1.0f * Turret.scale * 100, 2 * 3.29f * Turret.scale * 100, 2 * 1.0f * Turret.scale * 100));
             SH_SmallTurret = LoadShape(new Box(2 * 0.45f * SmallTurret.scale * 100, 2 * 2.1f * SmallTurret.scale * 100, 2 * 0.45f * SmallTurret.scale * 100));
+            SH_WeakPoint = LoadConvexHull("DeathStar/WeakPoint", DeathStar.trenchScale * 100f);
 
             // DeathStar shapes
             TypedIndex trenchPlain = LoadShape(new Box(DeathStar.trenchSize, DeathStar.trenchHeight, DeathStar.trenchSize));
@@ -159,6 +161,7 @@ namespace TGC.MonoGame.TP
             D_Laser = new LaserDrawer(M_Laser);
             D_Turret = new TurretDrawer(M_Turret, T_Turret, turretMaterial);
             D_SmallTurret = new SmallTurretDrawer(M_SmallTurret, T_Turret, turretMaterial);
+            D_WeakPoint = new MainDrawer(M_WeakPoint, T_Trench, trenchMaterial);
         }
 
         private Effect LoadEffect(string name) => contentManager.Load<Effect>(EffectsFolder + name);

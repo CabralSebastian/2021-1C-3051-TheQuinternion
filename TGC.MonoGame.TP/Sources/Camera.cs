@@ -20,7 +20,8 @@ namespace TGC.MonoGame.TP
         private const float farPlaneDistance = 4000f;
         private const float normalizedNearPlaneDistance = nearPlaneDistance / farPlaneDistance;
 
-        private Vector3 forward = Vector3.Forward, up = Vector3.Up, right = Vector3.Right;
+        internal Vector3 forward = Vector3.Forward;
+        private Vector3 up = Vector3.Up, right = Vector3.Right;
 
         internal readonly AudioListener listener = new AudioListener();
 

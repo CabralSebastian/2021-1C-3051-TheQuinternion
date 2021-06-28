@@ -32,7 +32,7 @@ namespace TGC.MonoGame.TP.GraphicInterface
         {
             if (IsMouseOver(position))
             {
-                if (Input.Fire())
+                if (Input.Click())
                 {
                     TGCGame.content.S_Click1.CreateInstance().Play();
                     color = new Color(0, 0, 0, 200);
