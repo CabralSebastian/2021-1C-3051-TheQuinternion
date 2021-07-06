@@ -57,7 +57,7 @@ namespace TGC.MonoGame.TP.Scenes
                 return;
 
             if (random.NextDouble() > 0.8f)
-                new TIE().Instantiate(new Vector3(random.Next(-4000, 4000), 0f, 0f));
+                new TIE().Instantiate(new Vector3(random.Next(-4000, 4000), 0f, random.Next(-4000, 4000)));
             lastTieSpawn = gameTime.TotalGameTime.TotalMilliseconds;
         }
 

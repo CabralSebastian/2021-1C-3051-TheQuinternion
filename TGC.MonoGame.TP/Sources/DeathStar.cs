@@ -203,7 +203,7 @@ namespace TGC.MonoGame.TP
         {
             for (int x = 0; x < size; x++)
                 for (int z = 0; z < size; z++)
-                    if (matrix[x, z] == 0 && RandomBool(0.3f))
+                    if (matrix[x, z] == 0 && RandomBool(0.15f))
                         new Turret().Instantiate(new Vector3(
                             ((x - halfSize) * trenchSize) + RandomTrenchSizeOffset(),
                             -100f,
