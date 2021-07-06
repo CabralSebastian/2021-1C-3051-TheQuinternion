@@ -11,6 +11,7 @@ namespace TGC.MonoGame.TP.Scenes
         private SoundEffectInstance gameMusic;
         internal static DeathStar deathStar;
         internal static XWing xwing;
+        internal static DistantFight distantFight;
         private Player player;
         private bool boss = false;
 
@@ -24,7 +25,9 @@ namespace TGC.MonoGame.TP.Scenes
             deathStar = new DeathStar();
             deathStar.Create(true);
             xwing = new XWing();
-            xwing.Instantiate(new Vector3(50f, 0f, 0f));          
+            xwing.Instantiate(new Vector3(50f, 0f, 0f));
+            distantFight = new DistantFight();
+            distantFight.Create();
             TGCGame.camera.SetLocation(new Vector3(80f, 0f, 0f), Vector3.Forward, Vector3.Up);
             TGCGame.camera.SetTarget(xwing);
 

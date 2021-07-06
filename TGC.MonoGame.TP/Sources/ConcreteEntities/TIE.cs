@@ -183,7 +183,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             Quaternion ActualRotation = body.Pose.Orientation.ToQuaternion();
             ActualRotation.Normalize();
 
-            Quaternion FinalRotation = Quaternion.Slerp(DegreeRotation, ActualRotation, (float) gameTime.ElapsedGameTime.TotalSeconds);
+            Quaternion FinalRotation = Quaternion.Slerp(DegreeRotation, ActualRotation, 0.2f * (float) gameTime.ElapsedGameTime.TotalSeconds);
             body.Pose.Orientation = FinalRotation.ToBEPU();
 
             Quaternion rotation = body.Pose.Orientation.ToQuaternion();
