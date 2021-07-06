@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using TGC.MonoGame.TP.GraphicInterface;
 
+
 namespace TGC.MonoGame.TP.Scenes
 {
     internal class MainMenu : Scene

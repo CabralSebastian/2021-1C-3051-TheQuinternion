@@ -12,6 +12,7 @@ namespace TGC.MonoGame.TP.Scenes
         internal static DeathStar deathStar;
         internal static XWing xwing;
         private Player player;
+        private bool boss = false;
 
         private readonly Random random = new Random();
         private double lastTieSpawn;
@@ -23,7 +24,7 @@ namespace TGC.MonoGame.TP.Scenes
             deathStar = new DeathStar();
             deathStar.Create(true);
             xwing = new XWing();
-            xwing.Instantiate(new Vector3(50f, 0f, 0f));
+            xwing.Instantiate(new Vector3(50f, 0f, 0f));          
             TGCGame.camera.SetLocation(new Vector3(80f, 0f, 0f), Vector3.Forward, Vector3.Up);
             TGCGame.camera.SetTarget(xwing);
 
@@ -42,6 +43,12 @@ namespace TGC.MonoGame.TP.Scenes
         internal override void Update(GameTime gameTime)
         {
             TIESpawn(gameTime);
+            
+            if (!boss)
+            {
+                VaderSpawn(gameTime);
+            }
+
             player.Update(gameTime);
             base.Update(gameTime);
         }
@@ -49,6 +56,15 @@ namespace TGC.MonoGame.TP.Scenes
         internal override void Draw2D(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
         {
             player.DrawHUD(graphicsDevice, spriteBatch);
+        }
+
+        private void VaderSpawn(GameTime gameTime)
+        {
+            if (random.NextDouble() > 0.9999f)
+            {
+                new VaderTIE().Instantiate(new Vector3(-500f, 100f, 0f));
+                // Avisar que spawneo Vader
+            }
         }
 
         private void TIESpawn(GameTime gameTime)
