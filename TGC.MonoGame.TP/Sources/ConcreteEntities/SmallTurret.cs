@@ -14,7 +14,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         protected override Drawer Drawer() => TGCGame.content.D_SmallTurret;
         protected override TypedIndex Shape => TGCGame.content.SH_SmallTurret;
 
-        protected override float MaxRange => 800f;
+        protected override float MaxRange => 600f;
         protected override float MinIdleTime => 1000f;
         protected override Vector3 CannonsOffset => new Vector3(0f, 1.70945f, 0f) * 100 * scale;
 
