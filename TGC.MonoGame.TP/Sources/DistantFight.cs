@@ -9,7 +9,7 @@ namespace TGC.MonoGame.TP
     {
         private readonly Random random = new Random();
         private readonly int MaxInstances = 20;
-        private Vector3 InitialFightPosition = new Vector3(5000f, 200f, 3000f);
+        private Vector3 InitialFightPosition = new Vector3(1000f, 200f, 2000f);
 
         public void Create()
         {

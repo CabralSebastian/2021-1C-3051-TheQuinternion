@@ -11,7 +11,7 @@ namespace TGC.MonoGame.TP.Scenes
     {
         private SoundEffectInstance menuMusic;
         private readonly Button startButton = new Button("Start", new Vector2(200, 40), () => TGCGame.game.ChangeScene(new World()));
-        private readonly Button infoButton = new Button("Info", new Vector2(200, 40), () => TGCGame.game.ChangeScene(new Info()));
+        private readonly Button infoButton = new Button("Help", new Vector2(200, 40), () => TGCGame.game.ChangeScene(new Info()));
         private readonly Button exitButton = new Button("Exit", new Vector2(200, 40), () => TGCGame.game.Exit());
 
         internal override void Initialize()

@@ -3,7 +3,6 @@ using BepuPhysics.Collidables;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using System;
-using System.Numerics;
 using TGC.MonoGame.TP.CollitionInterfaces;
 using TGC.MonoGame.TP.Drawers;
 using TGC.MonoGame.TP.Entities;
@@ -14,37 +13,40 @@ namespace TGC.MonoGame.TP
 {
     internal class ShellXWing : DynamicEntity, IStaticDamageable, ILaserDamageable
     {
-        private readonly AudioEmitter emitter;
+        private readonly AudioEmitter emitter = new AudioEmitter();
         private SoundEffectInstance engineSound;
 
         protected override Drawer Drawer() => TGCGame.content.D_XWing;
-        protected override Microsoft.Xna.Framework.Vector3 Scale => Microsoft.Xna.Framework.Vector3.One;
+        protected override Vector3 Scale => Vector3.One * 2;
         protected override TypedIndex Shape => TGCGame.content.SH_XWing;
 
         protected double LastFire = 0;
         private const double FireCooldownTime = 400;
         private const float LaserVolume = 0.2f;
         private readonly Random random = new Random();
-        private BodyReference body;
         protected override float Mass => 100f;
+
+        private Vector3 initialPos;
 
         protected override void OnInstantiate()
         {
-            body = Body();
-            body.Pose.Orientation = new Microsoft.Xna.Framework.Quaternion(new Microsoft.Xna.Framework.Vector3(-3, 0, 0), 1f).ToBEPU();
+            BodyReference body = Body();
+            body.Pose.Orientation = Quaternion.CreateFromYawPitchRoll(-MathHelper.PiOver2, MathHelper.ToRadians(20), 0).ToBEPU();
 
             engineSound = TGCGame.content.S_XWingEngine.CreateInstance();
             engineSound.IsLooped = true;
             engineSound.Volume = 0.001f;
+
+            initialPos = body.Pose.Position.ToVector3();
+            emitter.Position = body.Pose.Position.ToVector3();
             TGCGame.soundManager.PlaySound(engineSound, emitter);
         }
 
         internal override void Update(double elapsedTime, GameTime gameTime)
         {
-            if (random.NextDouble() > 0.98)
-            {
+            Body().Pose.Position = TGCGame.camera.position.ToBEPU() + initialPos.ToBEPU();
+            if (random.NextDouble() > 0.998)
                 Fire(gameTime);
-            }
         }
 
         protected void Fire(GameTime gameTime)
@@ -53,10 +55,11 @@ namespace TGC.MonoGame.TP
             if (totalTime < LastFire + FireCooldownTime)
                 return;
 
-            Microsoft.Xna.Framework.Vector3 position = body.Pose.Position.ToVector3();
-            Microsoft.Xna.Framework.Quaternion rotation = body.Pose.Orientation.ToQuaternion();
-            Microsoft.Xna.Framework.Vector3 forward = PhysicUtils.Forward(rotation);
-            Microsoft.Xna.Framework.Quaternion laserOrientation = PhysicUtils.DirectionsToQuaternion(forward, Microsoft.Xna.Framework.Vector3.Up);
+            BodyReference body = Body();
+            Vector3 position = body.Pose.Position.ToVector3();
+            Quaternion rotation = body.Pose.Orientation.ToQuaternion();
+            Vector3 forward = PhysicUtils.Forward(rotation);
+            Quaternion laserOrientation = PhysicUtils.DirectionsToQuaternion(forward, Vector3.Up);
             World.InstantiateLaser(position, -forward, laserOrientation, emitter, LaserVolume);
             LastFire = totalTime;
         }

@@ -2,7 +2,6 @@
 using BepuPhysics.Collidables;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using System.Numerics;
 using TGC.MonoGame.TP.Drawers;
 using TGC.MonoGame.TP.Entities;
 using TGC.MonoGame.TP.Physics;
@@ -18,7 +17,7 @@ namespace TGC.MonoGame.TP
         private SoundEffectInstance engineSound;
 
         protected override Drawer Drawer() => TGCGame.content.D_TIE;
-        protected override Microsoft.Xna.Framework.Vector3 Scale => Microsoft.Xna.Framework.Vector3.One * scale;
+        protected override Vector3 Scale => Vector3.One * scale;
         protected override TypedIndex Shape => TGCGame.content.SH_TIE;
 
         internal DummyTIE(float linearVelocity, float minX, float maxX, float scale = 1 / 100f)

@@ -161,7 +161,7 @@ namespace TGC.MonoGame.TP
             D_Laser = new LaserDrawer(M_Laser);
             D_Turret = new TurretDrawer(M_Turret, T_Turret, turretMaterial);
             D_SmallTurret = new SmallTurretDrawer(M_SmallTurret, T_Turret, turretMaterial);
-            D_WeakPoint = new MainDrawer(M_WeakPoint, T_Trench, trenchMaterial);
+            D_WeakPoint = new MainDrawer(M_WeakPoint, T_Turret, trenchMaterial);
         }
 
         private Effect LoadEffect(string name) => contentManager.Load<Effect>(EffectsFolder + name);

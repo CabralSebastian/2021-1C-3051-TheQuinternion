@@ -56,7 +56,7 @@ namespace TGC.MonoGame.TP.Scenes
         {
             float i = 1f;
             Vector2 center = TGCGame.gui.ScreenCenter;
-            Vector2 title = TGCGame.gui.DrawCenteredText("Information and controls", new Vector2(center.X - 100, center.Y / 4 ), 25f);
+            Vector2 title = TGCGame.gui.DrawCenteredText("objective and controls", new Vector2(center.X - 100, center.Y / 4 ), 25f);
             TGCGame.gui.DrawCenteredText("Your goal is to destroy the Death Star", new Vector2(center.X, center.Y / 4 + title.Y * i), 12f);
             i += 0.5f;
             TGCGame.gui.DrawCenteredText("To accomplish that, you must shoot the objective shown by the compass", new Vector2(center.X, center.Y / 4 + title.Y * i), 12f);
