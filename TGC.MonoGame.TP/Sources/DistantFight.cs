@@ -8,15 +8,15 @@ namespace TGC.MonoGame.TP
     internal class DistantFight
     {
         private readonly Random random = new Random();
-        private int MaxInstances = 20;
-        private Vector3 InitialFightPosition = new Vector3(5000f, 200f, 5000f);
+        private readonly int MaxInstances = 20;
+        private Vector3 InitialFightPosition = new Vector3(5000f, 200f, 3000f);
 
         public void Create()
         {
             for (int i = 0; i < MaxInstances; i++)
             {
-                new DummyTIE(0f, 0f, 0f).Instantiate(InitialFightPosition + RandomVectorTIE());
-                new DummyXWing(0f, 0f, 0f).Instantiate(InitialFightPosition + RandomVectorXWing());
+                new ShellTIE().Instantiate(InitialFightPosition + RandomVectorTIE());
+                new ShellXWing().Instantiate(InitialFightPosition + RandomVectorXWing());
             }
         }
 
