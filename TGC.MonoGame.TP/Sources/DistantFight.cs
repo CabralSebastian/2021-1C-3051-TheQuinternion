@@ -22,12 +22,12 @@ namespace TGC.MonoGame.TP
 
         private Vector3 RandomVectorTIE()
         {
-            return new Vector3((float)random.Next(1000, 2500), (float)random.Next(1000, 5000), (float)random.Next(1000, 2500));
+            return new Vector3((float)random.Next(100, 750), (float)random.Next(100, 1000), (float)random.Next(100, 750));
         }
 
         private Vector3 RandomVectorXWing()
         {
-            return new Vector3((float)random.Next(-2500, -1000), (float)random.Next(1000, 5000), (float)random.Next(-2500, -1000));
+            return new Vector3((float)random.Next(-750, -100), (float)random.Next(100, 1000), (float)random.Next(-750, -100));
         }
     }
 }

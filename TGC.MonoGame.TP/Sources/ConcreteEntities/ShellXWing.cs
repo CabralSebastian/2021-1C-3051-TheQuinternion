@@ -41,7 +41,7 @@ namespace TGC.MonoGame.TP
 
         internal override void Update(double elapsedTime, GameTime gameTime)
         {
-            if (random.NextDouble() > 0.95)
+            if (random.NextDouble() > 0.98)
             {
                 Fire(gameTime);
             }
