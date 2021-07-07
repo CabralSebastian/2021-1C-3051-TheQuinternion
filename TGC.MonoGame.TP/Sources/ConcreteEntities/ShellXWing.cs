@@ -33,7 +33,7 @@ namespace TGC.MonoGame.TP
             body = Body();
             body.Pose.Orientation = new Microsoft.Xna.Framework.Quaternion(new Microsoft.Xna.Framework.Vector3(-3, 0, 0), 1f).ToBEPU();
 
-            engineSound = TGCGame.content.S_TIEEngine.CreateInstance();
+            engineSound = TGCGame.content.S_XWingEngine.CreateInstance();
             engineSound.IsLooped = true;
             engineSound.Volume = 0.001f;
             TGCGame.soundManager.PlaySound(engineSound, emitter);

@@ -19,7 +19,7 @@ namespace TGC.MonoGame.TP
 
         protected override Drawer Drawer() => TGCGame.content.D_TIE;
         protected override Microsoft.Xna.Framework.Vector3 Scale => Microsoft.Xna.Framework.Vector3.One / 100;
-        protected override TypedIndex Shape => TGCGame.content.SH_XWing;
+        protected override TypedIndex Shape => TGCGame.content.SH_TIE;
 
         protected double LastFire = 0;
         private const double FireCooldownTime = 400;
