@@ -7,12 +7,10 @@ using TGC.MonoGame.TP.GraphicInterface;
 
 namespace TGC.MonoGame.TP.Scenes
 {
-    internal class MainMenu : Scene
+    internal class Info : Scene
     {
         private SoundEffectInstance menuMusic;
-        private readonly Button startButton = new Button("Start", new Vector2(200, 40), () => TGCGame.game.ChangeScene(new World()));
-        private readonly Button infoButton = new Button("Info", new Vector2(200, 40), () => TGCGame.game.ChangeScene(new Info()));
-        private readonly Button exitButton = new Button("Exit", new Vector2(200, 40), () => TGCGame.game.Exit());
+        private readonly Button exitButton = new Button("Exit", new Vector2(200, 40), () => TGCGame.game.ChangeScene(new MainMenu()));
 
         internal override void Initialize()
         {
@@ -42,9 +40,7 @@ namespace TGC.MonoGame.TP.Scenes
         {
             if (Input.Submit())
                 TGCGame.game.ChangeScene(new World());
-            startButton.Update(TGCGame.gui.ScreenCenter + new Vector2(0, 50));
-            infoButton.Update(TGCGame.gui.ScreenCenter + new Vector2(0, 100));
-            exitButton.Update(TGCGame.gui.ScreenCenter + new Vector2(0, 150));
+            exitButton.Update(TGCGame.gui.ScreenCenter + new Vector2(250, 200));
             base.Update(gameTime);
         }
 
@@ -58,12 +54,31 @@ namespace TGC.MonoGame.TP.Scenes
 
         internal override void Draw2D(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
         {
+            float i = 1f;
             Vector2 center = TGCGame.gui.ScreenCenter;
-            Vector2 starWarsSize = TGCGame.gui.DrawCenteredText("Star Wars", new Vector2(center.X, center.Y / 4), 20f);
-            TGCGame.gui.DrawCenteredText("Trench Run", new Vector2(center.X, center.Y / 4 + starWarsSize.Y + 5), 48f);
-            startButton.Draw(center + new Vector2(0, 50));
-            infoButton.Draw(center + new Vector2(0, 100));
-            exitButton.Draw(center + new Vector2(0, 150));
+            Vector2 title = TGCGame.gui.DrawCenteredText("Information and controls", new Vector2(center.X - 100, center.Y / 4 ), 25f);
+            TGCGame.gui.DrawCenteredText("Your goal is to destroy the Death Star", new Vector2(center.X, center.Y / 4 + title.Y * i), 12f);
+            i += 0.5f;
+            TGCGame.gui.DrawCenteredText("To accomplish that, you must shoot the objective shown by the compass", new Vector2(center.X, center.Y / 4 + title.Y * i), 12f);
+            i += 1f;
+            TGCGame.gui.DrawCenteredText("Dive: W", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            i += 0.5f;
+            TGCGame.gui.DrawCenteredText("Go up: S", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            i += 0.5f;
+            TGCGame.gui.DrawCenteredText("Strafe left: A", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            i += 0.5f;
+            TGCGame.gui.DrawCenteredText("Strafe right: D", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            i += 0.5f;
+            TGCGame.gui.DrawCenteredText("Roll right: E", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            i += 0.5f;
+            TGCGame.gui.DrawCenteredText("Roll left: Q", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            i += 0.5f;
+            TGCGame.gui.DrawCenteredText("Turbo: Left Shift", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            i += 0.5f;
+            TGCGame.gui.DrawCenteredText("Exit: Esc", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+
+
+            exitButton.Draw(center + new Vector2(250, 200));
         }
 
         internal override void Destroy()
