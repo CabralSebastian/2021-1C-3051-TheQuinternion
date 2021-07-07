@@ -92,7 +92,7 @@ float4 BlurPS(in VertexShaderOutput input) : COLOR
 
     // UV Movement vector
     float distanceToCenter = distance(input.TextureCoordinates, float2(0.5, 0.5));
-    float centerDistanceFactor = max(0, distanceToCenter - 0.2);
+    float centerDistanceFactor = max(0, distanceToCenter - 0.35);
     float2 blendVector = (input.TextureCoordinates - prevUVDepth.xy) * centerDistanceFactor;
 
     // Blur

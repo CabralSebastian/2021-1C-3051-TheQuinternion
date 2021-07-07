@@ -11,6 +11,7 @@ namespace TGC.MonoGame.TP.Scenes
         private SoundEffectInstance gameMusic;
         internal static DeathStar deathStar;
         internal static XWing xwing;
+        internal static DistantFight distantFight;
         private Player player;
 
         private readonly Random random = new Random();
@@ -24,6 +25,8 @@ namespace TGC.MonoGame.TP.Scenes
             deathStar.Create(true);
             xwing = new XWing();
             xwing.Instantiate(new Vector3(50f, 0f, 0f));
+            distantFight = new DistantFight();
+            distantFight.Create();
             TGCGame.camera.SetLocation(new Vector3(80f, 0f, 0f), Vector3.Forward, Vector3.Up);
             TGCGame.camera.SetTarget(xwing);
 
@@ -57,7 +60,7 @@ namespace TGC.MonoGame.TP.Scenes
                 return;
 
             if (random.NextDouble() > 0.8f)
-                new TIE().Instantiate(new Vector3(random.Next(-4000, 4000), 0f, 0f));
+                new TIE().Instantiate(new Vector3(random.Next(-4000, 4000), 0f, random.Next(-4000, 4000)));
             lastTieSpawn = gameTime.TotalGameTime.TotalMilliseconds;
         }
 
