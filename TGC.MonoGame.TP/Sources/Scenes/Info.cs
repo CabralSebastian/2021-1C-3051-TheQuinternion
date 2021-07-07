@@ -75,6 +75,8 @@ namespace TGC.MonoGame.TP.Scenes
             i += 0.5f;
             TGCGame.gui.DrawCenteredText("Turbo: Left Shift", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;
+            TGCGame.gui.DrawCenteredText("God mode: G", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            i += 0.5f;
             TGCGame.gui.DrawCenteredText("Exit: Esc", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
 
 
