@@ -32,8 +32,8 @@ namespace TGC.MonoGame.TP
         internal TGCGame()
         {
             game = this;
-            new GraphicsDeviceManager(this);
-            // Graphics.IsFullScreen = true;
+            GraphicsDeviceManager graphics = new GraphicsDeviceManager(this);
+            graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
         }
 
