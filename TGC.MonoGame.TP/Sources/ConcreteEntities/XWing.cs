@@ -39,11 +39,9 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         private const double fireCooldownTime = 400;
 
         private bool barrelRollActivated = false;
-        private Quaternion previousBody;
         private float rotationValue = 15f;
-        private float barrelRollCooldownProgress;
+        private float previousHealth;
         private const float barrelRollCooldownTime = 5000;
-        private const float barrelRollDuration = 1000;
 
         private readonly AudioEmitter emitter = new AudioEmitter();
         private const float laserVolume = 0.2f;
@@ -183,9 +181,9 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         {
             if (!barrelRollActivated)
             {
-                previousBody = Body().Pose.Orientation.ToQuaternion();
                 Body().Pose.Orientation *= Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), rotationValue * rotationFixValues.Z).ToBEPU();
                 barrelRollActivated = true;
+                previousHealth = salud;
             }
             else
             {
@@ -198,6 +196,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             if (barrelRollActivated)
             {
                 Body().Pose.Orientation *= Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), rotationValue * rotationFixValues.Z).ToBEPU();
+                salud = previousHealth;
             }
 
             if (CompareUp()) 
@@ -208,7 +207,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         private bool CompareUp()
         {
-            return baseUpDirection.Y - upDirection.Y <= 0.005f;
+            return baseUpDirection.Y - upDirection.Y <= 0.003f;
         }
 
         private void Reiniciar()
