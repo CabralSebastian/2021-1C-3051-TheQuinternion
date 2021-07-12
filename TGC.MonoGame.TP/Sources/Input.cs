@@ -34,6 +34,8 @@ namespace TGC.MonoGame.TP
         internal static bool Exit() => KeyboardState.IsKeyDown(Keys.Escape);
         internal static bool ToggleF1() => KeyboardState.IsKeyDown(Keys.F1) && !PrevKeyboardState.IsKeyDown(Keys.F1);
 
+        internal static bool BarrelRoll() => KeyboardState.IsKeyDown(Keys.Space) && !PrevKeyboardState.IsKeyDown(Keys.Space);
+
         //MOUSE//
         internal static Vector2 MousePosition() => MouseState.Position.ToVector2();
         internal static bool Click() => MouseState.LeftButton == ButtonState.Pressed && PrevMouseState.LeftButton == ButtonState.Released;

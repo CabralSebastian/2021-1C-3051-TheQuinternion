@@ -37,6 +37,10 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         private double lastFire;
         private const double fireCooldownTime = 400;
+
+        private bool barrelRollActivated = false;
+        private Quaternion previousBody;
+        private float rotationValue = 15f;
         private float barrelRollCooldownProgress;
         private const float barrelRollCooldownTime = 5000;
         private const float barrelRollDuration = 1000;
@@ -75,6 +79,9 @@ namespace TGC.MonoGame.TP.ConcreteEntities
                 lastTurbo = gameTime.TotalGameTime.TotalMilliseconds;
             if (gameTime.TotalGameTime.TotalMilliseconds > lastTurbo + turboRegenerationTime)
                 turbo = Math.Min(turbo + turboRegeneration * (float)elapsedTime, maxTurbo);
+
+            if (barrelRollActivated)
+                BarrelRoll();
 
             TGCGame.content.E_MainShader.Parameters["bloomColor"].SetValue(Color.DarkRed.ToVector3() * body.Velocity.Linear.Length() / maxSpeed * 20000);
         }
@@ -170,6 +177,38 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             World.InstantiateLaser(position - up * 1.7f - left * 4.75459f, -forward, laserOrientation, emitter, laserVolume/4);
 
             lastFire = gameTime;
+        }
+
+        internal void ToggleBarrelRoll(GameTime gameTime)
+        {
+            if (!barrelRollActivated)
+            {
+                previousBody = Body().Pose.Orientation.ToQuaternion();
+                Body().Pose.Orientation *= Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), rotationValue * rotationFixValues.Z).ToBEPU();
+                barrelRollActivated = true;
+            }
+            else
+            {
+                barrelRollActivated = !barrelRollActivated;
+            }
+        }
+
+        private void BarrelRoll()
+        {
+            if (barrelRollActivated)
+            {
+                Body().Pose.Orientation *= Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), rotationValue * rotationFixValues.Z).ToBEPU();
+            }
+
+            if (CompareUp()) 
+            {
+                barrelRollActivated = false;
+            }
+        }
+
+        private bool CompareUp()
+        {
+            return baseUpDirection.Y - upDirection.Y <= 0.005f;
         }
 
         private void Reiniciar()

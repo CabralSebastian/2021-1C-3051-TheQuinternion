@@ -36,6 +36,9 @@ namespace TGC.MonoGame.TP
 
             if (Input.ToggleF1())
                 showF1 = !showF1;
+
+            if (Input.BarrelRoll())
+                World.xwing.ToggleBarrelRoll(gameTime);
         }
 
         //MOUSE//
