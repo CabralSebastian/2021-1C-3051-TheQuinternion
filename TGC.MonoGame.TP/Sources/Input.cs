@@ -30,10 +30,10 @@ namespace TGC.MonoGame.TP
         internal static int VerticalAxis() => BoolsToAxis(MovingUp(), MovingDown());
         internal static int FrontalRotationAxis() => BoolsToAxis(KeyboardState.IsKeyDown(Keys.E), KeyboardState.IsKeyDown(Keys.Q));
         internal static bool Accelerate() => KeyboardState.IsKeyDown(Keys.LeftShift);
+        internal static bool Deaccelerate() => KeyboardState.IsKeyDown(Keys.LeftControl);
         internal static bool GodMode() => KeyboardState.IsKeyDown(Keys.G) && !PrevKeyboardState.IsKeyDown(Keys.G);
         internal static bool Exit() => KeyboardState.IsKeyDown(Keys.Escape);
         internal static bool ToggleF1() => KeyboardState.IsKeyDown(Keys.F1) && !PrevKeyboardState.IsKeyDown(Keys.F1);
-
         internal static bool BarrelRoll() => KeyboardState.IsKeyDown(Keys.Space) && !PrevKeyboardState.IsKeyDown(Keys.Space);
 
         //MOUSE//
