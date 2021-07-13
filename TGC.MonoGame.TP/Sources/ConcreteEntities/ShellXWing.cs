@@ -44,7 +44,7 @@ namespace TGC.MonoGame.TP
 
         internal override void Update(double elapsedTime, GameTime gameTime)
         {
-            Body().Pose.Position = initialPos.ToBEPU();
+            Body().Pose.Position = TGCGame.camera.position.ToBEPU() + initialPos.ToBEPU();
             if (random.NextDouble() > 0.992)
                 Fire(gameTime);
         }
