@@ -22,7 +22,7 @@ namespace TGC.MonoGame.TP
 
         protected double LastFire = 0;
         private const double FireCooldownTime = 400;
-        private const float LaserVolume = 0.2f;
+        private const float LaserVolume = 0f;
         private readonly Random random = new Random();
         protected override float Mass => 100f;
 

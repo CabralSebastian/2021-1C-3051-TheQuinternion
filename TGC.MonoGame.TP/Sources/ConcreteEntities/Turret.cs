@@ -16,7 +16,6 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         protected override float MaxRange => 700f;
         protected override float MinIdleTime => 1000f;
-        private const float scaleFactor = 1 / 7f;
         protected override Vector3 CannonsOffset => new Vector3(0f, 2.8911f, 0f) * 100 * scale;
 
         private const float rotationSpeed = 0.2f;
@@ -55,5 +54,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             TGCGame.content.D_Turret.CannonsWorldMatrix = CannonsWorldMatrix();
             base.Draw();
         }
+
+        internal Turret() => health = 500f;
     }
 }

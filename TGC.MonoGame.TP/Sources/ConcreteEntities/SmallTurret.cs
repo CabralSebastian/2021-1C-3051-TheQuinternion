@@ -63,5 +63,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             TGCGame.content.D_SmallTurret.CannonsWorldMatrix = CannonsWorldMatrix();
             base.Draw();
         }
+
+        internal SmallTurret() => health = 100f;
     }
 }
