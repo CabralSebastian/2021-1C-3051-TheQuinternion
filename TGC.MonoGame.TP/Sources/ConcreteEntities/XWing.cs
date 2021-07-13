@@ -39,9 +39,9 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         private const double fireCooldownTime = 400;
 
         private bool barrelRollActivated = false;
-        private float rotationValue = 15f;
+        private float rotationValue = 25f;
         private float previousHealth;
-        private const float barrelRollCooldownTime = 5000;
+        private float barrelRollCooldownTime = 1250;
 
         private readonly AudioEmitter emitter = new AudioEmitter();
         private const float laserVolume = 0.2f;
@@ -80,6 +80,11 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
             if (barrelRollActivated)
                 BarrelRoll();
+            else
+            {
+                barrelRollCooldownTime += 20;
+                barrelRollCooldownTime = Math.Min(barrelRollCooldownTime, 1250);
+            }
 
             TGCGame.content.E_MainShader.Parameters["bloomColor"].SetValue(Color.DarkRed.ToVector3() * body.Velocity.Linear.Length() / maxSpeed * 20000);
         }
@@ -223,7 +228,8 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         private bool CompareUp()
         {
-            return baseUpDirection.Y - upDirection.Y <= 0.003f;
+            barrelRollCooldownTime -= 20;
+            return barrelRollCooldownTime <= 0; 
         }
 
         private void Reiniciar()
