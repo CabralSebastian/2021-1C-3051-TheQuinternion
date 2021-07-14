@@ -7,7 +7,7 @@ namespace TGC.MonoGame.TP
 {
     internal class DistantFight
     {
-        private readonly Random random = new Random();
+        private readonly Random Random = new Random();
         private readonly int MaxInstances = 20;
         private Vector3 InitialFightPosition = new Vector3(-600f, 300f, -3000f);
 
@@ -22,12 +22,12 @@ namespace TGC.MonoGame.TP
 
         private Vector3 RandomVectorTIE()
         {
-            return new Vector3((float)random.Next(100, 800), (float)random.Next(100, 1000), (float)random.Next(0, 200));
+            return new Vector3((float)Random.Next(100, 800), (float)Random.Next(100, 1000), (float)Random.Next(0, 200));
         }
 
         private Vector3 RandomVectorXWing()
         {
-            return new Vector3((float)random.Next(-800, -100), (float)random.Next(100, 1000), (float)random.Next(0, 200));
+            return new Vector3((float)Random.Next(-800, -100), (float)Random.Next(100, 1000), (float)Random.Next(0, 200));
         }
     }
 }

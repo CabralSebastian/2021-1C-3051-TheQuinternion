@@ -9,37 +9,37 @@ namespace TGC.MonoGame.TP.Physics
 {
     internal class PhysicSimulation
     {
-        private readonly Simulation simulation;
-        internal readonly BufferPool bufferPool = new BufferPool();
-        private readonly SimpleThreadDispatcher threadDispatcher;
-        internal Shapes Shapes() => simulation.Shapes;
+        private readonly Simulation Simulation;
+        internal readonly BufferPool BufferPool = new BufferPool();
+        private readonly SimpleThreadDispatcher ThreadDispatcher;
+        internal Shapes Shapes() => Simulation.Shapes;
 
-        private readonly BEPUVector3 gravity = new BEPUVector3();
-        private const float timestep = 1 / 60f;
+        private readonly BEPUVector3 Gravity = new BEPUVector3();
+        private const float Timestep = 1 / 60f;
 
-        internal readonly CollitionEvents collitionEvents = new CollitionEvents();
+        internal readonly CollitionEvents CollitionEvents = new CollitionEvents();
 
         internal PhysicSimulation()
         {
-            threadDispatcher = new SimpleThreadDispatcher(ThreadCount());
-            simulation = CreateSimulation();
+            ThreadDispatcher = new SimpleThreadDispatcher(ThreadCount());
+            Simulation = CreateSimulation();
         }
 
         private int ThreadCount() => Math.Max(1, Environment.ProcessorCount > 4 ? Environment.ProcessorCount - 2 : Environment.ProcessorCount - 1);
 
         private Simulation CreateSimulation() => Simulation.Create(
-            bufferPool, new NarrowPhaseCallbacks(),
-            new PoseIntegratorCallbacks(gravity, 0f, 0f), new PositionFirstTimestepper()
+            BufferPool, new NarrowPhaseCallbacks(),
+            new PoseIntegratorCallbacks(Gravity, 0f, 0f), new PositionFirstTimestepper()
         );
 
-        internal void Update() => simulation.Timestep(timestep, threadDispatcher);
+        internal void Update() => Simulation.Timestep(Timestep, ThreadDispatcher);
 
-        internal TypedIndex LoadShape<S>(S shape) where S : unmanaged, IShape => simulation.Shapes.Add(shape);
+        internal TypedIndex LoadShape<S>(S shape) where S : unmanaged, IShape => Simulation.Shapes.Add(shape);
 
-        internal BodyReference GetBody(BodyHandle handle) => simulation.Bodies.GetBodyReference(handle);
+        internal BodyReference GetBody(BodyHandle handle) => Simulation.Bodies.GetBodyReference(handle);
 
         internal StaticHandle CreateStatic(Vector3 position, Quaternion rotation, TypedIndex shape) =>
-            simulation.Statics.Add(new StaticDescription(
+            Simulation.Statics.Add(new StaticDescription(
                 position.ToBEPU(),
                 rotation.ToBEPU(),
                 new CollidableDescription(shape, 0.1f))
@@ -47,14 +47,14 @@ namespace TGC.MonoGame.TP.Physics
 
         internal BodyHandle CreateDynamic(Vector3 position, Quaternion rotation, TypedIndex shape, float mass)
         {
-            simulation.Shapes.GetShape<Sphere>(shape.Index).ComputeInertia(mass, out BodyInertia inertia);
+            Simulation.Shapes.GetShape<Sphere>(shape.Index).ComputeInertia(mass, out BodyInertia inertia);
             BodyDescription bodyDescription = BodyDescription.CreateDynamic(
                 new RigidPose(position.ToBEPU(),  rotation.ToBEPU()),
                 new BodyVelocity(new BEPUVector3(0f, 0f, 0f)),
                 inertia,
                 new CollidableDescription(shape, 0.1f),
                 new BodyActivityDescription(-1));
-            return simulation.Bodies.Add(bodyDescription);
+            return Simulation.Bodies.Add(bodyDescription);
         }
 
         internal BodyHandle CreateKinematic(Vector3 position, Quaternion rotation, TypedIndex shape)
@@ -64,17 +64,17 @@ namespace TGC.MonoGame.TP.Physics
                 new BodyVelocity(new BEPUVector3(0f, 0f, 0f)),
                 new CollidableDescription(shape, 0.1f),
                 new BodyActivityDescription(-1));
-            return simulation.Bodies.Add(bodyDescription);
+            return Simulation.Bodies.Add(bodyDescription);
         }
 
-        internal void DestroyStatic(StaticHandle handle) => simulation.Statics.Remove(handle);
-        internal void DestroyBody(BodyHandle handle) => simulation.Bodies.Remove(handle);
+        internal void DestroyStatic(StaticHandle handle) => Simulation.Statics.Remove(handle);
+        internal void DestroyBody(BodyHandle handle) => Simulation.Bodies.Remove(handle);
 
         internal void Dispose()
         {
-            simulation.Dispose();
-            bufferPool.Clear();
-            threadDispatcher.Dispose();
+            Simulation.Dispose();
+            BufferPool.Clear();
+            ThreadDispatcher.Dispose();
         }
     }
 }

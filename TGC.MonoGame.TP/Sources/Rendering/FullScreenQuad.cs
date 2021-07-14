@@ -5,13 +5,13 @@ namespace TGC.MonoGame.TP.Rendering
 {
     public class FullScreenQuad
     {
-        private readonly GraphicsDevice device;
-        private IndexBuffer indexBuffer;
-        private VertexBuffer vertexBuffer;
+        private readonly GraphicsDevice Device;
+        private IndexBuffer IndexBuffer;
+        private VertexBuffer VertexBuffer;
 
         public FullScreenQuad(GraphicsDevice device)
         {
-            this.device = device;
+            this.Device = device;
             CreateVertexBuffer();
             CreateIndexBuffer();
         }
@@ -28,9 +28,9 @@ namespace TGC.MonoGame.TP.Rendering
             vertices[3].Position = new Vector3(1f, 1f, 0f);
             vertices[3].TextureCoordinate = new Vector2(1f, 0f);
 
-            vertexBuffer = new VertexBuffer(device, VertexPositionTexture.VertexDeclaration, 4,
+            VertexBuffer = new VertexBuffer(Device, VertexPositionTexture.VertexDeclaration, 4,
                 BufferUsage.WriteOnly);
-            vertexBuffer.SetData(vertices);
+            VertexBuffer.SetData(vertices);
         }
 
         private void CreateIndexBuffer()
@@ -44,27 +44,27 @@ namespace TGC.MonoGame.TP.Rendering
             indices[4] = 3;
             indices[5] = 2;
 
-            indexBuffer = new IndexBuffer(device, IndexElementSize.SixteenBits, 6, BufferUsage.WriteOnly);
-            indexBuffer.SetData(indices);
+            IndexBuffer = new IndexBuffer(Device, IndexElementSize.SixteenBits, 6, BufferUsage.WriteOnly);
+            IndexBuffer.SetData(indices);
         }
 
 
         public void Draw(Effect effect)
         {
-            device.SetVertexBuffer(vertexBuffer);
-            device.Indices = indexBuffer;
+            Device.SetVertexBuffer(VertexBuffer);
+            Device.Indices = IndexBuffer;
 
             foreach (var pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 2);
+                Device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 2);
             }
         }
 
         public void Dispose()
         {
-            vertexBuffer.Dispose();
-            indexBuffer.Dispose();
+            VertexBuffer.Dispose();
+            IndexBuffer.Dispose();
         }
     }
 }

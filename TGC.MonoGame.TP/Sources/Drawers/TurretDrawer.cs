@@ -6,27 +6,27 @@ namespace TGC.MonoGame.TP.Drawers
 {
     internal class TurretDrawer : Drawer
     {
-        private static Effect Effect => TGCGame.content.E_MainShader;
-        protected readonly Model model;
-        protected readonly Texture2D[] texture;
+        private static Effect Effect => TGCGame.GameContent.E_MainShader;
+        protected readonly Model Model;
+        protected readonly Texture2D[] Texture;
         internal Matrix HeadWorldMatrix { private get; set; }
         internal Matrix CannonsWorldMatrix { private get; set; }
-        protected readonly Material material;
+        protected readonly Material Material;
 
         internal TurretDrawer(Model model, Texture2D[] texture, Material material)
         {
-            this.model = model;
-            this.texture = texture;
-            this.material = material;
+            this.Model = model;
+            this.Texture = texture;
+            this.Material = material;
         }
 
         internal override void Draw(Matrix generalWorldMatrix)
         {
-            Effect.Parameters["baseTexture"].SetValue(texture[0]);
-            material.Set();
-            DrawMesh(model.Meshes[1], generalWorldMatrix);
-            DrawMesh(model.Meshes[2], HeadWorldMatrix);
-            DrawMesh(model.Meshes[0], CannonsWorldMatrix);
+            Effect.Parameters["baseTexture"].SetValue(Texture[0]);
+            Material.Set();
+            DrawMesh(Model.Meshes[1], generalWorldMatrix);
+            DrawMesh(Model.Meshes[2], HeadWorldMatrix);
+            DrawMesh(Model.Meshes[0], CannonsWorldMatrix);
         }
 
         private void DrawMesh(ModelMesh mesh, Matrix matrix)

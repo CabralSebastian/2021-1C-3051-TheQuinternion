@@ -5,18 +5,18 @@ namespace TGC.MonoGame.TP.Drawers
 {
     internal class LaserDrawer : Drawer
     {
-        private static Effect Effect => TGCGame.content.E_LaserShader;
-        protected readonly Model model;
+        private static Effect Effect => TGCGame.GameContent.E_LaserShader;
+        protected readonly Model Model;
 
         internal LaserDrawer(Model model)
         {
-            this.model = model;
+            this.Model = model;
         }
 
         internal override void Draw(Matrix generalWorldMatrix)
         {
             int index = 0;
-            ModelMeshCollection meshes = model.Meshes;
+            ModelMeshCollection meshes = Model.Meshes;
             foreach (var mesh in meshes)
             {
                 Matrix worldMatrix = mesh.ParentBone.Transform * generalWorldMatrix;

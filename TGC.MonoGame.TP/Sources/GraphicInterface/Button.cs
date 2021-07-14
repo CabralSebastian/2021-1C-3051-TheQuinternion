@@ -5,28 +5,28 @@ namespace TGC.MonoGame.TP.GraphicInterface
 {
     internal class Button
     {
-        private readonly string text;
-        private readonly Vector2 size;
-        private readonly Action onClick;
-        private Color color = Color.Transparent;
-        private bool mouseOver = false;
+        private readonly string Text;
+        private readonly Vector2 Size;
+        private readonly Action OnClick;
+        private Color Color = Color.Transparent;
+        private bool MouseOver = false;
 
         internal Button(string text, Vector2 size, Action onClick)
         {
-            this.text = text;
-            this.size = size;
-            this.onClick = onClick;
+            this.Text = text;
+            this.Size = size;
+            this.OnClick = onClick;
         }
 
         internal void Draw(Vector2 position)
         {
-            TGCGame.gui.DrawCenteredSprite(TGCGame.content.T_Pixel, position, size, color);
-            TGCGame.gui.DrawCenteredText(text, position, 16f);
+            TGCGame.Gui.DrawCenteredSprite(TGCGame.GameContent.T_Pixel, position, Size, Color);
+            TGCGame.Gui.DrawCenteredText(Text, position, 16f);
         }
 
         private bool IsMouseOver(Vector2 position) =>
-            Input.MousePosition().X > position.X - size.X / 2 && Input.MousePosition().X < position.X + size.X / 2 &&
-            Input.MousePosition().Y > position.Y - size.Y / 2 && Input.MousePosition().Y < position.Y + size.Y / 2;
+            Input.MousePosition().X > position.X - Size.X / 2 && Input.MousePosition().X < position.X + Size.X / 2 &&
+            Input.MousePosition().Y > position.Y - Size.Y / 2 && Input.MousePosition().Y < position.Y + Size.Y / 2;
 
         internal void Update(Vector2 position)
         {
@@ -34,24 +34,24 @@ namespace TGC.MonoGame.TP.GraphicInterface
             {
                 if (Input.Click())
                 {
-                    TGCGame.content.S_Click1.CreateInstance().Play();
-                    color = new Color(0, 0, 0, 200);
-                    onClick.Invoke();
+                    TGCGame.GameContent.S_Click1.CreateInstance().Play();
+                    Color = new Color(0, 0, 0, 200);
+                    OnClick.Invoke();
                 }
                 else
                 {
-                    color = new Color(0, 0, 0, 100);
-                    if (!mouseOver)
+                    Color = new Color(0, 0, 0, 100);
+                    if (!MouseOver)
                     {
-                        TGCGame.content.S_Click2.CreateInstance().Play();
-                        mouseOver = true;
+                        TGCGame.GameContent.S_Click2.CreateInstance().Play();
+                        MouseOver = true;
                     }
                 }
             }
             else
             {
-                color = new Color(0, 0, 0, 50);
-                mouseOver = false;
+                Color = new Color(0, 0, 0, 50);
+                MouseOver = false;
             }
         }
     }

@@ -6,7 +6,7 @@ namespace TGC.MonoGame.TP
     {
         internal void PlaySound(SoundEffectInstance sound, AudioEmitter emitter)
         {
-            sound.Apply3D(TGCGame.camera.listener, emitter);
+            sound.Apply3D(TGCGame.Camera.Listener, emitter);
             sound.Play();
         }
     }

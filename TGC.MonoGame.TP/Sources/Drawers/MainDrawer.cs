@@ -6,29 +6,29 @@ namespace TGC.MonoGame.TP.Drawers
 {
     internal class MainDrawer : Drawer
     {
-        private static Effect Effect => TGCGame.content.E_MainShader;
-        protected readonly Model model;
-        protected readonly Texture2D[] textures;
-        protected readonly Material material;
+        private static Effect Effect => TGCGame.GameContent.E_MainShader;
+        protected readonly Model Model;
+        protected readonly Texture2D[] Textures;
+        protected readonly Material Material;
 
         internal MainDrawer(Model model, Texture2D[] textures, Material material)
         {
-            this.model = model;
-            this.textures = textures;
-            this.material = material;
+            this.Model = model;
+            this.Textures = textures;
+            this.Material = material;
         }
 
         internal override void Draw(Matrix generalWorldMatrix)
         {
             int index = 0;
-            ModelMeshCollection meshes = model.Meshes;
+            ModelMeshCollection meshes = Model.Meshes;
             foreach (var mesh in meshes)
             {
                 Matrix worldMatrix = mesh.ParentBone.Transform * generalWorldMatrix;
-                material.Set();
+                Material.Set();
                 Effect.Parameters["World"].SetValue(worldMatrix);
                 Effect.Parameters["InverseTransposeWorld"].SetValue(Matrix.Transpose(Matrix.Invert(worldMatrix)));
-                Effect.Parameters["baseTexture"].SetValue(textures[index]);
+                Effect.Parameters["baseTexture"].SetValue(Textures[index]);
                 mesh.Draw();
                 index++;
             }

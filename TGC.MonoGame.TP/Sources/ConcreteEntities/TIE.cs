@@ -14,10 +14,10 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 {
     internal class TIE : DynamicEntity, IStaticDamageable, ILaserDamageable
     {
-        protected override Drawer Drawer() => TGCGame.content.D_TIE;
+        protected override Drawer Drawer() => TGCGame.GameContent.D_TIE;
 
         protected override Vector3 Scale => Vector3.One / 100f;
-        protected override TypedIndex Shape => TGCGame.content.SH_TIE;
+        protected override TypedIndex Shape => TGCGame.GameContent.SH_TIE;
         protected override float Mass => 100f;
 
         protected State CurrentState = State.SEEKING;
@@ -35,6 +35,16 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         private const float LaserVolume = 0.2f;
         private SoundEffectInstance EngineSound;
 
+        protected override void OnInstantiate()
+        {
+            base.OnInstantiate();
+
+            EngineSound = TGCGame.GameContent.S_TIEEngine.CreateInstance();
+            EngineSound.IsLooped = true;
+            EngineSound.Volume = 0.01f;
+            TGCGame.SoundManager.PlaySound(EngineSound, Emitter);
+        }
+
         internal override void Update(double elapsedTime, GameTime gameTime)
         {
             StateMachine(gameTime);
@@ -46,7 +56,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
             if (Health <= 0)
             {
-                TGCGame.content.S_Explotion.CreateInstance().Play();
+                TGCGame.GameContent.S_Explotion.CreateInstance().Play();
                 Destroy();
             }
 
@@ -168,7 +178,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         private float DistanceToXWing(BodyReference body)
         {
             Vector3 TIEPosition = body.Pose.Position.ToVector3();
-            Vector3 XWingPosition = World.xwing.Position();
+            Vector3 XWingPosition = World.XWing.Position();
 
             Vector3 DistanceVector = TIEPosition - XWingPosition;
             DistanceVector.Y = 0f;
@@ -194,7 +204,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         private void GetCloseToXWing(BodyReference body, GameTime gameTime) 
         {
-            Vector3 XWingDirection = World.xwing.Position() - body.Pose.Position.ToVector3();
+            Vector3 XWingDirection = World.XWing.Position() - body.Pose.Position.ToVector3();
             Quaternion RotationToXWing = new Quaternion(XWingDirection, 1f);
             RotationToXWing.Normalize();
             Quaternion ActualRotation = body.Pose.Orientation.ToQuaternion();
@@ -210,7 +220,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         private void FaceXWing(BodyReference body, GameTime gameTime)
         {
-            Vector3 XWingDirection = World.xwing.Position() - body.Pose.Position.ToVector3();
+            Vector3 XWingDirection = World.XWing.Position() - body.Pose.Position.ToVector3();
             Quaternion RotationToXWing = new Quaternion(XWingDirection, 1f);
             RotationToXWing.Normalize();
             Quaternion ActualRotation = body.Pose.Orientation.ToQuaternion();

@@ -8,73 +8,73 @@ namespace TGC.MonoGame.TP.Scenes
 {
     internal class World : Scene
     {
-        private SoundEffectInstance gameMusic;
-        internal static DeathStar deathStar;
-        internal static XWing xwing;
-        internal static DistantFight distantFight;
-        private Player player;
+        private SoundEffectInstance GameMusic;
+        internal static DeathStar DeathStar;
+        internal static XWing XWing;
+        internal static DistantFight DistantFight;
+        private Player Player;
 
-        private readonly Random random = new Random();
-        private double lastTieSpawn;
-        private const double minTIESpawnTime = 2000;
+        private readonly Random Random = new Random();
+        private double LastTieSpawn;
+        private const double MinTIESpawnTime = 2000;
 
         internal override void Initialize()
         {
-            player = new Player();
-            deathStar = new DeathStar();
-            deathStar.Create(true);
-            xwing = new XWing();
-            xwing.Instantiate(new Vector3(50f, 0f, 0f));
-            distantFight = new DistantFight();
-            distantFight.Create();
-            TGCGame.camera.SetLocation(new Vector3(80f, 0f, 0f), Vector3.Forward, Vector3.Up);
-            TGCGame.camera.SetTarget(xwing);
+            Player = new Player();
+            DeathStar = new DeathStar();
+            DeathStar.Create(true);
+            XWing = new XWing();
+            XWing.Instantiate(new Vector3(50f, 0f, 0f));
+            DistantFight = new DistantFight();
+            DistantFight.Create();
+            TGCGame.Camera.SetLocation(new Vector3(80f, 0f, 0f), Vector3.Forward, Vector3.Up);
+            TGCGame.Camera.SetTarget(XWing);
 
             PlayMusic();
-            TGCGame.game.IsMouseVisible = false;
+            TGCGame.Game.IsMouseVisible = false;
         }
 
         private void PlayMusic()
         {
-            gameMusic = TGCGame.content.S_GameMusic.CreateInstance();
-            gameMusic.IsLooped = true;
-            gameMusic.Volume = 0.2f;
-            gameMusic.Play();
+            GameMusic = TGCGame.GameContent.S_GameMusic.CreateInstance();
+            GameMusic.IsLooped = true;
+            GameMusic.Volume = 0.2f;
+            GameMusic.Play();
         }
 
         internal override void Update(GameTime gameTime)
         {
             TIESpawn(gameTime);
-            player.Update(gameTime);
+            Player.Update(gameTime);
             base.Update(gameTime);
         }
 
         internal override void Draw2D(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
         {
-            player.DrawHUD(graphicsDevice, spriteBatch);
+            Player.DrawHUD(graphicsDevice, spriteBatch);
         }
 
         private void TIESpawn(GameTime gameTime)
         {
-            if (gameTime.TotalGameTime.TotalMilliseconds < lastTieSpawn + minTIESpawnTime)
+            if (gameTime.TotalGameTime.TotalMilliseconds < LastTieSpawn + MinTIESpawnTime)
                 return;
 
-            if (random.NextDouble() > 0.8f)
-                new TIE().Instantiate(new Vector3(random.Next(-4000, 4000), 0f, random.Next(-4000, 4000)));
-            lastTieSpawn = gameTime.TotalGameTime.TotalMilliseconds;
+            if (Random.NextDouble() > 0.8f)
+                new TIE().Instantiate(new Vector3(Random.Next(-4000, 4000), 0f, Random.Next(-4000, 4000)));
+            LastTieSpawn = gameTime.TotalGameTime.TotalMilliseconds;
         }
 
         internal static void InstantiateLaser(Vector3 position, Vector3 forward, Quaternion orientation, AudioEmitter emitter, float volume = 0.01f)
         {
             new Laser().Instantiate(position - forward * 5f, orientation);
-            SoundEffectInstance sound = TGCGame.content.S_Laser.CreateInstance();
+            SoundEffectInstance sound = TGCGame.GameContent.S_Laser.CreateInstance();
             sound.Volume = volume;
-            TGCGame.soundManager.PlaySound(sound, emitter);
+            TGCGame.SoundManager.PlaySound(sound, emitter);
         }
 
         internal override void Destroy()
         {
-            gameMusic.Stop();
+            GameMusic.Stop();
             base.Destroy();
         }
     }

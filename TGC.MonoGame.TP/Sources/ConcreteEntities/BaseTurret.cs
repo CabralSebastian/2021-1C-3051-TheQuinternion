@@ -13,44 +13,44 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         protected abstract float MinIdleTime { get; }
         protected abstract Vector3 CannonsOffset { get; }
 
-        protected float headAngle = 0f, cannonsAngle = 0f;
+        protected float HeadAngle = 0f, CannonsAngle = 0f;
 
         protected Vector3 CannonsPosition;
-        private double idleTime = 0d;
-        protected readonly AudioEmitter emitter = new AudioEmitter();
+        private double IdleTime = 0d;
+        protected readonly AudioEmitter Emitter = new AudioEmitter();
 
-        protected float health = 100f;
+        protected float Health = 100f;
 
         protected bool IsInRange(float distance) => distance < MaxRange;
 
         protected override void OnInstantiate()
         {
             CannonsPosition = Position + CannonsOffset;
-            emitter.Position = CannonsPosition;
+            Emitter.Position = CannonsPosition;
         }
 
         internal override void Update(double elapsedTime, GameTime gameTime)
         {
-            if (World.xwing == null)
+            if (World.XWing == null)
                 return;
 
-            Vector3 difference = World.xwing.Position() - CannonsPosition;
+            Vector3 difference = World.XWing.Position() - CannonsPosition;
             float distance = difference.Length();
 
             if (IsInRange(distance))
             {
                 PhysicUtils.DirectionToEuler(difference, distance, out float objectiveYaw, out float objectivePitch);
-                Aim(difference, objectiveYaw - headAngle, objectivePitch - cannonsAngle, elapsedTime);
-                if (IsAimed(Math.Abs(objectiveYaw - headAngle), Math.Abs(objectivePitch - cannonsAngle)) && idleTime > MinIdleTime)
+                Aim(difference, objectiveYaw - HeadAngle, objectivePitch - CannonsAngle, elapsedTime);
+                if (IsAimed(Math.Abs(objectiveYaw - HeadAngle), Math.Abs(objectivePitch - CannonsAngle)) && IdleTime > MinIdleTime)
                 {
                     Fire();
-                    idleTime = 0;
+                    IdleTime = 0;
                 }
                 else
-                    idleTime += elapsedTime;
+                    IdleTime += elapsedTime;
             }
             else
-                idleTime += elapsedTime;
+                IdleTime += elapsedTime;
         }
 
         protected abstract void Aim(Vector3 difference, float yawDifference, float pitchDifference, double elapsedTime);
@@ -60,10 +60,10 @@ namespace TGC.MonoGame.TP.ConcreteEntities
         public override bool HandleCollition(ICollitionHandler other)
         {
             base.HandleCollition(other);
-            health -= 20;
-            if (health <= 0)
+            Health -= 20;
+            if (Health <= 0)
             {
-                TGCGame.soundManager.PlaySound(TGCGame.content.S_Explotion.CreateInstance(), emitter);
+                TGCGame.SoundManager.PlaySound(TGCGame.GameContent.S_Explotion.CreateInstance(), Emitter);
                 Destroy();
             }
             return false;

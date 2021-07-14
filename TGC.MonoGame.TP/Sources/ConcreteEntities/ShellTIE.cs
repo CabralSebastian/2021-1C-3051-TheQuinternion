@@ -13,39 +13,39 @@ namespace TGC.MonoGame.TP
 {
     internal class ShellTIE : DynamicEntity, IStaticDamageable, ILaserDamageable
     {
-        private readonly AudioEmitter emitter = new AudioEmitter();
-        private SoundEffectInstance engineSound;
+        private readonly AudioEmitter Emitter = new AudioEmitter();
+        private SoundEffectInstance EngineSound;
 
-        protected override Drawer Drawer() => TGCGame.content.D_TIE;
+        protected override Drawer Drawer() => TGCGame.GameContent.D_TIE;
         protected override Vector3 Scale => Vector3.One / 100 * 2;
-        protected override TypedIndex Shape => TGCGame.content.SH_TIE;
+        protected override TypedIndex Shape => TGCGame.GameContent.SH_TIE;
 
         protected double LastFire = 0;
         private const double FireCooldownTime = 400;
         private const float LaserVolume = 0f;
-        private readonly Random random = new Random();
+        private readonly Random Random = new Random();
         protected override float Mass => 100f;
 
-        private Vector3 initialPos;
+        private Vector3 InitialPos;
 
         protected override void OnInstantiate()
         {
             BodyReference body = Body();
             body.Pose.Orientation = Quaternion.CreateFromYawPitchRoll(-MathHelper.PiOver2, MathHelper.ToRadians(10), 0).ToBEPU();
 
-            engineSound = TGCGame.content.S_TIEEngine.CreateInstance();
-            engineSound.IsLooped = true;
-            engineSound.Volume = 0.001f;
+            EngineSound = TGCGame.GameContent.S_TIEEngine.CreateInstance();
+            EngineSound.IsLooped = true;
+            EngineSound.Volume = 0.001f;
 
-            initialPos = body.Pose.Position.ToVector3();
-            emitter.Position = body.Pose.Position.ToVector3();
-            TGCGame.soundManager.PlaySound(engineSound, emitter);
+            InitialPos = body.Pose.Position.ToVector3();
+            Emitter.Position = body.Pose.Position.ToVector3();
+            TGCGame.SoundManager.PlaySound(EngineSound, Emitter);
         }
 
         internal override void Update(double elapsedTime, GameTime gameTime)
         {
-            Body().Pose.Position = TGCGame.camera.position.ToBEPU() + initialPos.ToBEPU();
-            if (random.NextDouble() > 0.994)
+            Body().Pose.Position = TGCGame.Camera.Position.ToBEPU() + InitialPos.ToBEPU();
+            if (Random.NextDouble() > 0.994)
                 Fire(gameTime);
         }
 
@@ -60,13 +60,13 @@ namespace TGC.MonoGame.TP
             Quaternion rotation = body.Pose.Orientation.ToQuaternion();
             Vector3 forward = PhysicUtils.Forward(rotation);
             Quaternion laserOrientation = PhysicUtils.DirectionsToQuaternion(forward, Vector3.Up);
-            World.InstantiateLaser(position, -forward, laserOrientation, emitter, LaserVolume);
+            World.InstantiateLaser(position, -forward, laserOrientation, Emitter, LaserVolume);
             LastFire = totalTime;
         }
 
         internal override void Destroy()
         {
-            engineSound.Stop();
+            EngineSound.Stop();
             base.Destroy();
         }
 

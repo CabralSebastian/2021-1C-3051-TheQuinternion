@@ -9,8 +9,8 @@ namespace TGC.MonoGame.TP.Entities
     {
         protected virtual Vector3 Scale { get; } = Vector3.One;
         protected abstract TypedIndex Shape { get; }
-        private BodyHandle handle;
-        protected BodyReference Body() => TGCGame.physicSimulation.GetBody(handle);
+        private BodyHandle Handle;
+        protected BodyReference Body() => TGCGame.PhysicsSimulation.GetBody(Handle);
         protected bool Destroyed { get; private set; } = false;
 
         protected override Matrix GeneralWorldMatrix()
@@ -22,16 +22,16 @@ namespace TGC.MonoGame.TP.Entities
         internal void Instantiate(Vector3 position) => Instantiate(position, Quaternion.Identity);
         internal override void Instantiate(Vector3 position, Quaternion rotation)
         {
-            handle = CreateBody(position, rotation);
-            TGCGame.physicSimulation.collitionEvents.RegisterCollider(handle, this);
+            Handle = CreateBody(position, rotation);
+            TGCGame.PhysicsSimulation.CollitionEvents.RegisterCollider(Handle, this);
             base.Instantiate(position, rotation);
         }
 
         internal override void Destroy()
         {
-            TGCGame.physicSimulation.collitionEvents.UnregisterCollider(handle);
+            TGCGame.PhysicsSimulation.CollitionEvents.UnregisterCollider(Handle);
             if (!Body().Exists && !Destroyed)
-                TGCGame.physicSimulation.DestroyBody(handle);
+                TGCGame.PhysicsSimulation.DestroyBody(Handle);
             base.Destroy();
             Destroyed = true;
         }

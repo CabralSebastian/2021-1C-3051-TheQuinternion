@@ -9,13 +9,13 @@ namespace TGC.MonoGame.TP.Scenes
 {
     internal class Info : Scene
     {
-        private SoundEffectInstance menuMusic;
-        private readonly Button exitButton = new Button("Exit", new Vector2(200, 40), () => TGCGame.game.ChangeScene(new MainMenu()));
+        private SoundEffectInstance MenuMusic;
+        private readonly Button ExitButton = new Button("Exit", new Vector2(200, 40), () => TGCGame.Game.ChangeScene(new MainMenu()));
 
         internal override void Initialize()
         {
             new DeathStar().Create(true);
-            TGCGame.camera.SetLocation(new Vector3(0f, 0f, 0f), Vector3.Forward, Vector3.Up);
+            TGCGame.Camera.SetLocation(new Vector3(0f, 0f, 0f), Vector3.Forward, Vector3.Up);
 
             Quaternion toLeft = Quaternion.CreateFromAxisAngle(Vector3.Up, MathHelper.PiOver2);
             Quaternion toRight = Quaternion.CreateFromAxisAngle(Vector3.Up, -MathHelper.PiOver2);
@@ -25,22 +25,22 @@ namespace TGC.MonoGame.TP.Scenes
             SpawnSquad(3, 300f, -10000f, 0f, -1000f, toLeft);
 
             PlayMusic();
-            TGCGame.game.IsMouseVisible = true;
+            TGCGame.Game.IsMouseVisible = true;
         }
 
         private void PlayMusic()
         {
-            menuMusic = TGCGame.content.S_MenuMusic.CreateInstance();
-            menuMusic.IsLooped = true;
-            menuMusic.Volume = 0.2f;
-            menuMusic.Play();
+            MenuMusic = TGCGame.GameContent.S_MenuMusic.CreateInstance();
+            MenuMusic.IsLooped = true;
+            MenuMusic.Volume = 0.2f;
+            MenuMusic.Play();
         }
 
         internal override void Update(GameTime gameTime)
         {
             if (Input.Submit())
-                TGCGame.game.ChangeScene(new World());
-            exitButton.Update(TGCGame.gui.ScreenCenter + new Vector2(250, 200));
+                TGCGame.Game.ChangeScene(new World());
+            ExitButton.Update(TGCGame.Gui.ScreenCenter + new Vector2(250, 200));
             base.Update(gameTime);
         }
 
@@ -55,45 +55,45 @@ namespace TGC.MonoGame.TP.Scenes
         internal override void Draw2D(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
         {
             float i = 1f;
-            Vector2 center = TGCGame.gui.ScreenCenter;
-            Vector2 title = TGCGame.gui.DrawCenteredText("objective and controls", new Vector2(center.X - 100, center.Y / 4 ), 25f);
-            TGCGame.gui.DrawCenteredText("Your goal is to destroy the Death Star", new Vector2(center.X, center.Y / 4 + title.Y * i), 12f);
+            Vector2 center = TGCGame.Gui.ScreenCenter;
+            Vector2 title = TGCGame.Gui.DrawCenteredText("objective and controls", new Vector2(center.X - 100, center.Y / 4 ), 25f);
+            TGCGame.Gui.DrawCenteredText("Your goal is to destroy the Death Star", new Vector2(center.X, center.Y / 4 + title.Y * i), 12f);
             i += 0.5f;
-            TGCGame.gui.DrawCenteredText("To accomplish that, you must shoot the objective shown by the compass", new Vector2(center.X, center.Y / 4 + title.Y * i), 12f);
+            TGCGame.Gui.DrawCenteredText("To accomplish that, you must shoot the objective shown by the compass", new Vector2(center.X, center.Y / 4 + title.Y * i), 12f);
             i += 1f;
-            TGCGame.gui.DrawCenteredText("Fire: left click", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            TGCGame.Gui.DrawCenteredText("Fire: left click", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;
-            TGCGame.gui.DrawCenteredText("Secondary Fire: right click", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            TGCGame.Gui.DrawCenteredText("Secondary Fire: right click", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;
-            TGCGame.gui.DrawCenteredText("Dive: W", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            TGCGame.Gui.DrawCenteredText("Dive: W", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;
-            TGCGame.gui.DrawCenteredText("Go up: S", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            TGCGame.Gui.DrawCenteredText("Go up: S", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;
-            TGCGame.gui.DrawCenteredText("Strafe left: A", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            TGCGame.Gui.DrawCenteredText("Strafe left: A", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;
-            TGCGame.gui.DrawCenteredText("Strafe right: D", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            TGCGame.Gui.DrawCenteredText("Strafe right: D", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;
-            TGCGame.gui.DrawCenteredText("Roll right: E", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            TGCGame.Gui.DrawCenteredText("Roll right: E", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;
-            TGCGame.gui.DrawCenteredText("Roll left: Q", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            TGCGame.Gui.DrawCenteredText("Roll left: Q", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;
-            TGCGame.gui.DrawCenteredText("Turbo: Left Shift", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            TGCGame.Gui.DrawCenteredText("Turbo: Left Shift", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;
-            TGCGame.gui.DrawCenteredText("Slow down: Left Ctrl", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            TGCGame.Gui.DrawCenteredText("Slow down: Left Ctrl", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;
-            TGCGame.gui.DrawCenteredText("Barrel Roll: Spacebar", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            TGCGame.Gui.DrawCenteredText("Barrel Roll: Spacebar", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;
-            TGCGame.gui.DrawCenteredText("God mode: G", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            TGCGame.Gui.DrawCenteredText("God mode: G", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;
-            TGCGame.gui.DrawCenteredText("Exit: Esc", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            TGCGame.Gui.DrawCenteredText("Exit: Esc", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
 
 
-            exitButton.Draw(center + new Vector2(250, 200));
+            ExitButton.Draw(center + new Vector2(250, 200));
         }
 
         internal override void Destroy()
         {
-            menuMusic.Stop();
+            MenuMusic.Stop();
             base.Destroy();
         }
     }
