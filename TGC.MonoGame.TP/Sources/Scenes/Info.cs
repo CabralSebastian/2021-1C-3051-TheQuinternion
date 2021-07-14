@@ -61,6 +61,10 @@ namespace TGC.MonoGame.TP.Scenes
             i += 0.5f;
             TGCGame.gui.DrawCenteredText("To accomplish that, you must shoot the objective shown by the compass", new Vector2(center.X, center.Y / 4 + title.Y * i), 12f);
             i += 1f;
+            TGCGame.gui.DrawCenteredText("Fire: left click", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            i += 0.5f;
+            TGCGame.gui.DrawCenteredText("Secondary Fire: right click", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            i += 0.5f;
             TGCGame.gui.DrawCenteredText("Dive: W", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;
             TGCGame.gui.DrawCenteredText("Go up: S", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
@@ -74,6 +78,10 @@ namespace TGC.MonoGame.TP.Scenes
             TGCGame.gui.DrawCenteredText("Roll left: Q", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;
             TGCGame.gui.DrawCenteredText("Turbo: Left Shift", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            i += 0.5f;
+            TGCGame.gui.DrawCenteredText("Slow down: Left Ctrl", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
+            i += 0.5f;
+            TGCGame.gui.DrawCenteredText("Barrel Roll: Spacebar", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;
             TGCGame.gui.DrawCenteredText("God mode: G", new Vector2(center.X, center.Y / 4 + title.Y * i), 11f);
             i += 0.5f;

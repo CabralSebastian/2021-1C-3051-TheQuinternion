@@ -12,13 +12,14 @@ namespace TGC.MonoGame.TP
     internal class TGCGame : Game
     {
         internal static TGCGame game;
+        private readonly GraphicsDeviceManager graphics;
         internal static Content content;
         internal static GUI gui;
         internal static readonly PhysicSimulation physicSimulation = new PhysicSimulation();
         private SpriteBatch spriteBatch;
         private SkyBox skyBox;
         private FullScreenQuad fullScreenQuad;
-        internal const int shadowmapSize = 2048 * 3;
+        internal const int shadowmapSize = 2048 * 2;
         private RenderTarget2D shadowMapRenderTarget, mainRenderTarget, bloomRenderTarget, integratedBloomRenderTarget;
 
         internal static readonly SoundManager soundManager = new SoundManager();
@@ -32,14 +33,23 @@ namespace TGC.MonoGame.TP
         internal TGCGame()
         {
             game = this;
-            new GraphicsDeviceManager(this);
-            // Graphics.IsFullScreen = true;
+            graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+        }
+
+        private void Fullscreen()
+        {
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            graphics.IsFullScreen = true;
+            graphics.ApplyChanges();
         }
 
         protected override void LoadContent()
         {
             base.LoadContent();
+            Fullscreen();
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
             gui = new GUI(GraphicsDevice, spriteBatch);
             fullScreenQuad = new FullScreenQuad(GraphicsDevice);

@@ -37,9 +37,11 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
         private double lastFire;
         private const double fireCooldownTime = 400;
-        private float barrelRollCooldownProgress;
-        private const float barrelRollCooldownTime = 5000;
-        private const float barrelRollDuration = 1000;
+
+        private bool barrelRollActivated = false;
+        private float rotationValue = 25f;
+        private float previousHealth;
+        private float barrelRollCooldownTime = 1250;
 
         private readonly AudioEmitter emitter = new AudioEmitter();
         private const float laserVolume = 0.2f;
@@ -76,6 +78,14 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             if (gameTime.TotalGameTime.TotalMilliseconds > lastTurbo + turboRegenerationTime)
                 turbo = Math.Min(turbo + turboRegeneration * (float)elapsedTime, maxTurbo);
 
+            if (barrelRollActivated)
+                BarrelRoll();
+            else
+            {
+                barrelRollCooldownTime += 20;
+                barrelRollCooldownTime = Math.Min(barrelRollCooldownTime, 1250);
+            }
+
             TGCGame.content.E_MainShader.Parameters["bloomColor"].SetValue(Color.DarkRed.ToVector3() * body.Velocity.Linear.Length() / maxSpeed * 20000);
         }
 
@@ -98,9 +108,14 @@ namespace TGC.MonoGame.TP.ConcreteEntities
                 AddLinearVelocity(body, forward * speed);
                 turbo -= speed;
             }
+            else if (Input.Deaccelerate())
+            {
+                float speed = acceleration * elapsedTime;
+                ReduceLinearVelocity(body, -(forward * speed));
+            }
             else
                 AddLinearVelocity(body, Vector3.Zero);
-            
+
         }
 
         private void Brakement(float elapsedTime, BodyReference body)
@@ -108,7 +123,7 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             Vector3 velocity = Velocity();
             float brakmentForce = -acceleration / 10;
 
-            Vector3 forwardBreakment = (!Input.Accelerate() || turbo == 0) ? forward : Vector3.Zero;
+            Vector3 forwardBreakment = (!Input.Deaccelerate() || !Input.Accelerate() || turbo == 0) ? forward : Vector3.Zero;
             float horizontalSpeed = Vector3.Dot(velocity, rightDirection) / (rightDirection.Length() * rightDirection.Length());
             Vector3 horizontalBrakment = horizontalSpeed != 0 ? Vector3.Normalize(rightDirection * horizontalSpeed) : Vector3.Zero;
             float verticalSpeed = Vector3.Dot(velocity, upDirection) / (upDirection.Length() * upDirection.Length());
@@ -136,6 +151,17 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 
             float forwardSpeed = Vector3.Dot(newVelocity, forward) / (forward.Length() * forward.Length());
             Vector3 forwardVelocity = Math.Clamp(forwardSpeed, minSpeed, maxSpeed) * forward;
+            Vector3 limitedVelocity = forwardVelocity;
+
+            body.Velocity.Linear = limitedVelocity.ToBEPU();
+        }
+
+        private void ReduceLinearVelocity(BodyReference body, Vector3 velocity)
+        {
+            var newVelocity = body.Velocity.Linear.ToVector3() + velocity;
+
+            float forwardSpeed = Vector3.Dot(newVelocity, forward) / (forward.Length() * forward.Length());
+            Vector3 forwardVelocity = Math.Clamp(forwardSpeed, 50, 150) * forward;
             Vector3 limitedVelocity = forwardVelocity;
 
             body.Velocity.Linear = limitedVelocity.ToBEPU();
@@ -170,6 +196,40 @@ namespace TGC.MonoGame.TP.ConcreteEntities
             World.InstantiateLaser(position - up * 1.7f - left * 4.75459f, -forward, laserOrientation, emitter, laserVolume/4);
 
             lastFire = gameTime;
+        }
+
+        internal void ToggleBarrelRoll(GameTime gameTime)
+        {
+            if (!barrelRollActivated)
+            {
+                Body().Pose.Orientation *= Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), rotationValue * rotationFixValues.Z).ToBEPU();
+                barrelRollActivated = true;
+                previousHealth = salud;
+            }
+            else
+            {
+                barrelRollActivated = !barrelRollActivated;
+            }
+        }
+
+        private void BarrelRoll()
+        {
+            if (barrelRollActivated)
+            {
+                Body().Pose.Orientation *= Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), rotationValue * rotationFixValues.Z).ToBEPU();
+                salud = previousHealth;
+            }
+
+            if (CompareUp()) 
+            {
+                barrelRollActivated = false;
+            }
+        }
+
+        private bool CompareUp()
+        {
+            barrelRollCooldownTime -= 20;
+            return barrelRollCooldownTime <= 0; 
         }
 
         private void Reiniciar()

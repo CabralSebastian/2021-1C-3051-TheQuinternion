@@ -22,7 +22,7 @@ namespace TGC.MonoGame.TP
 
         protected double LastFire = 0;
         private const double FireCooldownTime = 400;
-        private const float LaserVolume = 0.2f;
+        private const float LaserVolume = 0f;
         private readonly Random random = new Random();
         protected override float Mass => 100f;
 
@@ -45,7 +45,7 @@ namespace TGC.MonoGame.TP
         internal override void Update(double elapsedTime, GameTime gameTime)
         {
             Body().Pose.Position = TGCGame.camera.position.ToBEPU() + initialPos.ToBEPU();
-            if (random.NextDouble() > 0.998)
+            if (random.NextDouble() > 0.994)
                 Fire(gameTime);
         }
 
