@@ -5,7 +5,7 @@
 [#BuiltWithMonoGame](http://www.monogame.net) and [.NET Core](https://dotnet.microsoft.com)
 
 ## Descripción
-Videojuego "Star Wars: Trench Run" desarrollado por el grupo TheQuinternion.
+Videojuego "Star Wars: Trench Run" desarrollado por el grupo The Quinternion.
 
 La Estrella de la Muerte representa una amenaza para la galaxia, es por eso que la rebelión busca destruirla.  
 Para ello fuiste elegido como piloto del XWing que se encargara de romper el núcleo del arma del Imperio, aunque los peligros abundan en la superficie de esta.  
