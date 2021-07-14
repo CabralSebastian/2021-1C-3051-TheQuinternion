@@ -13,10 +13,10 @@ Naves TIEs y torretas resguardan el núcleo, ¿serás capaz de destruirlo?
 
 ## Integrantes
 
-* Mallet, German. *Insertar legajo aqui*  
+* Mallet, German. Legajo 167.314-2.  
 ![Imgur](https://i.imgur.com/RthYIHeb.png)
 
-* Morelli, Domingo. Legajo 172.573-7  
+* Morelli, Domingo. Legajo 172.573-7.  
 ![Imgur](https://i.imgur.com/kueHsGhb.jpg) 
 
 ## Capturas
