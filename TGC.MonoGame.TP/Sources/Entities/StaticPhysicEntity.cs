@@ -8,7 +8,7 @@ namespace TGC.MonoGame.TP.Entities
 {
     internal abstract class StaticPhysicEntity : StaticEntity, ICollitionHandler
     {
-        private StaticHandle handle;
+        private StaticHandle Handle;
         protected abstract TypedIndex Shape { get; }
 
         internal void Instantiate(Vector3 position) => Instantiate(position, Quaternion.Identity);
@@ -16,15 +16,15 @@ namespace TGC.MonoGame.TP.Entities
         {
             Position = position;
             Rotation = rotation;
-            handle = TGCGame.physicSimulation.CreateStatic(position, rotation, Shape);
-            TGCGame.physicSimulation.collitionEvents.RegisterCollider(handle, this);
+            Handle = TGCGame.PhysicsSimulation.CreateStatic(position, rotation, Shape);
+            TGCGame.PhysicsSimulation.CollitionEvents.RegisterCollider(Handle, this);
             base.Instantiate(position, rotation);
         }
 
         internal override void Destroy()
         {
-            TGCGame.physicSimulation.collitionEvents.UnregisterCollider(handle);
-            TGCGame.physicSimulation.DestroyStatic(handle);
+            TGCGame.PhysicsSimulation.CollitionEvents.UnregisterCollider(Handle);
+            TGCGame.PhysicsSimulation.DestroyStatic(Handle);
             base.Destroy();
         }
 

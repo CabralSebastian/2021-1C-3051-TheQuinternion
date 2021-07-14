@@ -2,22 +2,22 @@
 {
     internal class Material
     {
-        private readonly float kAmbient, kDiffuse, kSpecular, shininess;
+        private readonly float KAmbient, KDiffuse, KSpecular, Shininess;
 
         internal Material(float kAmbient, float kDiffuse, float kSpecular, float shininess)
         {
-            this.kAmbient = kAmbient;
-            this.kDiffuse = kDiffuse;
-            this.kSpecular = kSpecular;
-            this.shininess = shininess;
+            this.KAmbient = kAmbient;
+            this.KDiffuse = kDiffuse;
+            this.KSpecular = kSpecular;
+            this.Shininess = shininess;
         }
 
         internal void Set()
         {
-            TGCGame.content.E_MainShader.Parameters["KAmbient"]?.SetValue(kAmbient);
-            TGCGame.content.E_MainShader.Parameters["KDiffuse"]?.SetValue(kDiffuse);
-            TGCGame.content.E_MainShader.Parameters["KSpecular"]?.SetValue(kSpecular);
-            TGCGame.content.E_MainShader.Parameters["shininess"]?.SetValue(shininess);
+            TGCGame.GameContent.E_MainShader.Parameters["KAmbient"]?.SetValue(KAmbient);
+            TGCGame.GameContent.E_MainShader.Parameters["KDiffuse"]?.SetValue(KDiffuse);
+            TGCGame.GameContent.E_MainShader.Parameters["KSpecular"]?.SetValue(KSpecular);
+            TGCGame.GameContent.E_MainShader.Parameters["shininess"]?.SetValue(Shininess);
         }
     }
 }

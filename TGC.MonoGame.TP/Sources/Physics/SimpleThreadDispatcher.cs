@@ -8,34 +8,34 @@ namespace TGC.MonoGame.TP.Physics
 {
     public class SimpleThreadDispatcher : IThreadDispatcher, IDisposable
     {
-        readonly int threadCount;
-        public int ThreadCount => threadCount;
+        readonly int ThreadCountValue;
+        public int ThreadCount => ThreadCountValue;
         struct Worker
         {
             public Thread Thread;
             public AutoResetEvent Signal;
         }
 
-        readonly Worker[] workers;
-        readonly AutoResetEvent finished;
+        readonly Worker[] Workers;
+        readonly AutoResetEvent Finished;
 
-        readonly BufferPool[] bufferPools;
+        readonly BufferPool[] BufferPools;
 
         public SimpleThreadDispatcher(int threadCount)
         {
-            this.threadCount = threadCount;
-            workers = new Worker[threadCount - 1];
-            for (int i = 0; i < workers.Length; ++i)
+            this.ThreadCountValue = threadCount;
+            Workers = new Worker[threadCount - 1];
+            for (int i = 0; i < Workers.Length; ++i)
             {
-                workers[i] = new Worker { Thread = new Thread(WorkerLoop), Signal = new AutoResetEvent(false) };
-                workers[i].Thread.IsBackground = true;
-                workers[i].Thread.Start(workers[i].Signal);
+                Workers[i] = new Worker { Thread = new Thread(WorkerLoop), Signal = new AutoResetEvent(false) };
+                Workers[i].Thread.IsBackground = true;
+                Workers[i].Thread.Start(Workers[i].Signal);
             }
-            finished = new AutoResetEvent(false);
-            bufferPools = new BufferPool[threadCount];
-            for (int i = 0; i < bufferPools.Length; ++i)
+            Finished = new AutoResetEvent(false);
+            BufferPools = new BufferPool[threadCount];
+            for (int i = 0; i < BufferPools.Length; ++i)
             {
-                bufferPools[i] = new BufferPool();
+                BufferPools[i] = new BufferPool();
             }
         }
 
@@ -44,9 +44,9 @@ namespace TGC.MonoGame.TP.Physics
             Debug.Assert(workerBody != null);
             workerBody(workerIndex);
 
-            if (Interlocked.Increment(ref completedWorkerCounter) == threadCount)
+            if (Interlocked.Increment(ref completedWorkerCounter) == ThreadCountValue)
             {
-                finished.Set();
+                Finished.Set();
             }
         }
 
@@ -68,9 +68,9 @@ namespace TGC.MonoGame.TP.Physics
 
         void SignalThreads()
         {
-            for (int i = 0; i < workers.Length; ++i)
+            for (int i = 0; i < Workers.Length; ++i)
             {
-                workers[i].Signal.Set();
+                Workers[i].Signal.Set();
             }
         }
 
@@ -83,7 +83,7 @@ namespace TGC.MonoGame.TP.Physics
             SignalThreads();
             //Calling thread does work. No reason to spin up another worker and block this one!
             DispatchThread(0);
-            finished.WaitOne();
+            Finished.WaitOne();
             this.workerBody = null;
         }
 
@@ -94,11 +94,11 @@ namespace TGC.MonoGame.TP.Physics
             {
                 disposed = true;
                 SignalThreads();
-                for (int i = 0; i < bufferPools.Length; ++i)
+                for (int i = 0; i < BufferPools.Length; ++i)
                 {
-                    bufferPools[i].Clear();
+                    BufferPools[i].Clear();
                 }
-                foreach (var worker in workers)
+                foreach (var worker in Workers)
                 {
                     worker.Thread.Join();
                     worker.Signal.Dispose();
@@ -108,7 +108,7 @@ namespace TGC.MonoGame.TP.Physics
 
         public BufferPool GetThreadMemoryPool(int workerIndex)
         {
-            return bufferPools[workerIndex];
+            return BufferPools[workerIndex];
         }
     }
 

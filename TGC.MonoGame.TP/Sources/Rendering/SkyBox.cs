@@ -5,32 +5,32 @@ namespace TGC.MonoGame.TP.Rendering
 {
     internal class SkyBox
     {
-        public readonly Model model;
-        private readonly TextureCube texture;
-        private readonly Effect effect;
-        private readonly float size;
+        public readonly Model Model;
+        private readonly TextureCube Texture;
+        private readonly Effect Effect;
+        private readonly float Size;
 
         internal SkyBox(Model model, TextureCube texture, Effect effect, float size)
         {
-            this.model = model;
-            this.texture = texture;
-            this.effect = effect;
-            this.size = size;
+            this.Model = model;
+            this.Texture = texture;
+            this.Effect = effect;
+            this.Size = size;
         }
 
         public void Draw(Matrix viewProjection, Vector3 cameraPosition)
         {
-            foreach (var pass in effect.CurrentTechnique.Passes)
+            foreach (var pass in Effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                foreach (var mesh in model.Meshes)
+                foreach (var mesh in Model.Meshes)
                 {
                     foreach (var part in mesh.MeshParts)
                     {
-                        part.Effect = effect;
-                        part.Effect.Parameters["World"].SetValue(Matrix.CreateScale(size) * Matrix.CreateTranslation(cameraPosition));
+                        part.Effect = Effect;
+                        part.Effect.Parameters["World"].SetValue(Matrix.CreateScale(Size) * Matrix.CreateTranslation(cameraPosition));
                         part.Effect.Parameters["ViewProjection"].SetValue(viewProjection);
-                        part.Effect.Parameters["SkyBoxTexture"].SetValue(texture);
+                        part.Effect.Parameters["SkyBoxTexture"].SetValue(Texture);
                         part.Effect.Parameters["CameraPosition"].SetValue(cameraPosition);
                     }
                     mesh.Draw();

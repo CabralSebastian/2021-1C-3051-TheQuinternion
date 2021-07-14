@@ -18,7 +18,7 @@ namespace TGC.MonoGame.TP
 {
     internal class Content
     {
-        private readonly ContentManager contentManager;
+        private readonly ContentManager ContentManager;
 
         private const string EffectsFolder = "Effects/";
         private const string ModelsFolder = "Models/";
@@ -37,11 +37,11 @@ namespace TGC.MonoGame.TP
         internal readonly Drawer D_XWing, D_TIE, D_Trench_Plain, D_Trench_Line, D_Trench_Corner, D_Trench_T, D_Trench_Cross, D_Trench_End, D_Laser, D_WeakPoint;
         internal readonly TurretDrawer D_Turret;
         internal readonly SmallTurretDrawer D_SmallTurret;
-        internal readonly Material trenchMaterial, turretMaterial, xWingMaterial;
+        internal readonly Material TrenchMaterial, TurretMaterial, XWingMaterial;
 
         internal Content(ContentManager contentManager)
         {
-            this.contentManager = contentManager;
+            this.ContentManager = contentManager;
 
             // Efects
             E_MainShader = LoadEffect("MainShader");
@@ -68,17 +68,17 @@ namespace TGC.MonoGame.TP
             SH_XWing = LoadConvexHull("XWing/XWing", 1f);
             SH_TIE = LoadShape(new Sphere(8f));
             SH_Laser = LoadShape(new Cylinder(Laser.Radius / 2f, Laser.Lenght / 50f));
-            SH_Turret = LoadShape(new Box(2 * 1.0f * Turret.scale * 100, 2 * 3.29f * Turret.scale * 100, 2 * 1.0f * Turret.scale * 100));
-            SH_SmallTurret = LoadShape(new Box(2 * 0.45f * SmallTurret.scale * 100, 2 * 2.1f * SmallTurret.scale * 100, 2 * 0.45f * SmallTurret.scale * 100));
-            SH_WeakPoint = LoadConvexHull("DeathStar/WeakPoint", DeathStar.trenchScale * 100f);
+            SH_Turret = LoadShape(new Box(2 * 1.0f * Turret.ScaleValue * 100, 2 * 3.29f * Turret.ScaleValue * 100, 2 * 1.0f * Turret.ScaleValue * 100));
+            SH_SmallTurret = LoadShape(new Box(2 * 0.45f * SmallTurret.ScaleValue * 100, 2 * 2.1f * SmallTurret.ScaleValue * 100, 2 * 0.45f * SmallTurret.ScaleValue * 100));
+            SH_WeakPoint = LoadConvexHull("DeathStar/WeakPoint", DeathStar.TrenchScale * 100f);
 
             // DeathStar shapes
-            TypedIndex trenchPlain = LoadShape(new Box(DeathStar.trenchSize, DeathStar.trenchHeight, DeathStar.trenchSize));
-            TypedIndex trenchLine = LoadShape(new Box(DeathStar.trenchSize, DeathStar.trenchHeight, DeathStar.trenchSize / 1.6f));
-            TypedIndex trenchQuarter = LoadShape(new Box(DeathStar.trenchSize / 1.6f, DeathStar.trenchHeight, DeathStar.trenchSize / 1.6f));
-            RigidPose plainPose = new RigidPose(new BEPUVector3(0f, -DeathStar.trenchHeight, 0f));
-            float colliderYPos = -DeathStar.trenchHeight / 2f;
-            float sideOffset = DeathStar.trenchSize * 3.5f / 8f;
+            TypedIndex trenchPlain = LoadShape(new Box(DeathStar.TrenchSize, DeathStar.TrenchHeight, DeathStar.TrenchSize));
+            TypedIndex trenchLine = LoadShape(new Box(DeathStar.TrenchSize, DeathStar.TrenchHeight, DeathStar.TrenchSize / 1.6f));
+            TypedIndex trenchQuarter = LoadShape(new Box(DeathStar.TrenchSize / 1.6f, DeathStar.TrenchHeight, DeathStar.TrenchSize / 1.6f));
+            RigidPose plainPose = new RigidPose(new BEPUVector3(0f, -DeathStar.TrenchHeight, 0f));
+            float colliderYPos = -DeathStar.TrenchHeight / 2f;
+            float sideOffset = DeathStar.TrenchSize * 3.5f / 8f;
             BEPUQuaternion d90Rotation = BEPUQuaternion.CreateFromAxisAngle(BEPUVector3.UnitY, (float)Math.PI / 2f);
             Sh_Trench_Plain = LoadKinematicCompoundShape(new (TypedIndex, RigidPose)[] {
                 (trenchPlain, new RigidPose(new BEPUVector3(0f, colliderYPos, 0f)))
@@ -145,47 +145,47 @@ namespace TGC.MonoGame.TP
             F_StarJedi = LoadFont("Starjedi");
 
             // Materials
-            trenchMaterial = new Material(0.8f, 0.8f, 0.1f, 8.0f);
-            turretMaterial = new Material(1.0f, 0.5f, 0.01f, 8.0f);
-            xWingMaterial = new Material(0.7f, 0.9f, 0.4f, 4.0f);
+            TrenchMaterial = new Material(0.8f, 0.8f, 0.1f, 8.0f);
+            TurretMaterial = new Material(1.0f, 0.5f, 0.01f, 8.0f);
+            XWingMaterial = new Material(0.7f, 0.9f, 0.4f, 4.0f);
 
             // Drawers
-            D_XWing = new MainDrawer(M_XWing, T_XWing, xWingMaterial);
-            D_TIE = new MainDrawer(M_TIE, T_TIE, xWingMaterial);
-            D_Trench_Plain = new MainDrawer(M_Trench_Plain, T_Trench, trenchMaterial);
-            D_Trench_Line = new MainDrawer(M_Trench_Line, T_Trench, trenchMaterial);
-            D_Trench_Corner = new MainDrawer(M_Trench_Corner, T_Trench, trenchMaterial);
-            D_Trench_T = new MainDrawer(M_Trench_T, T_Trench, trenchMaterial);
-            D_Trench_Cross = new MainDrawer(M_Trench_Cross, T_Trench, trenchMaterial);
-            D_Trench_End = new MainDrawer(M_Trench_End, T_Trench, trenchMaterial);
+            D_XWing = new MainDrawer(M_XWing, T_XWing, XWingMaterial);
+            D_TIE = new MainDrawer(M_TIE, T_TIE, XWingMaterial);
+            D_Trench_Plain = new MainDrawer(M_Trench_Plain, T_Trench, TrenchMaterial);
+            D_Trench_Line = new MainDrawer(M_Trench_Line, T_Trench, TrenchMaterial);
+            D_Trench_Corner = new MainDrawer(M_Trench_Corner, T_Trench, TrenchMaterial);
+            D_Trench_T = new MainDrawer(M_Trench_T, T_Trench, TrenchMaterial);
+            D_Trench_Cross = new MainDrawer(M_Trench_Cross, T_Trench, TrenchMaterial);
+            D_Trench_End = new MainDrawer(M_Trench_End, T_Trench, TrenchMaterial);
             D_Laser = new LaserDrawer(M_Laser);
-            D_Turret = new TurretDrawer(M_Turret, T_Turret, turretMaterial);
-            D_SmallTurret = new SmallTurretDrawer(M_SmallTurret, T_Turret, turretMaterial);
-            D_WeakPoint = new MainDrawer(M_WeakPoint, T_Turret, trenchMaterial);
+            D_Turret = new TurretDrawer(M_Turret, T_Turret, TurretMaterial);
+            D_SmallTurret = new SmallTurretDrawer(M_SmallTurret, T_Turret, TurretMaterial);
+            D_WeakPoint = new MainDrawer(M_WeakPoint, T_Turret, TrenchMaterial);
         }
 
-        private Effect LoadEffect(string name) => contentManager.Load<Effect>(EffectsFolder + name);
+        private Effect LoadEffect(string name) => ContentManager.Load<Effect>(EffectsFolder + name);
         private Model LoadModel(string name, Effect effect)
         {
-            Model model = contentManager.Load<Model>(ModelsFolder + name);
+            Model model = ContentManager.Load<Model>(ModelsFolder + name);
             foreach (ModelMesh mesh in model.Meshes)
                 foreach (ModelMeshPart meshPart in mesh.MeshParts)
                     meshPart.Effect = effect;
             return model;
         }
-        private TypedIndex LoadShape<S>(S shape) where S : unmanaged, IShape => TGCGame.physicSimulation.LoadShape(shape);
+        private TypedIndex LoadShape<S>(S shape) where S : unmanaged, IShape => TGCGame.PhysicsSimulation.LoadShape(shape);
         private TypedIndex LoadKinematicCompoundShape((TypedIndex, RigidPose)[] colliders)
         {
-            CompoundBuilder builder = new CompoundBuilder(TGCGame.physicSimulation.bufferPool, TGCGame.physicSimulation.Shapes(), colliders.Length);
+            CompoundBuilder builder = new CompoundBuilder(TGCGame.PhysicsSimulation.BufferPool, TGCGame.PhysicsSimulation.Shapes(), colliders.Length);
             foreach ((TypedIndex, RigidPose) collider in colliders)
                 builder.AddForKinematic(collider.Item1, collider.Item2, 1f);
             builder.BuildKinematicCompound(out Buffer<CompoundChild> buffer);
-            return TGCGame.physicSimulation.LoadShape(new Compound(buffer));
+            return TGCGame.PhysicsSimulation.LoadShape(new Compound(buffer));
         }
-        private TypedIndex LoadConvexHull(string name, float scale) => LoadShape(ConvexHullGenerator.Generate(contentManager.Load<Model>(ModelsFolder + name), scale));
-        private Texture2D LoadTexture(string name) => contentManager.Load<Texture2D>(TexturesFolder + name);
-        private TextureCube LoadTextureCube(string name) => contentManager.Load<TextureCube>(TexturesFolder + name);
-        private SoundEffect LoadSound(string name) => contentManager.Load<SoundEffect>(SoundsFolder + name);
-        private SpriteFont LoadFont(string name) => contentManager.Load<SpriteFont>(FontsFolder + name);
+        private TypedIndex LoadConvexHull(string name, float scale) => LoadShape(ConvexHullGenerator.Generate(ContentManager.Load<Model>(ModelsFolder + name), scale));
+        private Texture2D LoadTexture(string name) => ContentManager.Load<Texture2D>(TexturesFolder + name);
+        private TextureCube LoadTextureCube(string name) => ContentManager.Load<TextureCube>(TexturesFolder + name);
+        private SoundEffect LoadSound(string name) => ContentManager.Load<SoundEffect>(SoundsFolder + name);
+        private SpriteFont LoadFont(string name) => ContentManager.Load<SpriteFont>(FontsFolder + name);
     }
 }

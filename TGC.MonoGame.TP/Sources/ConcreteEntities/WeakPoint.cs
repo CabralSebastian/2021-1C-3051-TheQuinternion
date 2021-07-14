@@ -9,18 +9,18 @@ namespace TGC.MonoGame.TP.ConcreteEntities
 {
     internal class WeakPoint : StaticPhysicEntity, ILaserDamageable
     {
-        protected override Drawer Drawer() => TGCGame.content.D_WeakPoint;
-        protected override Vector3 Scale => Vector3.One * DeathStar.trenchScale;
-        protected override TypedIndex Shape => TGCGame.content.SH_WeakPoint;
+        protected override Drawer Drawer() => TGCGame.GameContent.D_WeakPoint;
+        protected override Vector3 Scale => Vector3.One * DeathStar.TrenchScale;
+        protected override TypedIndex Shape => TGCGame.GameContent.SH_WeakPoint;
 
         internal Vector3 GetPosition => Position;
-        private float health = 800;
+        private float Health = 800;
 
         void ILaserDamageable.ReceiveLaserDamage()
         {
-            health -= 40;
-            if (health < 0)
-                TGCGame.game.ChangeScene(new Ending());
+            Health -= 40;
+            if (Health < 0)
+                TGCGame.Game.ChangeScene(new Ending());
         }
     }
 }

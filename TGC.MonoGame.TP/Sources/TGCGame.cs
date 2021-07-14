@@ -11,38 +11,38 @@ namespace TGC.MonoGame.TP
 {
     internal class TGCGame : Game
     {
-        internal static TGCGame game;
-        private readonly GraphicsDeviceManager graphics;
-        internal static Content content;
-        internal static GUI gui;
-        internal static readonly PhysicSimulation physicSimulation = new PhysicSimulation();
-        private SpriteBatch spriteBatch;
-        private SkyBox skyBox;
-        private FullScreenQuad fullScreenQuad;
-        internal const int shadowmapSize = 2048 * 2;
-        private RenderTarget2D shadowMapRenderTarget, mainRenderTarget, bloomRenderTarget, integratedBloomRenderTarget;
+        internal static TGCGame Game;
+        private readonly GraphicsDeviceManager Graphics;
+        internal static Content GameContent;
+        internal static GUI Gui;
+        internal static readonly PhysicSimulation PhysicsSimulation = new PhysicSimulation();
+        private SpriteBatch SpriteBatch;
+        private SkyBox SkyBox;
+        private FullScreenQuad FullScreenQuad;
+        internal const int ShadowMapSize = 2048 * 2;
+        private RenderTarget2D ShadowMapRenderTarget, MainRenderTarget, BloomRenderTarget, IntegratedBloomRenderTarget;
 
-        internal static readonly SoundManager soundManager = new SoundManager();
-        internal static Scene currentScene;
-        internal static Camera camera = new Camera();
-        internal static readonly LightCamera lightCamera = new LightCamera();
+        internal static readonly SoundManager SoundManager = new SoundManager();
+        internal static Scene CurrentScene;
+        internal static Camera Camera = new Camera();
+        internal static readonly LightCamera LightCamera = new LightCamera();
 
         internal Vector2 WindowSize() => new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
         internal double LastFPS { get; private set; }
 
         internal TGCGame()
         {
-            game = this;
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
+            Game = this;
+            Graphics = new GraphicsDeviceManager(this);
+            base.Content.RootDirectory = "Content";
         }
 
         private void Fullscreen()
         {
-            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            graphics.IsFullScreen = true;
-            graphics.ApplyChanges();
+            Graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            Graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            Graphics.IsFullScreen = true;
+            Graphics.ApplyChanges();
         }
 
         protected override void LoadContent()
@@ -50,22 +50,22 @@ namespace TGC.MonoGame.TP
             base.LoadContent();
             Fullscreen();
 
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            gui = new GUI(GraphicsDevice, spriteBatch);
-            fullScreenQuad = new FullScreenQuad(GraphicsDevice);
-            content = new Content(Content);
-            skyBox = new SkyBox(content.M_SkyBox, content.TC_Space, content.E_SkyBox, 3000f);
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
+            Gui = new GUI(GraphicsDevice, SpriteBatch);
+            FullScreenQuad = new FullScreenQuad(GraphicsDevice);
+            GameContent = new Content(base.Content);
+            SkyBox = new SkyBox(GameContent.M_SkyBox, GameContent.TC_Space, GameContent.E_SkyBox, 3000f);
 
-            shadowMapRenderTarget = new RenderTarget2D(GraphicsDevice, shadowmapSize, shadowmapSize,
+            ShadowMapRenderTarget = new RenderTarget2D(GraphicsDevice, ShadowMapSize, ShadowMapSize,
                 false, SurfaceFormat.Single, DepthFormat.Depth24Stencil8, 0, RenderTargetUsage.PlatformContents);
-            mainRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height,
+            MainRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height,
                 false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8, 0, RenderTargetUsage.DiscardContents);
-            bloomRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 
+            BloomRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 
                 false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8, 0, RenderTargetUsage.DiscardContents);
-            integratedBloomRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height,
+            IntegratedBloomRenderTarget = new RenderTarget2D(GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height,
                 false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
 
-            content.E_PostProcessing.Parameters["screenSize"]?.SetValue(new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
+            GameContent.E_PostProcessing.Parameters["screenSize"]?.SetValue(new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
         }
 
         protected override void Initialize()
@@ -75,9 +75,9 @@ namespace TGC.MonoGame.TP
             GraphicsDevice.RasterizerState = new RasterizerState { CullMode = CullMode.CullClockwiseFace };
 
             ChangeScene(new MainMenu());
-            camera.Initialize(GraphicsDevice);
+            Camera.Initialize(GraphicsDevice);
 
-            content.E_MainShader.Parameters["shadowMapSize"].SetValue(Vector2.One * shadowmapSize);
+            GameContent.E_MainShader.Parameters["shadowMapSize"].SetValue(Vector2.One * ShadowMapSize);
         }
 
         protected override void Update(GameTime gameTime)
@@ -86,9 +86,9 @@ namespace TGC.MonoGame.TP
             if (Input.Exit())
                 Exit();
 
-            currentScene.Update(gameTime);
-            camera.Update();
-            physicSimulation.Update();
+            CurrentScene.Update(gameTime);
+            Camera.Update();
+            PhysicsSimulation.Update();
             base.Update(gameTime);
         }
 
@@ -106,68 +106,68 @@ namespace TGC.MonoGame.TP
             BloomIntegratePass();
             BlurPass();
 
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, DepthStencilState.DepthRead, RasterizerState.CullNone);
-            currentScene.Draw2D(GraphicsDevice, spriteBatch);
-            spriteBatch.End();
+            SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, DepthStencilState.DepthRead, RasterizerState.CullNone);
+            CurrentScene.Draw2D(GraphicsDevice, SpriteBatch);
+            SpriteBatch.End();
         }
 
         private void ShadowMapPass()
         {
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            GraphicsDevice.SetRenderTarget(shadowMapRenderTarget); //shadowMapRenderTarget null
+            GraphicsDevice.SetRenderTarget(ShadowMapRenderTarget); //shadowMapRenderTarget null
             GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
 
-            lightCamera.Update();
-            content.E_MainShader.CurrentTechnique = content.E_MainShader.Techniques["DepthPass"];
-            content.E_LaserShader.CurrentTechnique = content.E_LaserShader.Techniques["DepthPass"];
+            LightCamera.Update();
+            GameContent.E_MainShader.CurrentTechnique = GameContent.E_MainShader.Techniques["DepthPass"];
+            GameContent.E_LaserShader.CurrentTechnique = GameContent.E_LaserShader.Techniques["DepthPass"];
 
-            content.E_MainShader.Parameters["ViewProjection"].SetValue(lightCamera.ViewProjection);
-            content.E_LaserShader.Parameters["ViewProjection"].SetValue(lightCamera.ViewProjection);
+            GameContent.E_MainShader.Parameters["ViewProjection"].SetValue(LightCamera.ViewProjection);
+            GameContent.E_LaserShader.Parameters["ViewProjection"].SetValue(LightCamera.ViewProjection);
 
-            skyBox.Draw(camera.ViewProjection, camera.position);
-            currentScene.Draw();
+            SkyBox.Draw(Camera.ViewProjection, Camera.Position);
+            CurrentScene.Draw();
         }
 
         private void MainPass()
         {
-            GraphicsDevice.SetRenderTarget(mainRenderTarget);
+            GraphicsDevice.SetRenderTarget(MainRenderTarget);
             GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
 
-            content.E_MainShader.CurrentTechnique = content.E_MainShader.Techniques["DrawShadowed"];
-            content.E_LaserShader.CurrentTechnique = content.E_LaserShader.Techniques["DrawShadowed"];
+            GameContent.E_MainShader.CurrentTechnique = GameContent.E_MainShader.Techniques["DrawShadowed"];
+            GameContent.E_LaserShader.CurrentTechnique = GameContent.E_LaserShader.Techniques["DrawShadowed"];
 
-            content.E_MainShader.Parameters["ViewProjection"].SetValue(camera.ViewProjection);
-            content.E_LaserShader.Parameters["ViewProjection"].SetValue(camera.ViewProjection);
+            GameContent.E_MainShader.Parameters["ViewProjection"].SetValue(Camera.ViewProjection);
+            GameContent.E_LaserShader.Parameters["ViewProjection"].SetValue(Camera.ViewProjection);
 
-            content.E_MainShader.Parameters["cameraPosition"].SetValue(camera.position);
-            content.E_MainShader.Parameters["LightViewProjection"].SetValue(lightCamera.ViewProjection);
-            content.E_MainShader.Parameters["lightDirection"].SetValue(-lightCamera.Direction);
-            content.E_MainShader.Parameters["shadowMap"].SetValue(shadowMapRenderTarget);
+            GameContent.E_MainShader.Parameters["cameraPosition"].SetValue(Camera.Position);
+            GameContent.E_MainShader.Parameters["LightViewProjection"].SetValue(LightCamera.ViewProjection);
+            GameContent.E_MainShader.Parameters["lightDirection"].SetValue(-LightCamera.Direction);
+            GameContent.E_MainShader.Parameters["shadowMap"].SetValue(ShadowMapRenderTarget);
 
-            skyBox.Draw(camera.ViewProjection, camera.position);
-            currentScene.Draw();
+            SkyBox.Draw(Camera.ViewProjection, Camera.Position);
+            CurrentScene.Draw();
         }
 
         private void BloomPass()
         {
-            GraphicsDevice.SetRenderTarget(bloomRenderTarget);
+            GraphicsDevice.SetRenderTarget(BloomRenderTarget);
             GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
 
-            content.E_MainShader.CurrentTechnique = content.E_MainShader.Techniques["BloomPass"];
-            content.E_LaserShader.CurrentTechnique = content.E_LaserShader.Techniques["BloomPass"];
+            GameContent.E_MainShader.CurrentTechnique = GameContent.E_MainShader.Techniques["BloomPass"];
+            GameContent.E_LaserShader.CurrentTechnique = GameContent.E_LaserShader.Techniques["BloomPass"];
 
-            currentScene.Draw();
+            CurrentScene.Draw();
         }
 
         private void BloomIntegratePass()
         {
-            GraphicsDevice.SetRenderTarget(integratedBloomRenderTarget);
+            GraphicsDevice.SetRenderTarget(IntegratedBloomRenderTarget);
             GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
 
-            content.E_PostProcessing.CurrentTechnique = content.E_PostProcessing.Techniques["BloomPass"];
-            content.E_PostProcessing.Parameters["baseTexture"].SetValue(mainRenderTarget);
-            content.E_PostProcessing.Parameters["bloomTexture"].SetValue(bloomRenderTarget);
-            fullScreenQuad.Draw(content.E_PostProcessing);
+            GameContent.E_PostProcessing.CurrentTechnique = GameContent.E_PostProcessing.Techniques["BloomPass"];
+            GameContent.E_PostProcessing.Parameters["baseTexture"].SetValue(MainRenderTarget);
+            GameContent.E_PostProcessing.Parameters["bloomTexture"].SetValue(BloomRenderTarget);
+            FullScreenQuad.Draw(GameContent.E_PostProcessing);
         }
 
         private void BlurPass()
@@ -175,25 +175,25 @@ namespace TGC.MonoGame.TP
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1f, 0);
 
-            content.E_PostProcessing.CurrentTechnique = content.E_PostProcessing.Techniques["BlurPass"];
-            content.E_PostProcessing.Parameters["InverseViewProjection"].SetValue(camera.InverseViewProjection);
-            content.E_PostProcessing.Parameters["PrevViewProjection"].SetValue(camera.PrevViewProjection);
-            content.E_PostProcessing.Parameters["baseTexture"].SetValue(integratedBloomRenderTarget);
-            fullScreenQuad.Draw(content.E_PostProcessing);
+            GameContent.E_PostProcessing.CurrentTechnique = GameContent.E_PostProcessing.Techniques["BlurPass"];
+            GameContent.E_PostProcessing.Parameters["InverseViewProjection"].SetValue(Camera.InverseViewProjection);
+            GameContent.E_PostProcessing.Parameters["PrevViewProjection"].SetValue(Camera.PrevViewProjection);
+            GameContent.E_PostProcessing.Parameters["baseTexture"].SetValue(IntegratedBloomRenderTarget);
+            FullScreenQuad.Draw(GameContent.E_PostProcessing);
         }
 
         protected override void UnloadContent()
         {
-            Content.Unload();
-            physicSimulation.Dispose();
-            fullScreenQuad.Dispose();
+            base.Content.Unload();
+            PhysicsSimulation.Dispose();
+            FullScreenQuad.Dispose();
             base.UnloadContent();
         }
 
         internal void ChangeScene(Scene scene)
         {
-            currentScene?.Destroy();
-            currentScene = scene;
+            CurrentScene?.Destroy();
+            CurrentScene = scene;
             scene.Initialize();
         }
     }

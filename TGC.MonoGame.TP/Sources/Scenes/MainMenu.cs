@@ -9,15 +9,15 @@ namespace TGC.MonoGame.TP.Scenes
 {
     internal class MainMenu : Scene
     {
-        private SoundEffectInstance menuMusic;
-        private readonly Button startButton = new Button("Start", new Vector2(200, 40), () => TGCGame.game.ChangeScene(new World()));
-        private readonly Button infoButton = new Button("Help", new Vector2(200, 40), () => TGCGame.game.ChangeScene(new Info()));
-        private readonly Button exitButton = new Button("Exit", new Vector2(200, 40), () => TGCGame.game.Exit());
+        private SoundEffectInstance MenuMusic;
+        private readonly Button StartButton = new Button("Start", new Vector2(200, 40), () => TGCGame.Game.ChangeScene(new World()));
+        private readonly Button InfoButton = new Button("Help", new Vector2(200, 40), () => TGCGame.Game.ChangeScene(new Info()));
+        private readonly Button ExitButton = new Button("Exit", new Vector2(200, 40), () => TGCGame.Game.Exit());
 
         internal override void Initialize()
         {
             new DeathStar().Create(true);
-            TGCGame.camera.SetLocation(new Vector3(0f, 0f, 0f), Vector3.Forward, Vector3.Up);
+            TGCGame.Camera.SetLocation(new Vector3(0f, 0f, 0f), Vector3.Forward, Vector3.Up);
 
             Quaternion toLeft = Quaternion.CreateFromAxisAngle(Vector3.Up, MathHelper.PiOver2);
             Quaternion toRight = Quaternion.CreateFromAxisAngle(Vector3.Up, -MathHelper.PiOver2);
@@ -27,24 +27,24 @@ namespace TGC.MonoGame.TP.Scenes
             SpawnSquad(3, 300f, -10000f, 0f, -1000f, toLeft);
 
             PlayMusic();
-            TGCGame.game.IsMouseVisible = true;
+            TGCGame.Game.IsMouseVisible = true;
         }
 
         private void PlayMusic()
         {
-            menuMusic = TGCGame.content.S_MenuMusic.CreateInstance();
-            menuMusic.IsLooped = true;
-            menuMusic.Volume = 0.2f;
-            menuMusic.Play();
+            MenuMusic = TGCGame.GameContent.S_MenuMusic.CreateInstance();
+            MenuMusic.IsLooped = true;
+            MenuMusic.Volume = 0.2f;
+            MenuMusic.Play();
         }
 
         internal override void Update(GameTime gameTime)
         {
             if (Input.Submit())
-                TGCGame.game.ChangeScene(new World());
-            startButton.Update(TGCGame.gui.ScreenCenter + new Vector2(0, 50));
-            infoButton.Update(TGCGame.gui.ScreenCenter + new Vector2(0, 100));
-            exitButton.Update(TGCGame.gui.ScreenCenter + new Vector2(0, 150));
+                TGCGame.Game.ChangeScene(new World());
+            StartButton.Update(TGCGame.Gui.ScreenCenter + new Vector2(0, 50));
+            InfoButton.Update(TGCGame.Gui.ScreenCenter + new Vector2(0, 100));
+            ExitButton.Update(TGCGame.Gui.ScreenCenter + new Vector2(0, 150));
             base.Update(gameTime);
         }
 
@@ -58,17 +58,17 @@ namespace TGC.MonoGame.TP.Scenes
 
         internal override void Draw2D(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
         {
-            Vector2 center = TGCGame.gui.ScreenCenter;
-            Vector2 starWarsSize = TGCGame.gui.DrawCenteredText("Star Wars", new Vector2(center.X, center.Y / 4), 20f);
-            TGCGame.gui.DrawCenteredText("Trench Run", new Vector2(center.X, center.Y / 4 + starWarsSize.Y + 5), 48f);
-            startButton.Draw(center + new Vector2(0, 50));
-            infoButton.Draw(center + new Vector2(0, 100));
-            exitButton.Draw(center + new Vector2(0, 150));
+            Vector2 center = TGCGame.Gui.ScreenCenter;
+            Vector2 starWarsSize = TGCGame.Gui.DrawCenteredText("Star Wars", new Vector2(center.X, center.Y / 4), 20f);
+            TGCGame.Gui.DrawCenteredText("Trench Run", new Vector2(center.X, center.Y / 4 + starWarsSize.Y + 5), 48f);
+            StartButton.Draw(center + new Vector2(0, 50));
+            InfoButton.Draw(center + new Vector2(0, 100));
+            ExitButton.Draw(center + new Vector2(0, 150));
         }
 
         internal override void Destroy()
         {
-            menuMusic.Stop();
+            MenuMusic.Stop();
             base.Destroy();
         }
     }

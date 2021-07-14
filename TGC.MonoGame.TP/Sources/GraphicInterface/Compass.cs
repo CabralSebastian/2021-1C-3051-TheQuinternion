@@ -5,9 +5,9 @@ namespace TGC.MonoGame.TP.GraphicInterface
 {
     internal class Compass
     {
-        private Vector2 barSize = new Vector2(300, 2);
-        private Vector2 objectiveSize = new Vector2(4, 8);
-        private float horizontalFieldOfView = MathHelper.ToRadians(90);
+        private Vector2 BarSize = new Vector2(300, 2);
+        private Vector2 ObjectiveSize = new Vector2(4, 8);
+        private float HorizontalFieldOfView = MathHelper.ToRadians(90);
 
         private Vector2 Rotate(Vector2 vector, float angle)
         {
@@ -25,7 +25,7 @@ namespace TGC.MonoGame.TP.GraphicInterface
 
         internal void Draw(Vector3 cameraPosition, Vector3 objectivePosition, Vector3 cameraForward)
         {
-            TGCGame.gui.DrawCenteredSprite(TGCGame.content.T_Pixel, new Vector2(TGCGame.gui.ScreenSize.X / 2, 15), barSize, Color.White);
+            TGCGame.Gui.DrawCenteredSprite(TGCGame.GameContent.T_Pixel, new Vector2(TGCGame.Gui.ScreenSize.X / 2, 15), BarSize, Color.White);
 
             // Variables
             Vector2 proyectedCameraPosition = new Vector2(cameraPosition.X, cameraPosition.Z);
@@ -38,10 +38,10 @@ namespace TGC.MonoGame.TP.GraphicInterface
             float angle = GetYaw(viewRelativeObjectivePosition);
 
             // Offset
-            float offset = angle * barSize.X / horizontalFieldOfView;
-            offset = MathHelper.Clamp(offset, -barSize.X / 2, barSize.X / 2);
+            float offset = angle * BarSize.X / HorizontalFieldOfView;
+            offset = MathHelper.Clamp(offset, -BarSize.X / 2, BarSize.X / 2);
 
-            TGCGame.gui.DrawCenteredSprite(TGCGame.content.T_Pixel, new Vector2(TGCGame.gui.ScreenSize.X / 2 + offset, 15), objectiveSize, Color.Yellow);
+            TGCGame.Gui.DrawCenteredSprite(TGCGame.GameContent.T_Pixel, new Vector2(TGCGame.Gui.ScreenSize.X / 2 + offset, 15), ObjectiveSize, Color.Yellow);
         }
     }
 }

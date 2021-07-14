@@ -109,8 +109,8 @@ namespace TGC.MonoGame.TP.Physics
 
         private ICollitionHandler GetCollitionHandler(CollidableReference collider) =>
             collider.Mobility == CollidableMobility.Static ?
-            TGCGame.physicSimulation.collitionEvents.GetHandler(collider.StaticHandle) :
-            TGCGame.physicSimulation.collitionEvents.GetHandler(collider.BodyHandle);
+            TGCGame.PhysicsSimulation.CollitionEvents.GetHandler(collider.StaticHandle) :
+            TGCGame.PhysicsSimulation.CollitionEvents.GetHandler(collider.BodyHandle);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool ConfigureContactManifold(int workerIndex, CollidablePair pair, int childIndexA, int childIndexB, ref ConvexContactManifold manifold)

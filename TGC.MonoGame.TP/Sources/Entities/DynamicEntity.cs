@@ -8,6 +8,6 @@ namespace TGC.MonoGame.TP.Entities
         protected abstract float Mass { get; }
 
         protected override BodyHandle CreateBody(Vector3 position, Quaternion rotation) =>
-            TGCGame.physicSimulation.CreateDynamic(position, rotation, Shape, Mass);
+            TGCGame.PhysicsSimulation.CreateDynamic(position, rotation, Shape, Mass);
     }
 }
